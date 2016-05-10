@@ -100,7 +100,7 @@
         android:layout_below="@id/textView_Coupons_Details_Name"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="6dp"
-        android:text="Expiry: 016-02-22"
+        android:text="EXPIRES: "
         android:textColor="@android:color/white"
         android:textSize="15sp" />
 
@@ -111,7 +111,7 @@
         android:layout_below="@id/textView_Coupons_Details_expiry"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="6dp"
-        android:text="Coupons USED: 2/10"
+        android:text="COUPONS USED: "
         android:textColor="@android:color/white"
         android:textSize="15sp" />
 

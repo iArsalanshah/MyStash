@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Get_Al
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -31,9 +33,11 @@ import retrofit2.Response;
 
 public class Coupons_Categories_Click extends AppCompatActivity {
 
+    List<Coupon> couponObj;
     private ImageView imgBack;
     private ListView listView;
     private String catID;
+    private TextView altTextCouponsSavedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,26 +46,35 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         catID = getIntent().getStringExtra("catID");
         init();
         clickEvents();
-//        listView.setAdapter(new ListAdapter_Categorries(this));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getAllCoupons();
+        getSavedCoupons();
+    }
+
+    private void getSavedCoupons() {
+
     }
 
     private void getAllCoupons() {
         Users cid = CustomSharedPrefLogin.getUserObject(this);
+        Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getAllCoupons(Constant_util.ACTION_GET_ALL_COUPONS_LIST, catID, cid.getId());
         call.enqueue(new Callback<Get_All_Coupons>() {
             @Override
             public void onResponse(Call<Get_All_Coupons> call, Response<Get_All_Coupons> response) {
                 Get_All_Coupons allCoupons = response.body();
                 if (allCoupons.getHeader().getSuccess().equals("1")) {
+                    altTextCouponsSavedList.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
                     listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, allCoupons.getBody().getCoupons()));
                 } else {
-                    Toast.makeText(Coupons_Categories_Click.this, "Found: " + allCoupons.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    altTextCouponsSavedList.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
+//                    Toast.makeText(Coupons_Categories_Click.this, "Found: " + allCoupons.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -83,7 +96,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Coupons_Categories_Click.this, CouponsList_Details.class);
-                //intent.putExtra("couponObj",);
+                Coupon objCoupon = couponObj.get(position);
+                intent.putExtra("couponObj", new Gson().toJson(objCoupon));
                 startActivity(intent);
             }
         });
@@ -92,6 +106,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     private void init() {
         imgBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
         listView = (ListView) findViewById(R.id.listView_Categories_Coupons);
+        altTextCouponsSavedList = (TextView) findViewById(R.id.altTextCouponsSavedList);
     }
 
     private class ListAdapter_Categorries extends BaseAdapter {
@@ -102,7 +117,6 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         public ListAdapter_Categorries(Context context, List<Coupon> coupons) {
             this.context = context;
             this.coupons = coupons;
-
         }
 
         @Override
@@ -136,6 +150,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                     .placeholder(R.drawable.img_profile)
                     .error(R.drawable.img_profile)
                     .into(listImage);
+            couponObj = coupons;
             return convertView;
         }
     }

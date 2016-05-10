@@ -31,4 +31,6 @@ public class Constant_util {
     public static final String USER_EMAIL = "userEmail";
     public static final String USER_GENDER = "userGender";
     public static final String USER_OBJECT = "userObject";
+    public static final String ACTION_REMINDME_COUPON = "remindme_coupon";
+    public static final String ACTION_REDEEM_COUPON = "customer_redeem_coupons";
 }

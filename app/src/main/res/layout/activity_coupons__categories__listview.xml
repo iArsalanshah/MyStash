@@ -41,4 +41,17 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="3dp"
         android:dividerHeight="6dp" />
+
+    <TextView
+        android:id="@+id/altTextCouponsSavedList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relativeLayout_toolbar"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:text="Sorry there are currently no coupons in this section yet. Please try back again some other time"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:visibility="gone" />
 </RelativeLayout>

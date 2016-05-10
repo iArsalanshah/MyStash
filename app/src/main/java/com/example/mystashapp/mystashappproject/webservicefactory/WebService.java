@@ -14,6 +14,8 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_register.RegisterUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.SearchBusiness;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.ProgramsStamps;
+import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
+import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
 
@@ -138,4 +140,20 @@ public interface WebService {
 
     @GET("/mystash/mobileservice_new.php")
     Call<CategoriesCoupons> getSavedCoupons(@Query("action") String customer_get_coupon_categories);
+
+    @GET("/mystash/mobileservice_new.php")
+    Call<RemindMe> getRemindCoupon(@Query("action") String remindme_coupon,
+                                   @Query("clientid") String clientID_cid,
+                                   @Query("couponid") String couponid,
+                                   @Query("uid") String uid,
+                                   @Query("remindme") String remindme,
+                                   @Query("remindmessage") String remindmessage);
+
+    @GET("/mystash/mobileservice_new.php")
+    Call<RedeemCoupon> getRedeemCoupon(@Query("action") String customer_redeem_coupons,
+                                       @Query("adminid") String adminid_uid,
+                                       @Query("cid") String cid,
+                                       @Query("couponid") String couponid);
+
+
 }
