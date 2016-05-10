@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gray"
+    tools:context="com.example.mystashapp.mystashappproject.home.mycards_box.DetailsLoyalty">
+
+    <RelativeLayout
+        android:id="@+id/container_addLoyalty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:onClick="imgBack_LoyaltyDetails"
+                android:src="@drawable/img_toolbar_back" />
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Details"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/container_addLoyalty"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_red"
+        android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_Loyalty"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp" />
+
+        <com.pixelcan.inkpageindicator.InkPageIndicator
+            android:id="@+id/ink_indicator_loyalty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:currentPageIndicatorColor="#ffff"
+            app:dotDiameter="8dp"
+            app:dotGap="8dp"
+            app:pageIndicatorColor="#ccefa2a2" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:onClick="loyalty_details_img"
+            android:src="@drawable/rotate" />
+
+        <EditText
+            android:id="@+id/edittext_loyalty_cardNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="6dp"
+            android:background="@android:color/white"
+            android:hint=" Card No."
+            android:inputType="phone"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textColorHint="#cccc"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edittext_loyalty_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/white"
+            android:hint=" Name"
+            android:inputType="textPersonName"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textColorHint="#cccc"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edittext_loyalty_business"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/white"
+            android:hint=" Business"
+            android:inputType="textPersonName"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textColorHint="#cccc"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edittext_loyalty_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/white"
+            android:gravity="top|left"
+            android:hint="   Details"
+            android:maxLines="4"
+            android:minLines="4"
+            android:paddingTop="6dp"
+            android:textColorHint="#cccc"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/button_loyalty_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+</RelativeLayout>

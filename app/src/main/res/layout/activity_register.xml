@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainerRegister"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    tools:context="com.example.mystashapp.mystashappproject.login_pages.Register">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:onClick="backRegisterImageBtn"
+            android:src="@drawable/img_toolbar_back" />
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbarRegister">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="80dp"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="65dp">
+
+                    <EditText
+                        android:id="@+id/etNameRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cursorVisible="false"
+                        android:drawableLeft="@drawable/ic_username"
+                        android:drawableStart="@drawable/ic_username"
+                        android:hint=" Name"
+                        android:inputType="textPersonName|textAutoComplete"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/etEmailRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_username"
+                        android:drawableStart="@drawable/ic_username"
+                        android:hint=" Email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/etPwdRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_username"
+                        android:drawableStart="@drawable/ic_username"
+                        android:hint=" Password"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/etCnfPwdRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_username"
+                        android:drawableStart="@drawable/ic_username"
+                        android:hint=" Confirm Password"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/etPhoneRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_username"
+                        android:drawableStart="@drawable/ic_username"
+                        android:hint=" Phone no."
+                        android:inputType="phone" />
+                </android.support.design.widget.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/etBirthdayRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_username"
+                    android:drawableStart="@drawable/ic_username"
+                    android:focusable="false"
+                    android:hint=" Birthday"
+                    android:onClick="BirthdayRegister" />
+
+                <Spinner
+                    android:id="@+id/spinnerSexRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <EditText
+                    android:id="@+id/etSexRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_username"
+                    android:drawableStart="@drawable/ic_username"
+                    android:focusable="false"
+                    android:hint=" Sex"
+                    android:onClick="SexRegister" />
+
+                <Spinner
+                    android:id="@+id/spinnerCategoriesRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <com.example.mystashapp.mystashappproject.login_pages.MultiSpinner
+                    android:id="@+id/multi_spinnerCat"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+
+                <EditText
+                    android:id="@+id/etCategoriesRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_username"
+                    android:drawableStart="@drawable/ic_username"
+                    android:focusable="false"
+                    android:hint=" Categories"
+                    android:onClick="CategoriesRegister" />
+
+                <Spinner
+                    android:id="@+id/spinnerAreaOfInterestRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <com.example.mystashapp.mystashappproject.login_pages.MultiSpinner
+                    android:id="@+id/multi_spinnerInterest"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+
+                <EditText
+                    android:id="@+id/etAreaOfInterestRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_username"
+                    android:drawableStart="@drawable/ic_username"
+                    android:focusable="false"
+                    android:hint=" Area of interest"
+                    android:onClick="AreaOfInterestRegoster" />
+
+                <Button
+                    android:id="@+id/btnId_Register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@color/colorLoginBtn"
+                    android:onClick="btnRegister"
+                    android:text="@string/btn_reg_login"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageProfileRegister"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:contentDescription="User Profile Image"
+                android:src="@drawable/img_profile" />
+        </FrameLayout>
+    </ScrollView>
+</RelativeLayout>

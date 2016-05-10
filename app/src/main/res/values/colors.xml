@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#B42E3C</color>
+    <color name="colorPrimaryDark">#9b303b</color>
+    <color name="colorAccent">#d0e4e2e2</color>
+    <color name="colorLoginBtn">#F89526</color>
+    <color name="colorFbLoginBtn">#415D99</color>
+    <color name="colorToolbarLogin">#B42E3C</color>
+    <color name="colorRegisterBtn">#BF1531</color>
+</resources>

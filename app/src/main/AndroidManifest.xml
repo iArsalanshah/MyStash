@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mystashapp.mystashappproject">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:name="android.support.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login_pages.Login_activity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login_pages.Register"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".login_pages.ActivityForgotPwd"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.List_MyStash"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.SearchBusiness_MyStash"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.ListDetails_MyStash"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDIctG065Xna_Xc_JkaAW2ppFCFrn6YuYU" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".home.mystash_box.ReviewDetailsList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Cite_Points"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.MyCards"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.Add_LoyaltyCard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.DetailsLoyalty"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.coupons_box.Coupons"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.coupons_box.Coupons_Categories_Click"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.coupons_box.CouponsList_Details"
+            android:screenOrientation="portrait" />
+        <activity android:name=".home.flyers_box.Flyers_Available" />
+        <activity android:name=".home.flyers_box.Flyers_pdfview" />
+        <activity
+            android:name=".home.mycards_box.SimpleScannerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.RateAndReview"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.ProgramsList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mystash_box.Program_Details"
+            android:screenOrientation="portrait"></activity>
+    </application>
+
+</manifest>

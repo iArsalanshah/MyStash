@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainerLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    tools:context="com.example.mystashapp.mystashappproject.login_pages.Login_activity">
+
+    <FrameLayout
+        android:id="@+id/framelayoutToolbarLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="top|center_horizontal"
+            android:src="@drawable/ic_logo" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/framelayoutToolbarLogin"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutEmailLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#d0e4e2e2">
+
+            <EditText
+                android:id="@+id/input_email_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/sym_action_email"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textColor="#d0e4e2e2" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutPwdLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#d0e4e2e2">
+
+            <EditText
+                android:id="@+id/input_pwd_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:shadowColor="@color/colorAccent"
+                android:singleLine="true"
+                android:textColor="#d0e4e2e2"
+                android:textColorLink="@color/colorAccent" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textviewForgotPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="33dp"
+            android:onClick="TvForgotPwd"
+            android:text="Forgot Password?"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLoginBtn"
+            android:onClick="btnMainLogin"
+            android:text="@string/btn_login"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:background="@color/colorRegisterBtn"
+            android:onClick="btnRegLogin"
+            android:text="@string/btn_reg_login"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:text="OR"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_fb_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/com_facebook_button_like_icon_selected"
+            android:paddingBottom="15dp"
+            android:paddingLeft="25dp"
+            android:paddingTop="15dp"
+            android:textSize="16sp"
+            android:visibility="visible" />
+    </LinearLayout>
+</RelativeLayout>
