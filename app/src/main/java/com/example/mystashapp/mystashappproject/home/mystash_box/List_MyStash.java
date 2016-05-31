@@ -3,6 +3,7 @@ package com.example.mystashapp.mystashappproject.home.mystash_box;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class List_MyStash extends AppCompatActivity {
     TextView altText;
     private RecyclerAdapter_MyStashList mAdapter;
     private ProgressDialog prog;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class List_MyStash extends AppCompatActivity {
         //Progress Dialog
         prog = new ProgressDialog(this);
         prog.show();
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh_MyStashList);
 
         //RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_myStashList);
@@ -47,6 +50,17 @@ public class List_MyStash extends AppCompatActivity {
             mRecyclerView.setHasFixedSize(true);
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyStash();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     @Override
@@ -62,6 +76,7 @@ public class List_MyStash extends AppCompatActivity {
         call.enqueue(new Callback<GetMyStash>() {
             @Override
             public void onResponse(Call<GetMyStash> call, Response<GetMyStash> response) {
+                swipeContainer.setRefreshing(false);
                 try {
                     GetMyStash businessResponse = response.body();
                     if (businessResponse.getHeader().getSuccess().equals("1")) {
@@ -70,7 +85,6 @@ public class List_MyStash extends AppCompatActivity {
                         mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
                         prog.dismiss();
                         mRecyclerView.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
                     } else if (businessResponse.getHeader().getSuccess().equals("0")) {
                         prog.dismiss();
                         mRecyclerView.setVisibility(View.GONE);
@@ -83,6 +97,7 @@ public class List_MyStash extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<GetMyStash> call, Throwable t) {
+                swipeContainer.setRefreshing(false);
                 //lv.setVisibility(View.GONE);
                 Toast.makeText(List_MyStash.this, "Can't connect to Internet", Toast.LENGTH_SHORT).show();
             }

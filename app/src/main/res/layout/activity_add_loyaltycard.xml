@@ -38,10 +38,24 @@
         android:id="@+id/listView_Add_LoyaltyCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/button_create_loyalty"
         android:layout_below="@+id/container_addLoyalty"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="4dp"
         android:dividerHeight="6dp" />
+
+    <Button
+        android:id="@+id/button_create_loyalty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Create your own card"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

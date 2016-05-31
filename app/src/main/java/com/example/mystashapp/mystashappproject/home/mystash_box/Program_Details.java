@@ -3,11 +3,13 @@ package com.example.mystashapp.mystashappproject.home.mystash_box;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
@@ -68,8 +70,90 @@ public class Program_Details extends AppCompatActivity {
                 .into(img1);
 
         tvTitle.setText(stampObject.getProgramname());
-        tvAvailableDays.append(stampObject.getDays());
-        tvTiming.append(stampObject.getAllDay());
+        //Splitting Days
+        StringBuilder stringBuilder = new StringBuilder();
+        String allDaysEvaluated = "";
+        String[] daysStrings = stampObject.getDays().split(",");
+        for (int i = 0; i < daysStrings.length; i++) {
+            switch (i) {
+                case 0:
+                    if (daysStrings[i].equals("1"))
+                        stringBuilder.append("Mon");
+                    break;
+                case 1:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1"))
+                            stringBuilder.append(",Tue");
+                        else
+                            stringBuilder.append("Tue");
+                    }
+                    break;
+
+                case 2:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1"))
+                            stringBuilder.append(",Wed");
+                        else
+                            stringBuilder.append("Wed");
+                    }
+                    break;
+                case 3:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
+                                || daysStrings[i - 3].equals("1"))
+                            stringBuilder.append(",Thu");
+                        else
+                            stringBuilder.append("Thu");
+                    }
+                    break;
+                case 4:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
+                                || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1"))
+                            stringBuilder.append(",Fri");
+                        else
+                            stringBuilder.append("Fri");
+                    }
+                    break;
+                case 5:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
+                                || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
+                                || daysStrings[i - 5].equals("1"))
+                            stringBuilder.append(",Sat");
+                        else
+                            stringBuilder.append("Sat");
+                    }
+                    break;
+                case 6:
+                    if (daysStrings[i].equals("1")) {
+                        if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
+                                || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
+                                || daysStrings[i - 5].equals("1") || daysStrings[i - 6].equals("1"))
+                            stringBuilder.append(",Sun");
+                        else
+                            stringBuilder.append("Sun");
+                    }
+                    break;
+                case 7:
+                    if (daysStrings[i].equals("1")) {
+                        allDaysEvaluated = "All Week";
+                    }
+                    break;
+                default:
+                    Log.d(Constant_util.LOG_TAG, "settingData: ");
+                    break;
+            }
+        }
+        if (!allDaysEvaluated.equals("All Week")) {
+            allDaysEvaluated = stringBuilder.toString();
+        }
+        tvAvailableDays.append(allDaysEvaluated);
+        if (stampObject.getAllDay().equals("1")) {
+            tvTiming.append("All Day");
+        } else {
+            tvTiming.append(stampObject.getStarttime() + "-" + stampObject.getEndtime());
+        }
         tvRation.setText(stampObject.getStampcount() + "/" + stampObject.getTotalstamp());
     }
 

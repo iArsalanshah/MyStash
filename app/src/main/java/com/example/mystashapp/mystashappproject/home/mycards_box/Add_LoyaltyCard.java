@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -24,7 +25,6 @@ import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalt
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +39,20 @@ public class Add_LoyaltyCard extends AppCompatActivity {
     private ArrayList<String> stTitle;
     private ArrayList<String> stDetails;
     private ProgressDialog progress;
+    private Button createButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_loyaltycard);
         init();
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Add_LoyaltyCard.this, "Works", Toast.LENGTH_SHORT).show();
+//                Intent createIntent = new Intent(Add_LoyaltyCard.this, takeLoyaltyCardPic);
+            }
+        });
     }
 
     @Override
@@ -83,6 +91,7 @@ public class Add_LoyaltyCard extends AppCompatActivity {
     private void init() {
         listview = (ListView) findViewById(R.id.listView_Add_LoyaltyCard);
         progress = new ProgressDialog(this);
+        createButton = (Button) findViewById(R.id.button_create_loyalty);
     }
 
     public void imgBack_MyCards(View view) {
@@ -130,9 +139,10 @@ public class Add_LoyaltyCard extends AppCompatActivity {
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
-                    intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
+                    Intent intent = new Intent(Add_LoyaltyCard.this, takeLoyaltyBarCode.class);
+//                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
+//                    intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
                     DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 }

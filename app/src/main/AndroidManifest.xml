@@ -104,7 +104,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.mystash_box.Program_Details"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".home.mycards_box.takeLoyaltyBarCode"></activity>
     </application>
 
 </manifest>
