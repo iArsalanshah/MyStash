@@ -8,19 +8,23 @@ public class Files {
 
     @SerializedName("filepath")
     @Expose
-    private Filepath filepath;
+    private String filepath;
 
     /**
-     * @return The filepath
+     * 
+     * @return
+     *     The filepath
      */
-    public Filepath getFilepath() {
+    public String getFilepath() {
         return filepath;
     }
 
     /**
-     * @param filepath The filepath
+     * 
+     * @param filepath
+     *     The filepath
      */
-    public void setFilepath(Filepath filepath) {
+    public void setFilepath(String filepath) {
         this.filepath = filepath;
     }
 

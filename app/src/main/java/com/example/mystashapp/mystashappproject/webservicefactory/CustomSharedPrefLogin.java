@@ -12,7 +12,6 @@ public class CustomSharedPrefLogin {
 
     public static void setUserObject(Context _context, Users object) {
         String json = (new Gson()).toJson(object);
-
         Editor editor = _context.getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
         editor.putString(Constant_util.USER_OBJECT, json);
         editor.putString(Constant_util.IS_LOGIN, Constant_util.IS_LOGIN);

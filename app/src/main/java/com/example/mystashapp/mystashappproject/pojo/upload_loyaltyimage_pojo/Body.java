@@ -11,14 +11,18 @@ public class Body {
     private Files files;
 
     /**
-     * @return The files
+     * 
+     * @return
+     *     The files
      */
     public Files getFiles() {
         return files;
     }
 
     /**
-     * @param files The files
+     * 
+     * @param files
+     *     The files
      */
     public void setFiles(Files files) {
         this.files = files;

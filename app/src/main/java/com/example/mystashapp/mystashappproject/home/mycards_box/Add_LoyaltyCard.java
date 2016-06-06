@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalt
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +51,8 @@ public class Add_LoyaltyCard extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Add_LoyaltyCard.this, "Works", Toast.LENGTH_SHORT).show();
-//                Intent createIntent = new Intent(Add_LoyaltyCard.this, takeLoyaltyCardPic);
+                Intent createIntent = new Intent(Add_LoyaltyCard.this, CreateACard.class);
+                startActivity(createIntent);
             }
         });
     }
@@ -124,7 +126,7 @@ public class Add_LoyaltyCard extends AppCompatActivity {
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             if (layoutInflater == null) {
                 layoutInflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -142,7 +144,9 @@ public class Add_LoyaltyCard extends AppCompatActivity {
                     Intent intent = new Intent(Add_LoyaltyCard.this, takeLoyaltyBarCode.class);
 //                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
-//                    intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
+                    SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+                    editor.putString("loyaltyPosition", getloyalties.get(position).getId()).apply();
+                    intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
                     DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 }

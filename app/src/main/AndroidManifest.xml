@@ -94,7 +94,7 @@
         <activity android:name=".home.flyers_box.Flyers_Available" />
         <activity android:name=".home.flyers_box.Flyers_pdfview" />
         <activity
-            android:name=".home.mycards_box.SimpleScannerActivity"
+            android:name=".helper.SimpleScannerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.mystash_box.RateAndReview"
@@ -105,7 +105,15 @@
         <activity
             android:name=".home.mystash_box.Program_Details"
             android:screenOrientation="portrait" />
-        <activity android:name=".home.mycards_box.takeLoyaltyBarCode"></activity>
+        <activity
+            android:name=".home.mycards_box.takeLoyaltyBarCode"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.takeLoyaltyNameDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.CreateACard"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

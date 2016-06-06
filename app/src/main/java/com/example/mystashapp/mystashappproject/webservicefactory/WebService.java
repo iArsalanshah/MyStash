@@ -18,10 +18,14 @@ import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
 import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
+import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface WebService {
@@ -97,18 +101,17 @@ public interface WebService {
     Call<GetCardsList> getCardsList(@Query("action") String customer_get_loyalty_card_list,
                                     @Query("userid") String cid_userid);
 
+
+    //TODO userName,front Image, BackImage
     @GET("/mystash/mobileservice_new.php")
     Call<AddLoyalty> getAddLoyalty(@Query("action") String customer_add_loyalty_card,
                                    @Query("cid") String cid_userid,
-                                   @Query("cardname") String cardname,
-                                   @Query("carddetail") String carddetail,
-                                   @Query("companyinfo") String companyinfo,
-                                   @Query("companylogo") String companylogo,
+                                   @Query("cardname") String cardname_as_ur_name,
+                                   @Query("carddetail") String carddetail_as_card_Name,
                                    @Query("cardno") String cardno,
                                    @Query("notes") String notes,
-                                   @Query("frontimage") String frontimage,
-                                   @Query("backimage") String backimage,
-                                   @Query("is_registerd_company") String is_registerd_company);
+                                   @Query("frontimage") String frontImage,
+                                   @Query("backimage") String barcodeImage);
 
     @GET("/mystash/mobileservice_new.php")
     Call<EditLoyalty> getEditLoyalty(@Query("action") String edit_customer_loyalty_card,
@@ -155,5 +158,8 @@ public interface WebService {
                                        @Query("cid") String cid,
                                        @Query("couponid") String couponid);
 
-
+    @Multipart
+    @POST("/mystash/mobileservice_new.php")
+    Call<UploadLoyaltyImage> uploadImage(@Query("action") String upload_image,
+                                         @Part MultipartBody.Part file);
 }

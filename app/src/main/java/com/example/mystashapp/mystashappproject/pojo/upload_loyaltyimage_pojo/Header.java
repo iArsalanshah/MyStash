@@ -14,28 +14,36 @@ public class Header {
     private String message;
 
     /**
-     * @return The success
+     * 
+     * @return
+     *     The success
      */
     public String getSuccess() {
         return success;
     }
 
     /**
-     * @param success The success
+     * 
+     * @param success
+     *     The success
      */
     public void setSuccess(String success) {
         this.success = success;
     }
 
     /**
-     * @return The message
+     * 
+     * @return
+     *     The message
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * @param message The message
+     * 
+     * @param message
+     *     The message
      */
     public void setMessage(String message) {
         this.message = message;
