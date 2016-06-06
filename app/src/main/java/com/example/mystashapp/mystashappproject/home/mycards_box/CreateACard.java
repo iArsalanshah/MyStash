@@ -3,6 +3,7 @@ package com.example.mystashapp.mystashappproject.home.mycards_box;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,19 +13,31 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
+import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreateACard extends AppCompatActivity implements View.OnClickListener {
     Button next, retake;
@@ -40,6 +53,18 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         clickListeners();
         textview_front_of_card.setVisibility(View.VISIBLE);
         retake.setVisibility(View.GONE);
+        boolean comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
+        if (comesFromDetailActivity) {
+            String url = getIntent().getStringExtra("frontCard");
+            if (!url.equals("")) {
+                textview_front_of_card.setVisibility(View.GONE);
+                retake.setVisibility(View.VISIBLE);
+                Picasso.with(this).load(url)
+                        .placeholder(R.drawable.placeholder_shadow)
+                        .error(R.drawable.placeholder_shadow)
+                        .into(frontCard);
+            }
+        }
     }
 
     private void initialization() {
@@ -66,10 +91,12 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.button_loyaltyDetails_next:
                 if (retake.getVisibility() == View.VISIBLE) {
+                    uploadImageView();
+                    takeLoyaltyNameDetails.is_Created = true;
                     Intent intent = new Intent(CreateACard.this, takeLoyaltyBarCode.class);
                     startActivity(intent);
                 } else
-                    Toast.makeText(CreateACard.this, "Please select front card", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateACard.this, "Please add front card", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureFrontCard:
                 break;
@@ -82,6 +109,50 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    private void uploadImageView() {
+        frontCard.buildDrawingCache();
+        Bitmap bitmap = frontCard.getDrawingCache();
+        if (bitmap != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+            // create RequestBody instance from file
+            RequestBody requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOutputStream.toByteArray());
+
+            // MultipartBody.Part is used to send also the actual file name
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
+            Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+
+            call.enqueue(new Callback<UploadLoyaltyImage>() {
+                @Override
+                public void onResponse(Call<UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
+                    UploadLoyaltyImage uploadLoyaltyImage = response.body();
+                    if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
+                        Toast.makeText(CreateACard.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                        String frontImage = "http://pioneerfoodclub.com/mystash/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
+                        SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+                        editor.putString("frontImage", frontImage);
+                        editor.apply();
+//                        Intent intent = new Intent(takeLoyaltyBarCode.this, takeLoyaltyNameDetails.class);
+//                        intent.putExtra("cardNumber", editText_generator_barcode.getText());
+//                        startActivity(intent);
+                    } else {
+                        Toast.makeText(CreateACard.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UploadLoyaltyImage> call, Throwable t) {
+                    Log.d(Constant_util.LOG_TAG, "onFailure: " + t.getMessage());
+                    Toast.makeText(CreateACard.this, "Network Connection Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else
+            Toast.makeText(CreateACard.this, "Error on Bitmap conversion", Toast.LENGTH_SHORT).show();
     }
 
     private void selectImage() {

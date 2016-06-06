@@ -27,6 +27,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,6 +139,12 @@ public class Add_LoyaltyCard extends AppCompatActivity {
             TextView title = (TextView) convertView.findViewById(R.id.textViewTitle_row_list_myCards);
             TextView details = (TextView) convertView.findViewById(R.id.textViewDetails_row_list_myCards);
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_addLoyalty);
+            title.setText(getloyalties.get(position).getCardname());
+            details.setText(getloyalties.get(position).getCarddetail());
+            Picasso.with(context).load(getloyalties.get(position).getImageurl())
+                    .error(R.drawable.placeholder_shadow)
+                    .placeholder(R.drawable.placeholder_shadow)
+                    .into(img);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -145,14 +152,13 @@ public class Add_LoyaltyCard extends AppCompatActivity {
 //                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
                     SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+                    editor.putString("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
                     editor.putString("loyaltyPosition", getloyalties.get(position).getId()).apply();
                     intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
                     DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 }
             });
-            title.setText(getloyalties.get(position).getCardname());
-            details.setText(getloyalties.get(position).getCarddetail());
 
             return convertView;
         }

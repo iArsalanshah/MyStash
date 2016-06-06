@@ -79,9 +79,7 @@
         <activity
             android:name=".home.mycards_box.Add_LoyaltyCard"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".home.mycards_box.DetailsLoyalty"
-            android:screenOrientation="portrait" />
+        <activity android:name=".home.mycards_box.DetailsLoyalty" />
         <activity
             android:name=".home.coupons_box.Coupons"
             android:screenOrientation="portrait" />

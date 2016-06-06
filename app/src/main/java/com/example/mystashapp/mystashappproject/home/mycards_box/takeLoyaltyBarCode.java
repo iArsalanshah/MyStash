@@ -64,8 +64,8 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         if (!SimpleScannerActivity.barcodeText.equals("")) {
             editText_generator_barcode.setText(SimpleScannerActivity.barcodeText);
             com.google.zxing.MultiFormatWriter writer = new MultiFormatWriter();
@@ -156,7 +156,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                                 editor.putString("barcodeImage", barcodeImage);
                                 editor.apply();
                                 Intent intent = new Intent(takeLoyaltyBarCode.this, takeLoyaltyNameDetails.class);
-                                intent.putExtra("cardNumber", editText_generator_barcode.getText());
+                                intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(takeLoyaltyBarCode.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();

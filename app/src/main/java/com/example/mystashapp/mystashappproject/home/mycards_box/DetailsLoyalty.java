@@ -2,6 +2,7 @@ package com.example.mystashapp.mystashappproject.home.mycards_box;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,27 +17,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalty;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.Loyaltycard;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.squareup.picasso.Picasso;
 
 public class DetailsLoyalty extends AppCompatActivity implements View.OnClickListener {
     public static boolean is_Edit = false;
-    public static boolean is_Created = false;
     ViewPager viewPager;
     TextView etCard, etName, etBusiness, etDetails;
     InkPageIndicator inkPageIndicator;
     Button edit;
     private Class<?> mClass;
-    private ImageView img1;
-    private ImageView img2;
     private Loyaltycard convertedObjEdit;
-    private String cardNumber;
-    private String urName;
-    private String cardName;
-    private String cardNote;
-//    String barcodeImage;
+    private String cardNumber, urName, cardName, cardNote, frontCard, backCard;
+    //String barcodeImage;
+    private int[] image_resources = {R.drawable.ic_loyalty_card_front, R.drawable.ic_loyalty_card_bk};
+    private Getloyalty getloyalty;
+    private ImageView gotViewForConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +45,15 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_details_loyalty);
 
         //
-        //Extra Intent from List
+        //Extra Intent from save loyalty
         //
         if (!is_Edit) {
             cardNumber = getIntent().getStringExtra("cardNumber");
             urName = getIntent().getStringExtra("urName");
             cardName = getIntent().getStringExtra("cardName");
             cardNote = getIntent().getStringExtra("cardNotes");
+            frontCard = getIntent().getStringExtra("frontCard");
+            backCard = getIntent().getStringExtra("backCard");
         }
 //        barcodeImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("barcodeImage", "none");
 
@@ -60,6 +63,8 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         String objectEdit = getIntent().getStringExtra("editLoyaltyObject");
         convertedObjEdit = new Gson().fromJson(objectEdit, Loyaltycard.class);
 
+        String addLoyaltyObj = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");
+        getloyalty = new Gson().fromJson(addLoyaltyObj, Getloyalty.class);
 
         init();
 
@@ -75,109 +80,6 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        if (!SimpleScannerActivity.barcodeText.equals("")) {
-//            etCard.setText(SimpleScannerActivity.barcodeText);
-//            com.google.zxing.MultiFormatWriter writer = new MultiFormatWriter();
-//
-//            String finaldata = Uri.encode(SimpleScannerActivity.barcodeText, "utf-8");
-//
-//            BitMatrix bm = null;
-//            try {
-//                bm = writer.encode(finaldata, BarcodeFormat.CODE_128, 150, 150);
-//            } catch (WriterException e) {
-//                e.printStackTrace();
-//            }
-//            Bitmap ImageBitmap = Bitmap.createBitmap(280, 140, Bitmap.Config.ARGB_8888);
-//
-//            for (int i = 0; i < 280; i++) {//width
-//                for (int j = 0; j < 140; j++) {//height
-//                    ImageBitmap.setPixel(i, j, bm.get(i, j) ? Color.BLACK : Color.WHITE);
-//                }
-//            }
-//
-//            if (ImageBitmap != null) {
-//                img2.setImageBitmap(ImageBitmap);
-//            } else {
-//                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-        if (is_Edit) {
-            etCard.setText(convertedObjEdit.getCardno());
-            //etName.setText(convertedObjEdit.get);
-        }
-    }
-
-    private void settingData() {
-        if (is_Edit) {
-            etBusiness.setText(convertedObjEdit.getCardname());
-            etDetails.setText(convertedObjEdit.getCarddetail());
-        } else {
-//            etBusiness.setText(convertedObjAdd.getCardname());
-//            etDetails.setText(convertedObjAdd.getCarddetail());
-            etCard.setText(cardNumber);
-            etName.setText(urName);
-            etBusiness.setText(cardName);
-            etDetails.setText(cardNote);
-        }
-        edit.setOnClickListener(this);
-//        save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Users cid = CustomSharedPrefLogin.getUserObject(DetailsLoyalty.this);
-//                if (!etName.getText().toString().equals("") && !etBusiness.getText().toString().equals("") &&
-//                        !etCard.getText().toString().equals("") && !etDetails.getText().toString().equals("")) {
-//                    if (is_Edit) {
-//                        Call<EditLoyalty> calledit = WebServicesFactory.getInstance().getEditLoyalty(Constant_util.ACTION_EDIT_LOYALTY_CARD, cid.getId(),
-//                                convertedObjEdit.getCardname(), convertedObjEdit.getCarddetail(), "Hyenoon", "Logo", etCard.getText().toString(), "Notes", "", "", "1", convertedObjEdit.getCid());
-//                        calledit.enqueue(new Callback<EditLoyalty>() {
-//                            @Override
-//                            public void onResponse(Call<EditLoyalty> call, Response<EditLoyalty> response) {
-//                                EditLoyalty editLoyalty = response.body();
-//                                if (editLoyalty.getHeader().getSuccess().equals("1")) {
-//                                    Toast.makeText(DetailsLoyalty.this, "Successfully Edited", Toast.LENGTH_SHORT).show();
-//                                    finish();
-//                                } else {
-//                                    Toast.makeText(DetailsLoyalty.this, "Found 0", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Call<EditLoyalty> call, Throwable t) {
-//                                Toast.makeText(DetailsLoyalty.this, "Network Error", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    } else {
-//                        Call<AddLoyalty> call = WebServicesFactory.getInstance().getAddLoyalty(Constant_util.ACTION_ADD_LOYALTY_CARD, cid.getId(),
-//                                convertedObjAdd.getCardname(), convertedObjAdd.getCarddetail(), "Hyenoon", "Logo", etCard.getText().toString(), "Notes", "", "", "1"
-//                        );
-//                        call.enqueue(new Callback<AddLoyalty>() {
-//                            @Override
-//                            public void onResponse(Call<AddLoyalty> call, Response<AddLoyalty> response) {
-//                                AddLoyalty addLoyalty = response.body();
-//                                if (addLoyalty.getHeader().getSuccess().equals("1")) {
-//                                    Toast.makeText(DetailsLoyalty.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-//                                    finish();
-//                                } else {
-//                                    Toast.makeText(DetailsLoyalty.this, "Found 0", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Call<AddLoyalty> call, Throwable t) {
-//                                Toast.makeText(DetailsLoyalty.this, "Network Error", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    }
-//                } else {
-//                    Toast.makeText(DetailsLoyalty.this, "Please Complete All Fields", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-    }
-
     private void init() {
         viewPager = (ViewPager) findViewById(R.id.view_pager_Loyalty);
         etCard = (EditText) findViewById(R.id.edittext_loyalty_cardNo);
@@ -188,6 +90,24 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         inkPageIndicator = (InkPageIndicator) findViewById(R.id.ink_indicator_loyalty);
     }
 
+    private void settingData() {
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (is_Edit) {
+                etBusiness.setText(convertedObjEdit.getCarddetail());
+                etDetails.setText(convertedObjEdit.getNotes());
+                etCard.setText(convertedObjEdit.getCardno());
+                etName.setText(convertedObjEdit.getCardname());
+            } else {
+                etCard.setText(cardNumber);
+                etName.setText(urName);
+                etBusiness.setText(cardName);
+                etDetails.setText(cardNote);
+            }
+            edit.setOnClickListener(this);
+        }
+    }
+
     public void imgBack_LoyaltyDetails(View view) {
         finish();
     }
@@ -196,35 +116,29 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(DetailsLoyalty.this, "Clicked", Toast.LENGTH_SHORT).show();
     }
 
-//    public void launchActivity(Class<?> clss) {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            mClass = clss;
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
-//        } else {
-//            Intent intent = new Intent(this, clss);
-//            startActivity(intent);
-//        }
-//    }
-
     @Override
     protected void onStop() {
         super.onStop();
-//        SimpleScannerActivity.barcodeText = "";
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_loyalty_edit:
-                if (is_Created) {
-                    Intent intent = new Intent();
-//                startActivity(intent);
+                Intent intent = new Intent(DetailsLoyalty.this, CreateACard.class);
+                if (getloyalty.getImageurl().length() > 0) {
+                    if (is_Edit) {
+                        intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
+                        intent.putExtra("comesFromDetail", true);
+                        startActivity(intent);
+                    } else {
+                        intent.putExtra("frontCard", frontCard);
+                        intent.putExtra("comesFromDetail", true);
+                        startActivity(intent);
+                    }
                 } else {
-                    Toast.makeText(DetailsLoyalty.this, "need to implement", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class);
-//                    startActivity(intent);
+                    intent.putExtra("comesFromDetail", false);
+                    startActivity(intent);
                 }
                 break;
             default:
@@ -234,117 +148,36 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-
+        //TODO need to implement flow
     }
 
-    //    private void selectImage() {
-//        final CharSequence[] items = {"Take Photo", "Choose from Library",
-//                "Cancel"};
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(DetailsLoyalty.this);
-//        builder.setTitle("Add Photo!");
-//        builder.setItems(items, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int item) {
-//                if (items[item].equals("Take Photo")) {
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    startActivityForResult(intent, REQUEST_CAMERA);
-//                } else if (items[item].equals("Choose from Library")) {
-//                    Intent intent = new Intent(
-//                            Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                    intent.setType("image/*");
-//                    startActivityForResult(
-//                            Intent.createChooser(intent, "Select File"),
-//                            SELECT_FILE);
-//                } else if (items[item].equals("Cancel")) {
-//                    dialog.dismiss();
-//                }
-//            }
-//        });
-//        builder.show();
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
-//    private void onCaptureImageResult(Intent data) {
-//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-//
-//        File destination = new File(Environment.getExternalStorageDirectory(),
-//                System.currentTimeMillis() + ".jpg");
-//
-//        FileOutputStream fo;
-//        try {
-//            destination.createNewFile();
-//            fo = new FileOutputStream(destination);
-//            fo.write(bytes.toByteArray());
-//            fo.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        img1.setImageBitmap(thumbnail);
-//    }
-
-//    @SuppressWarnings("deprecation")
-//    private void onSelectFromGalleryResult(Intent data) {
-//        Uri selectedImageUri = data.getData();
-//        String[] projection = {MediaStore.MediaColumns.DATA};
-//        Cursor cursor = managedQuery(selectedImageUri, projection, null, null,
-//                null);
-//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-//        cursor.moveToFirst();
-//
-//        String selectedImagePath = cursor.getString(column_index);
-//
-//        Bitmap bm;
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(selectedImagePath, options);
-//        final int REQUIRED_SIZE = 200;
-//        int scale = 1;
-//        while (options.outWidth / scale / 2 >= REQUIRED_SIZE
-//                && options.outHeight / scale / 2 >= REQUIRED_SIZE)
-//            scale *= 2;
-//        options.inSampleSize = scale;
-//        options.inJustDecodeBounds = false;
-//        bm = BitmapFactory.decodeFile(selectedImagePath, options);
-//
-//        img1.setImageBitmap(bm);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
 //    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == SELECT_FILE)
-//                onSelectFromGalleryResult(data);
-//            else if (requestCode == REQUEST_CAMERA)
-//                onCaptureImageResult(data);
-//        }
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case CAMERA_PERMISSION:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if (mClass != null) {
-//                        Intent intent = new Intent(this, mClass);
-//                        startActivity(intent);
-//                    }
-//                } else {
-//                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
-//                }
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            Toast.makeText(DetailsLoyalty.this, "Landscape", Toast.LENGTH_SHORT).show();
+////            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(300,120);
+////            viewPager.setLayoutParams(layoutParams);
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            Toast.makeText(DetailsLoyalty.this, "Portrait", Toast.LENGTH_SHORT).show();
+////            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+////            viewPager.setLayoutParams(layoutParams);
 //        }
 //    }
 
     private class ViewPagerLayaltyAdapter extends PagerAdapter {
         Context context;
-        private int[] image_resources = {R.drawable.ic_loyalty_card_front,R.drawable.ic_loyalty_card_bk};
+        String[] imgs = {"1", "2"};
         private LayoutInflater layoutInflater;
 
         public ViewPagerLayaltyAdapter(Context context) {
@@ -359,28 +192,39 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
             View item_view = layoutInflater.inflate
                     (R.layout.swipe_layout_loyalty_details, container, false);
-
             ImageView imageView = (ImageView) item_view.findViewById(R.id.swipe_view_Images_loyalty);
-
-            imageView.setImageResource(image_resources[position]);
+            gotViewForConfig = imageView;
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
-                            img1 = (ImageView) v;
-                            Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
                             break;
                         case 1:
-                            img2 = (ImageView) v;
-                            Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
                             break;
                         default:
-                            Toast.makeText(context, "default", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
             });
+            if (!is_Edit) {
+                imgs[0] = frontCard;
+                imgs[1] = backCard;
+                Picasso.with(context)
+                        .load(imgs[position])
+                        .placeholder(R.drawable.placeholder_shadow)
+                        .into(imageView);
+            } else {
+                if (convertedObjEdit.getFrontimage().length() > 0 && convertedObjEdit.getBackimage().length() > 0) {
+                    imgs[0] = convertedObjEdit.getFrontimage();
+                    imgs[1] = convertedObjEdit.getBackimage();
+                    Picasso.with(context)
+                            .load(imgs[position])
+                            .placeholder(R.drawable.placeholder_shadow)
+                            .into(imageView);
+                } else imageView.setImageResource(image_resources[position]);
+
+            }
             container.addView(item_view);
             return item_view;
         }
@@ -392,7 +236,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public int getCount() {
-            return 0;
+            return image_resources.length;
         }
 
         @Override
