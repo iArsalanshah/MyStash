@@ -54,8 +54,8 @@ public class CouponsList_Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupons_list__details);
         String objCoupon = getIntent().getStringExtra("couponObj");
-        cObj = new Gson().fromJson(objCoupon, Coupon.class);
         Log.d(Constant_util.LOG_TAG, objCoupon);
+        cObj = new Gson().fromJson(objCoupon, Coupon.class);
         cid = CustomSharedPrefLogin.getUserObject(CouponsList_Details.this);
         init();
         clickEvents();

@@ -3,6 +3,7 @@ package com.example.mystashapp.mystashappproject;
 public class Constant_util {
     public static final String BASE_URL = "http://pioneerfoodclub.com/";
     public static final String ACTION_REGISTER_CUSTOMER = "customer_register";
+    public static final String ACTION_UPDATE_REGISTER_CUSTOMER = "customer_register_edit";
     public static final String ACTION_LOGIN_CUSTOMER = "customer_login";
     public static final String ACTION_GET_MYSTASH_LIST = "get_my_stash_list";
     public static final String ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN = "get_restaurant_list_for_checkin";
@@ -34,4 +35,5 @@ public class Constant_util {
     public static final String ACTION_REMINDME_COUPON = "remindme_coupon";
     public static final String ACTION_REDEEM_COUPON = "customer_redeem_coupons";
     public static final String ACTION_UPLOAD_LOYALTY_IMAGE = "upload_loyalty_image";
+    public static final String ACTION_UPLOAD_PROFILE_IMAGE = "upload_image";
 }

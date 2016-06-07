@@ -125,7 +125,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             // MultipartBody.Part is used to send also the actual file name
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
-            Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+            Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
 
             call.enqueue(new Callback<UploadLoyaltyImage>() {
                 @Override

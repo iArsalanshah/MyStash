@@ -18,6 +18,7 @@ import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
 import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
+import com.example.mystashapp.mystashappproject.pojo.update_registeration.UpdateRegisteration;
 import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 
 import okhttp3.MultipartBody;
@@ -35,16 +36,28 @@ public interface WebService {
                                   @Query("password") String password);
 
     @POST("/mystash/mobileservice_new.php")
-    Call<RegisterUser> postRegisterUser(@Query("action") String action,
+    Call<RegisterUser> postRegisterUser(@Query("action") String customer_register,
                                         @Query("cfirstname") String name,
                                         @Query("email") String email,
                                         @Query("password") String password,
                                         @Query("number") String number,
-                                        @Query("number") String bday,
+                                        @Query("imgurl") String imgURL,
+                                        @Query("birthday") String bday,
                                         @Query("sex") String sex,
                                         @Query("categories") String category,
-                                        @Query("areaOfInterest") String areaOfInterst
-    );
+                                        @Query("areaOfInterest") String areaOfInterst);
+
+    @POST("/mystash/mobileservice_new.php")
+    Call<UpdateRegisteration> postUpdateRegisterUser(@Query("action") String customer_register_edit,
+                                                     @Query("cfirstname") String name,
+                                                     @Query("email") String email,
+                                                     @Query("password") String pwd,
+                                                     @Query("number") String phone,
+                                                     @Query("imgurl") String imgURL,
+                                                     @Query("birthday") String bday,
+                                                     @Query("sex") String gender,
+                                                     @Query("categories") String category,
+                                                     @Query("areaOfInterest") String areaOfInterest);
 
     @GET("/mystash/mobileservice_new.php")
     Call<GetMyStash> getMyStashList(@Query("action") String action,
@@ -97,10 +110,10 @@ public interface WebService {
     Call<GetMycards> getMyCards(@Query("action") String customer_my_loyalty_card,
                                 @Query("userid") String cid_userid);
 
+
     @GET("/mystash/mobileservice_new.php")
     Call<GetCardsList> getCardsList(@Query("action") String customer_get_loyalty_card_list,
                                     @Query("userid") String cid_userid);
-
 
     //TODO userName,front Image, BackImage
     @GET("/mystash/mobileservice_new.php")
@@ -142,7 +155,8 @@ public interface WebService {
                                        @Query("couponid") String couponid);
 
     @GET("/mystash/mobileservice_new.php")
-    Call<CategoriesCoupons> getSavedCoupons(@Query("action") String customer_get_coupon_categories);
+    Call<Get_All_Coupons> getSavedCoupons(@Query("action") String customer_get_coupon_categories,
+                                          @Query("cid") String cid);
 
     @GET("/mystash/mobileservice_new.php")
     Call<RemindMe> getRemindCoupon(@Query("action") String remindme_coupon,
@@ -160,6 +174,12 @@ public interface WebService {
 
     @Multipart
     @POST("/mystash/mobileservice_new.php")
-    Call<UploadLoyaltyImage> uploadImage(@Query("action") String upload_image,
-                                         @Part MultipartBody.Part file);
+    Call<UploadLoyaltyImage> uploadLoyaltyImage(@Query("action") String upload_loyalty_image,
+                                                @Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("/mystash/mobileservice_new.php")
+    Call<UploadLoyaltyImage> uploadProfileImage(@Query("action") String upload_image,
+                                                @Part MultipartBody.Part file);
+
 }

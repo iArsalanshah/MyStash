@@ -202,14 +202,37 @@
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnId_updateRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@color/colorLoginBtn"
+                    android:text="Update"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
-            <ImageView
+            <!--<ImageView-->
+            <!--android:id="@+id/imageProfileRegister"-->
+            <!--android:layout_width="130dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:contentDescription="User Profile Image"-->
+            <!--android:src="@drawable/img_profile" />-->
+
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageProfileRegister"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:contentDescription="User Profile Image"
                 android:src="@drawable/img_profile" />
         </FrameLayout>

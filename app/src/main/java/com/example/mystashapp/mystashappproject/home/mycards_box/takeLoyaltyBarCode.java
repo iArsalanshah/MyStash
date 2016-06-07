@@ -44,13 +44,12 @@ import retrofit2.Response;
 
 public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClickListener {
     private static final int CAMERA_PERMISSION = 1;
-    private Class<?> mClass;
     Bitmap bitmap = null;
-
     ImageView imageview_backTopbar, imageView_captureBarcode;
     EditText editText_generator_barcode;
-    private Button button_next_barcode;
     TextView button_generate_barcode;
+    private Class<?> mClass;
+    private Button button_next_barcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +142,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
                     //TODO need to implement Webservice for upload loyalty image
 
-                    Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+                    Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
 
                     call.enqueue(new Callback<UploadLoyaltyImage>() {
                         @Override

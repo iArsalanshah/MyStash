@@ -111,6 +111,7 @@ public class Coupons extends AppCompatActivity {
                 } else {
                     Toast.makeText(Coupons.this, "" + position, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Coupons.this, Coupons_Categories_Click.class);
+                    intent.putExtra("textSavedClick", false);
                     intent.putExtra("catID", resp.getBody().getCategories().get(position).getId());
                     startActivity(intent);
                 }
@@ -121,7 +122,9 @@ public class Coupons extends AppCompatActivity {
         textSaved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Coupons.this, Coupons_Categories_Click.class)); ///****************BHUNNDDDD*********************
+                Intent intent = new Intent(Coupons.this, Coupons_Categories_Click.class);
+                intent.putExtra("textSavedClick", true);
+                startActivity(intent);
             }
         });
 

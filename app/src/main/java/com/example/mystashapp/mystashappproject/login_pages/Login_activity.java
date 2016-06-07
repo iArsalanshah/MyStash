@@ -181,7 +181,7 @@ public class Login_activity extends AppCompatActivity {
                 public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
                     LoginUser users = response.body();
 
-                    users.getBody().getUsers();
+//                    users.getBody().getUsers();
                     if (users.getHeader().getSuccess().equals("1")) {
                         prog.dismiss();
                         Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();

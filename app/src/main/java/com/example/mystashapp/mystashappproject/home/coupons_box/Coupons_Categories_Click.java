@@ -38,6 +38,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     private ListView listView;
     private String catID;
     private TextView altTextCouponsSavedList;
+    private boolean isTextSavedClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +47,41 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         catID = getIntent().getStringExtra("catID");
         init();
         clickEvents();
+        isTextSavedClick = getIntent().getBooleanExtra("textSavedClick", false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getAllCoupons();
-        getSavedCoupons();
+        if (isTextSavedClick) {
+            getSavedCoupons();
+        } else
+            getAllCoupons();
     }
 
     private void getSavedCoupons() {
+        Users cid = CustomSharedPrefLogin.getUserObject(this);
+        Log.d(Constant_util.LOG_TAG, cid.getId());
+        Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getSavedCoupons(Constant_util.ACTION_GET_MY_SAVED_COUPONS, cid.getId());
+        call.enqueue(new Callback<Get_All_Coupons>() {
+            @Override
+            public void onResponse(Call<Get_All_Coupons> call, Response<Get_All_Coupons> response) {
+                Get_All_Coupons savedCoupons = response.body();
+                if (savedCoupons.getHeader().getSuccess().equals("1")) {
+                    altTextCouponsSavedList.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                    listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, savedCoupons.getBody().getCoupons()));
+                } else {
+                    altTextCouponsSavedList.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
+                Toast.makeText(Coupons_Categories_Click.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getAllCoupons() {
@@ -74,7 +99,6 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                 } else {
                     altTextCouponsSavedList.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
-//                    Toast.makeText(Coupons_Categories_Click.this, "Found: " + allCoupons.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
