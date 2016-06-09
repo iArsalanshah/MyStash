@@ -36,4 +36,7 @@ public class Constant_util {
     public static final String ACTION_REDEEM_COUPON = "customer_redeem_coupons";
     public static final String ACTION_UPLOAD_LOYALTY_IMAGE = "upload_loyalty_image";
     public static final String ACTION_UPLOAD_PROFILE_IMAGE = "upload_image";
+    public static final String ACTION_CUSTOMER_CHECKIN = "customer_checkin";
+    public static final String DEFAULT_RADIUS = "50";
+
 }

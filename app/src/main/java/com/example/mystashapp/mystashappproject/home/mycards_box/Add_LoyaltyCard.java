@@ -79,14 +79,16 @@ public class Add_LoyaltyCard extends AppCompatActivity {
                 if (getCardsList.getHeader().getSuccess().equals("1")) {
                     listview.setAdapter(new AddLoyaltyAdapter(Add_LoyaltyCard.this, getCardsList.getBody().getGetloyalty()));
                 } else {
-                    Toast.makeText(Add_LoyaltyCard.this, "Found 0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Add_LoyaltyCard.this, "Something went wrong. try again later", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GetCardsList> call, Throwable t) {
                 progress.dismiss();
-                Log.d(Constant_util.LOG_TAG, t.getMessage());
+                Toast.makeText(Add_LoyaltyCard.this, "Something went wrong with internet connection", Toast.LENGTH_SHORT).show();
+                if (t.getMessage() != null)
+                    Log.d(Constant_util.LOG_TAG, "" + t.getMessage());
             }
         });
     }
@@ -141,10 +143,11 @@ public class Add_LoyaltyCard extends AppCompatActivity {
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_addLoyalty);
             title.setText(getloyalties.get(position).getCardname());
             details.setText(getloyalties.get(position).getCarddetail());
-            Picasso.with(context).load(getloyalties.get(position).getImageurl())
-                    .error(R.drawable.placeholder_shadow)
-                    .placeholder(R.drawable.placeholder_shadow)
-                    .into(img);
+            if (getloyalties.get(position).getImageurl() != null && !getloyalties.get(position).getImageurl().isEmpty())
+                Picasso.with(context).load(getloyalties.get(position).getImageurl())
+                        .error(R.drawable.placeholder_shadow)
+                        .placeholder(R.drawable.placeholder_shadow)
+                        .into(img);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

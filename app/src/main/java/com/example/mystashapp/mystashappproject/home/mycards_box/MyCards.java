@@ -25,6 +25,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -145,8 +146,12 @@ MyCards extends AppCompatActivity {
             });
             title.setText(loyaltycards.get(position).getCardname());
             details.setText(loyaltycards.get(position).getCarddetail());
-
-            //Image is missing in webservice
+            if (loyaltycards.get(position).getImageurl() != null && !loyaltycards.get(position).getImageurl().isEmpty())
+                Picasso.with(context)
+                        .load(loyaltycards.get(position).getImageurl())
+                        .placeholder(R.drawable.placeholder_shadow)
+                        .error(R.drawable.img_profile)
+                        .into(img);
 
             return convertView;
         }

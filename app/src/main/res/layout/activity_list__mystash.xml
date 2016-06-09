@@ -38,7 +38,7 @@
                 android:layout_height="28dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="16dp"
                 android:onClick="PlusMyStashRecyclerImageView"
                 android:src="@drawable/img_toolbar_add" />
         </RelativeLayout>

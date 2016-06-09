@@ -12,6 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="6dp"
+        android:scaleType="fitXY"
         android:src="@drawable/img_profile" />
 
     <TextView

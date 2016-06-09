@@ -174,7 +174,6 @@ public class Coupons extends AppCompatActivity {
 
             final RelativeLayout layoutBack = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_cat_row_listview);
             TextView titleLabel = (TextView) convertView.findViewById(R.id.textView_row_Categories_Listview);
-//            layoutBack.setBackgroundResource(categories.get(position).getImgurl());
             Picasso.with(context).load(categories.get(position).getImgurl())
                     .placeholder(R.drawable.placeholder_shadow)
                     .error(R.drawable.placeholder_shadow)

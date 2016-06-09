@@ -41,7 +41,7 @@ public class List_MyStash extends AppCompatActivity {
         altText = (TextView) findViewById(R.id.list_mystash_altText);
         //Progress Dialog
         prog = new ProgressDialog(this);
-        prog.show();
+        prog.setProgressStyle(android.R.style.Widget_Holo_Light_ProgressBar_Large_Inverse);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh_MyStashList);
 
         //RecyclerView
@@ -71,24 +71,32 @@ public class List_MyStash extends AppCompatActivity {
     }
 
     private void getMyStash() {
+        prog.show();
         Users cid = CustomSharedPrefLogin.getUserObject(List_MyStash.this);
         Call<GetMyStash> call = WebServicesFactory.getInstance().getMyStashList(Constant_util.ACTION_GET_MYSTASH_LIST, cid.getId());
         call.enqueue(new Callback<GetMyStash>() {
             @Override
             public void onResponse(Call<GetMyStash> call, Response<GetMyStash> response) {
+                prog.dismiss();
                 swipeContainer.setRefreshing(false);
                 try {
                     GetMyStash businessResponse = response.body();
-                    if (businessResponse.getHeader().getSuccess().equals("1")) {
-                        ArrayList<Stashlist> arrSearchBusiness = new
-                                ArrayList<>(businessResponse.getBody().getStashlist());
-                        mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
-                        prog.dismiss();
-                        mRecyclerView.setAdapter(mAdapter);
-                    } else if (businessResponse.getHeader().getSuccess().equals("0")) {
-                        prog.dismiss();
-                        mRecyclerView.setVisibility(View.GONE);
-                        altText.setVisibility(View.VISIBLE);
+                    switch (businessResponse.getHeader().getSuccess()) {
+                        case "1":
+                            ArrayList<Stashlist> arrSearchBusiness = new
+                                    ArrayList<>(businessResponse.getBody().getStashlist());
+                            mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
+                            mRecyclerView.setAdapter(mAdapter);
+                            if (businessResponse.getBody().getStashlist().isEmpty() && businessResponse.getBody().getStashlist().size() == 0)
+                                Toast.makeText(List_MyStash.this, "Something fishy", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "0":
+                            mRecyclerView.setVisibility(View.GONE);
+                            altText.setVisibility(View.VISIBLE);
+                            break;
+                        default:
+                            Toast.makeText(List_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -98,8 +106,8 @@ public class List_MyStash extends AppCompatActivity {
             @Override
             public void onFailure(Call<GetMyStash> call, Throwable t) {
                 swipeContainer.setRefreshing(false);
-                //lv.setVisibility(View.GONE);
-                Toast.makeText(List_MyStash.this, "Can't connect to Internet", Toast.LENGTH_SHORT).show();
+                prog.dismiss();
+                Toast.makeText(List_MyStash.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }

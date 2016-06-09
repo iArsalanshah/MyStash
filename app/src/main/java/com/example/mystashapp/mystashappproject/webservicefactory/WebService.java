@@ -5,6 +5,7 @@ import com.example.mystashapp.mystashappproject.pojo.add_review_pojo.ADDReview;
 import com.example.mystashapp.mystashappproject.pojo.add_stash.AddStash;
 import com.example.mystashapp.mystashappproject.pojo.addloyalty_pojo.AddLoyalty;
 import com.example.mystashapp.mystashappproject.pojo.categories_coupons_pojo.CategoriesCoupons;
+import com.example.mystashapp.mystashappproject.pojo.customer_check_in.CustomerCheckIn;
 import com.example.mystashapp.mystashappproject.pojo.editloyalty_pojo.EditLoyalty;
 import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
@@ -67,7 +68,8 @@ public interface WebService {
     Call<SearchBusiness> getSearchBusinessCall(@Query("action") String action,
                                                @Query("userid") String userid,
                                                @Query("lat") String lat,
-                                               @Query("long") String lng);
+                                               @Query("long") String lng,
+                                               @Query("radius") String radius);
 
     @POST("/mystash/mobileservice_new.php")
     Call<LoginUser> getFblogin(@Query("action") String action,
@@ -115,7 +117,6 @@ public interface WebService {
     Call<GetCardsList> getCardsList(@Query("action") String customer_get_loyalty_card_list,
                                     @Query("userid") String cid_userid);
 
-    //TODO userName,front Image, BackImage
     @GET("/mystash/mobileservice_new.php")
     Call<AddLoyalty> getAddLoyalty(@Query("action") String customer_add_loyalty_card,
                                    @Query("cid") String cid_userid,
@@ -181,5 +182,11 @@ public interface WebService {
     @POST("/mystash/mobileservice_new.php")
     Call<UploadLoyaltyImage> uploadProfileImage(@Query("action") String upload_image,
                                                 @Part MultipartBody.Part file);
+
+
+    @POST("/mystash/mobileservice_new.php")
+    Call<CustomerCheckIn> checkInCustomer(@Query("action") String customer_checkin,
+                                          @Query("userid") String userid,
+                                          @Query("adminid") String adminid);
 
 }
