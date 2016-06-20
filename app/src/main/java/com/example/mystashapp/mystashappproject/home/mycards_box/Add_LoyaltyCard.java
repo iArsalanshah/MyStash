@@ -79,7 +79,7 @@ public class Add_LoyaltyCard extends AppCompatActivity {
                 if (getCardsList.getHeader().getSuccess().equals("1")) {
                     listview.setAdapter(new AddLoyaltyAdapter(Add_LoyaltyCard.this, getCardsList.getBody().getGetloyalty()));
                 } else {
-                    Toast.makeText(Add_LoyaltyCard.this, "Something went wrong. try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Add_LoyaltyCard.this, "" + getCardsList.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -100,7 +100,7 @@ public class Add_LoyaltyCard extends AppCompatActivity {
     }
 
     public void imgBack_MyCards(View view) {
-        finish();
+        startActivity(new Intent(Add_LoyaltyCard.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     private class AddLoyaltyAdapter extends BaseAdapter {
@@ -138,15 +138,15 @@ public class Add_LoyaltyCard extends AppCompatActivity {
                 convertView = layoutInflater.inflate(R.layout.row_addloyaltycard_listview, parent, false);
 
             ImageView img = (ImageView) convertView.findViewById(R.id.imageView_row_list_myCards);
-            TextView title = (TextView) convertView.findViewById(R.id.textViewTitle_row_list_myCards);
+//            TextView title = (TextView) convertView.findViewById(R.id.textViewTitle_row_list_myCards);
             TextView details = (TextView) convertView.findViewById(R.id.textViewDetails_row_list_myCards);
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_addLoyalty);
-            title.setText(getloyalties.get(position).getCardname());
-            details.setText(getloyalties.get(position).getCarddetail());
+//            title.setText(getloyalties.get(position).getCardname());
+            details.setText(getloyalties.get(position).getCardname());
             if (getloyalties.get(position).getImageurl() != null && !getloyalties.get(position).getImageurl().isEmpty())
                 Picasso.with(context).load(getloyalties.get(position).getImageurl())
-                        .error(R.drawable.placeholder_shadow)
-                        .placeholder(R.drawable.placeholder_shadow)
+                        .error(R.drawable.placeholder)
+                        .placeholder(R.drawable.placeholder)
                         .into(img);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

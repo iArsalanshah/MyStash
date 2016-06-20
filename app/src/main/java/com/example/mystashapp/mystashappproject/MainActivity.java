@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +22,12 @@ import com.example.mystashapp.mystashappproject.home.mystash_box.List_MyStash;
 import com.example.mystashapp.mystashappproject.home.mystash_box.SearchBusiness_MyStash;
 import com.example.mystashapp.mystashappproject.login_pages.Login_activity;
 import com.example.mystashapp.mystashappproject.login_pages.Register;
-import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
+import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.residemenu_util.ResideMenu;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.Tracker;
 import com.facebook.login.LoginManager;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
     static int[] listImages = {R.drawable.ic_home, R.drawable.ic_messege, R.drawable.ic_my_cite_point, R.drawable.ic_my_account, R.drawable.ic_sharethe_app, R.drawable.ic_powerbtn};
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     private ResideMenu resideMenu;
     private Tracker tracker;
+    private Users user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         enableTracking();
+        settingUpUserData();
+    }
+
+    private void settingUpUserData() {
+        TextView Name = (TextView) resideMenu.getLeftMenuView().findViewById(R.id.textViewNameResideMenu);
+        ImageView imgProfile = (ImageView) resideMenu.getLeftMenuView().findViewById(R.id.imageViewResideMenuProfile);
+        //String name = user.getBody().getUsers().getCfirstname();
+        try {
+            if (user.getCfirstname() != null) {
+                Name.setText(user.getCfirstname());
+                if (user.getClastname() != null) {
+                    Name.append(" " + user.getClastname());
+                }
+            }
+            if (user.getImgurl() != null && !user.getImgurl().isEmpty()) {
+                Picasso.with(this)
+                        .load(user.getImgurl())
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                        .into(imgProfile);
+            }
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void setToolbar() {
@@ -65,15 +92,8 @@ public class MainActivity extends AppCompatActivity {
     private void setUpMenu() {
 
         // attach to current activity;
-        TextView Name = (TextView) findViewById(R.id.textViewNameResideMenu);
+        user = CustomSharedPrefLogin.getUserObject(MainActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
-        LoginUser user = new LoginUser();
-        //String name = user.getBody().getUsers().getCfirstname();
-        try {
-            Name.setText(user.getBody().getUsers().getCfirstname());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         resideMenu = new ResideMenu(this, R.layout.residemenu_left_activity, R.layout.residemenu_left_activity);
         resideMenu.setBackground(R.drawable.menu_background);
         resideMenu.attachToActivity(this);
@@ -127,6 +147,26 @@ public class MainActivity extends AppCompatActivity {
         //valid scale factor is between 0.0f and 1.0f. left menu'width is 150dip.
         resideMenu.setScaleValue(0.6f);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+//        TextView Name = (TextView) resideMenu.getLeftMenuView().findViewById(R.id.textViewNameResideMenu);
+//        ImageView imgProfile = (ImageView) resideMenu.getLeftMenuView().findViewById(R.id.imageViewResideMenuProfile);
+//        //String name = user.getBody().getUsers().getCfirstname();
+//        try {
+//            if (user.getCfirstname() != null) {
+//                Name.setText(user.getCfirstname());
+//                if (user.getClastname() != null) {
+//                    Name.append(" " + user.getClastname());
+//                }
+//            }
+//            if (user.getImgurl() != null) {
+//                Picasso.with(this)
+//                        .load(user.getImgurl())
+//                        .placeholder(R.drawable.img_profile)
+//                        .error(R.drawable.img_profile)
+//                        .into(imgProfile);
+//            }
+//        } catch (NullPointerException ex) {
+//            ex.printStackTrace();
+//        }
         addMenuButtonListener();
     }
 
@@ -140,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (NullPointerException e) {
-            Toast.makeText(MainActivity.this, "Menu Btn Not Working", Toast.LENGTH_SHORT).show();
+            Log.d(Constant_util.LOG_TAG, "addMenuButtonListener: Menu Btn Not Working");
         }
     }
 

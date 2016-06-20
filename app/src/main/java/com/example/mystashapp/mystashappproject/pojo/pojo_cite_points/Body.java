@@ -9,22 +9,43 @@ import java.util.List;
 
 public class Body {
 
-    @SerializedName("data")
+    @SerializedName("totalpoints")
     @Expose
-    private List<Datum> data = new ArrayList<Datum>();
+    private String totalpoints;
+    @SerializedName("history")
+    @Expose
+    private List<History> history = new ArrayList<History>();
 
     /**
-     * @return The data
+     *
+     * @return
+     *     The totalpoints
      */
-    public List<Datum> getData() {
-        return data;
+    public String getTotalpoints() {
+        return totalpoints;
     }
 
     /**
-     * @param data The data
+     *
+     * @param totalpoints
+     *     The totalpoints
      */
-    public void setData(List<Datum> data) {
-        this.data = data;
+    public void setTotalpoints(String totalpoints) {
+        this.totalpoints = totalpoints;
+    }
+
+    /**
+     * @return The history
+     */
+    public List<History> getHistory() {
+        return history;
+    }
+
+    /**
+     * @param history The history
+     */
+    public void setHistory(List<History> history) {
+        this.history = history;
     }
 
 }

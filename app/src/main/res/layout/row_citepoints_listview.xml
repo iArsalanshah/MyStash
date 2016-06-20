@@ -13,8 +13,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="1234 Points | "
+        android:text="1234 Points"
         android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/textView_row_citepoint"
+        android:text=" | "
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -32,7 +42,7 @@
         android:id="@+id/textView_row_citePoints_dateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textView_row_citepoint"
+        android:layout_toRightOf="@+id/dash"
         android:text="2014-10-14"
         android:textColor="@android:color/black"
         android:textSize="16sp" />

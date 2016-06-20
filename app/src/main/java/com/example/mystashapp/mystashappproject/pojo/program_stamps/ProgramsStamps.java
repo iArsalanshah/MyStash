@@ -14,28 +14,36 @@ public class ProgramsStamps {
     private Body body;
 
     /**
-     * @return The header
+     *
+     * @return
+     *     The header
      */
     public Header getHeader() {
         return header;
     }
 
     /**
-     * @param header The header
+     *
+     * @param header
+     *     The header
      */
     public void setHeader(Header header) {
         this.header = header;
     }
 
     /**
-     * @return The body
+     *
+     * @return
+     *     The body
      */
     public Body getBody() {
         return body;
     }
 
     /**
-     * @param body The body
+     *
+     * @param body
+     *     The body
      */
     public void setBody(Body body) {
         this.body = body;

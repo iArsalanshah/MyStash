@@ -38,8 +38,8 @@
         android:layout_below="@id/relativeLayout_toolbar"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:layout_marginTop="4dp"
-        android:dividerHeight="3dp" />
+        android:layout_marginTop="6dp"
+        android:dividerHeight="6dp" />
 
     <TextView
         android:id="@+id/list_programs_altText"

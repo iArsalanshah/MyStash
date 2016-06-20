@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -27,11 +24,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_register.RegisterUser;
@@ -72,7 +71,10 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     private ArrayList<String> listCat, listInterest;
     private MultiSpinner multiSpinnerInterest;
     private ImageView imageProfileRegister;
-    private Button btnId_updateRegister;
+    private Button btnId_updateRegister, btnId_updatePwd;
+    private String newPassword = "";
+    private ImageView imageProfileRegisterThumb;
+    private String TAG = "Register Data check";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 etName.setCursorVisible(true);
             }
         });
-        imageProfileRegister.setOnClickListener(new View.OnClickListener() {
+        imageProfileRegisterThumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
@@ -103,10 +105,11 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         //RootLayout
         rootLayout = (RelativeLayout) findViewById(R.id.rootContainerRegister);
         progressDialog = new ProgressDialog(this);
-
+        progressDialog.setMessage("Loading...");
         //Button
         btnRegisterID = (Button) findViewById(R.id.btnId_Register);
         btnId_updateRegister = (Button) findViewById(R.id.btnId_updateRegister);
+        btnId_updatePwd = (Button) findViewById(R.id.btnId_updatePwd);
 
         //edittext
         etName = (EditText) findViewById(R.id.etNameRegister);
@@ -124,75 +127,128 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         multiSpinnerInterest = (MultiSpinner) findViewById(R.id.multi_spinnerInterest);
         spinnerSex = (Spinner) findViewById(R.id.spinnerSexRegister);
         imageProfileRegister = (ImageView) findViewById(R.id.imageProfileRegister);
+        imageProfileRegisterThumb = (ImageView) findViewById(R.id.imageProfileRegisterThumb);
         btnId_updateRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateRegister();
             }
         });
+        btnId_updatePwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePassword(v);
+            }
+        });
+    }
+
+    private void updatePassword(final View v) {
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText oldPwd = new EditText(this);
+        oldPwd.setHint(" old password");
+        oldPwd.setSingleLine(true);
+        layout.addView(oldPwd);
+
+        final EditText newPwd = new EditText(this);
+        newPwd.setHint(" new password");
+        newPwd.setSingleLine(true);
+        layout.addView(newPwd);
+
+        final EditText newcPwd = new EditText(this);
+        newcPwd.setHint(" confirm password");
+        newcPwd.setSingleLine(true);
+        layout.addView(newcPwd);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        layout.setLayoutParams(lp);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Change Password");
+        builder.setView(layout);
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                String old = oldPwd.getText().toString();
+                String newp = newPwd.getText().toString();
+                String newc = newcPwd.getText().toString();
+                if (!old.equals("") || !newp.equals("") || !newc.equals("")) {
+                    if (old.equals(CustomSharedPrefLogin.getUserObject(Register.this).getPassword())) {
+                        if (newp.equals(newc)) {
+                            hidesoftkeyboard(v);
+                            newPassword = newp;
+                            Toast.makeText(Register.this, "Please update account to effect changes", Toast.LENGTH_SHORT).show();
+                        } else {
+                            hidesoftkeyboard(v);
+                            Toast.makeText(Register.this, "new password not matched", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        hidesoftkeyboard(v);
+                        Toast.makeText(Register.this, "old password not matched", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    hidesoftkeyboard(getCurrentFocus());
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     private void updateRegister() {
-        progressDialog.setMessage("Loading...");
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"; //TODO better option for email validation
+        final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"; //TODO better option for email validation
         gettingEdittextData();
-        if (!name.equals("") && !email.equals("") && !pwd.equals("") &&
-                !cpwd.equals("") && !phone.equals("") && !bday.equals("") &&
-                !gender.equals("") && !category.equals("") && !areaOfInterest.equals("") && email.matches(emailPattern)) {
-            if (etPwd.getText().toString().equals(etCPwd.getText().toString())) {
-                progressDialog.show();
-//                uploadImage(); //first webservice for uploading image
-                gettingEdittextData();
-
-                //Registering the user
-                Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
-                        name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest);
-                call.enqueue(new Callback<UpdateRegisteration>() {
-                    @Override
-                    public void onResponse(Call<UpdateRegisteration> call, Response<UpdateRegisteration> response) {
-                        UpdateRegisteration registerResponse = response.body();
-                        if (registerResponse.getHeader().getSuccess().equals("1")) {
-                            progressDialog.dismiss();
-                            Toast.makeText(Register.this, "Update Successful", Toast.LENGTH_SHORT).show();
-                            Users obj = new Users();
-                            obj.setId(CustomSharedPrefLogin.getUserObject(Register.this).getId());
-                            obj.setUsername(etName.getText().toString());
-                            obj.setEmail(etEmail.getText().toString());
-                            obj.setPassword(etPwd.getText().toString());
-                            obj.setContactnumber(etPhone.getText().toString());
-                            obj.setImgurl(imgURL);
-                            obj.setBirthday(etBday.getText().toString());
-                            obj.setSex(etSex.getText().toString());
-                            obj.setCategories(etCateg.getText().toString());
-                            obj.setAreaOfInterest(etInterest.getText().toString());
-                            CustomSharedPrefLogin.setUserObject(Register.this, obj);
-                            finish();
-                        } else {
-                            progressDialog.dismiss();
-                            Snackbar.make(rootLayout, "" + registerResponse.getHeader().getMessage(), Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Snackbar snackbar = Snackbar.make(rootLayout, "Register Failure", Snackbar.LENGTH_SHORT);
-                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(Register.this, R.color.colorPrimary));
-                        snackbar.show();
-                    }
-                });
-
-
+        if (!name.equals("") && !email.equals("") &&
+                !gender.equals("") && email.matches(emailPattern)) {
+            progressDialog.show();
+            gettingEdittextData();
+            if (!newPassword.equals("")) {
+                pwd = newPassword;
             } else {
-                Snackbar snackbar = Snackbar.make(rootLayout, "Password not matched!", Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                snackbar.show();
+                pwd = CustomSharedPrefLogin.getUserObject(this).getPassword();
             }
+            //Registering the user
+            Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
+                    name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest);
+            Log.d(TAG, "onResponse: " + name + " " + email + " " + pwd + " " + phone + " " + imgURL + " " + bday + " " + gender + " " + category + " " + areaOfInterest);
+            call.enqueue(new Callback<UpdateRegisteration>() {
+                @Override
+                public void onResponse(Call<UpdateRegisteration> call, Response<UpdateRegisteration> response) {
+                    UpdateRegisteration registerResponse = response.body();
+                    if (registerResponse.getHeader().getSuccess().equals("1")) {
+                        progressDialog.dismiss();
+                        String id = CustomSharedPrefLogin.getUserObject(Register.this).getId();
+                        Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        CustomSharedPrefLogin.RemoveUserObject(Register.this);
+                        Users obj = new Users();
+                        obj.setId(id);
+                        obj.setCfirstname(name);
+                        obj.setEmail(email);
+                        obj.setPassword(pwd);
+                        obj.setContactnumber(phone);
+                        obj.setImgurl(imgURL);
+                        obj.setBirthday(bday);
+                        obj.setSex(gender);
+                        obj.setCategories(category);
+                        obj.setAreaOfInterest(areaOfInterest);
+                        CustomSharedPrefLogin.setUserObject(Register.this, obj);
+                        finish();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
+                    progressDialog.dismiss();
+                    Toast.makeText(Register.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
-            Snackbar snackbar = Snackbar.make(rootLayout, "Please enter valid fields!", Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            snackbar.show();
+            Toast.makeText(Register.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -266,7 +322,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         multiSpinnerCat.performClick();
     }
 
-    public void AreaOfInterestRegoster(View view) {
+    public void AreaOfInterestRegister(View view) {
         hidesoftkeyboard(view);
         multiSpinnerInterest.performClick();
     }
@@ -293,6 +349,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private void gettingEdittextData() {
@@ -330,35 +387,44 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     protected void onResume() {
         super.onResume();
         if (isNavigated) {
+            try {
+                etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
+                etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
+                etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
+                imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
+                etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
+                etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
+                etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
+                etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
+                Log.d(Constant_util.LOG_TAG, "onResume: " + CustomSharedPrefLogin.getUserObject(this).getBirthday());
+                btnRegisterID.setVisibility(View.GONE); //TODO after taking picture this does not work sometimes
+                findViewById(R.id.pwdContainer).setVisibility(View.GONE);
+                findViewById(R.id.confPwdContainer).setVisibility(View.GONE);
+                btnId_updateRegister.setVisibility(View.VISIBLE);
+                btnId_updatePwd.setVisibility(View.VISIBLE);
+                if (!imgURL.equals("")) {
+                    Picasso.with(this)
+                            .load(imgURL)
+                            .error(R.drawable.img_profile)
+                            .placeholder(R.drawable.img_profile)
+                            .into(imageProfileRegister); //TODO image is not loading
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             CustomSharedPrefLogin.getUserObject(this);
             Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getCfirstname());
             Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getSex());
-            etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
-            etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
-            etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
-            imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
-            etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
-            etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
-            etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
-            etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
-
-            btnRegisterID.setVisibility(View.GONE); //TODO after taking picture this does not work
-            btnId_updateRegister.setVisibility(View.VISIBLE);
-            if (!imgURL.equals("")) {
-                Picasso.with(this)
-                        .load(imgURL)
-                        .error(R.drawable.img_profile)
-                        .placeholder(R.drawable.img_profile)
-                        .into(imageProfileRegister); //TODO image is not loading
-            }
         } else {
             btnRegisterID.setVisibility(View.VISIBLE);
+            findViewById(R.id.pwdContainer).setVisibility(View.VISIBLE);
+            findViewById(R.id.confPwdContainer).setVisibility(View.VISIBLE);
             btnId_updateRegister.setVisibility(View.GONE);
+            btnId_updatePwd.setVisibility(View.GONE);
         }
     }
 
     public void btnRegister(View view) {
-        progressDialog.setMessage("Loading...");
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"; //TODO better option for email validation
         gettingEdittextData();
         if (!name.equals("") && !email.equals("") && !pwd.equals("") &&
@@ -375,44 +441,43 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 call.enqueue(new Callback<RegisterUser>() {
                     @Override
                     public void onResponse(Call<RegisterUser> call, Response<RegisterUser> response) {
+                        progressDialog.dismiss();
                         RegisterUser registerResponse = response.body();
                         if (registerResponse.getHeader().getSuccess().equals("1")) {
-                            progressDialog.dismiss();
-
-                            Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                            //SharePref
-                            SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-//                                editor.putString(Constant_util.IS_LOGIN, Constant_util.IS_LOGIN);
-//                                editor.putString(Constant_util.USER_NAME, registerResponse.getBody().getUsers().getCfirstname());
-//                                editor.putString(Constant_util.USER_ID, registerResponse.getBody().getUsers().getCfirstname());
-                            editor.apply();
-                            startActivity(new Intent(Register.this, Login_activity.class));
+//                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            com.example.mystashapp.mystashappproject.pojo.pojo_register.Users vals = registerResponse.getBody().getUsers();
+                            Users obj = new Users();
+                            obj.setId(vals.getId());
+                            obj.setCfirstname(vals.getCfirstname());
+                            obj.setEmail(vals.getEmail());
+                            obj.setPassword(vals.getPassword());
+                            obj.setContactnumber(vals.getContactnumber());
+                            obj.setImgurl(vals.getImgurl());
+                            obj.setBirthday(vals.getBirthday());
+                            obj.setSex(vals.getSex());
+                            obj.setCategories(vals.getCategories());
+                            obj.setAreaOfInterest(vals.getAreaOfInterest());
+                            CustomSharedPrefLogin.setUserObject(Register.this, obj);
+                            startActivity(new Intent(Register.this, MainActivity.class));
                         } else {
-                            progressDialog.dismiss();
-                            Snackbar.make(rootLayout, "" + registerResponse.getHeader().getMessage(), Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<RegisterUser> call, Throwable t) {
                         progressDialog.dismiss();
-                        Snackbar snackbar = Snackbar.make(rootLayout, "Register Failure", Snackbar.LENGTH_SHORT);
-                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(Register.this, R.color.colorPrimary));
-                        snackbar.show();
+                        Toast.makeText(Register.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
                     }
                 });
 
 
             } else {
-                Snackbar snackbar = Snackbar.make(rootLayout, "Password not matched!", Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                snackbar.show();
+                Toast.makeText(Register.this, "Password not matched", Toast.LENGTH_SHORT).show();
             }
 
         } else {
-            Snackbar snackbar = Snackbar.make(rootLayout, "Please enter valid fields!", Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            snackbar.show();
+            Toast.makeText(Register.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
         }
     }
 

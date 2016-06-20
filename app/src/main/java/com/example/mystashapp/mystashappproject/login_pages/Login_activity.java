@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -75,7 +73,7 @@ public class Login_activity extends AppCompatActivity {
                                 //WebService
                                 Call<LoginUser> call = WebServicesFactory.getInstance().getFblogin(Constant_util.ACTION_FB_LOGIN,
                                         bFb.getString("email"), bFb.getString("name"),
-                                        bFb.getString("idFacebook"), bFb.getString("gender"));
+                                        bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"));
                                 call.enqueue(new Callback<LoginUser>() {
                                     @Override
                                     public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
@@ -87,9 +85,7 @@ public class Login_activity extends AppCompatActivity {
 
                                     @Override
                                     public void onFailure(Call<LoginUser> call, Throwable t) {
-                                        Snackbar snackbar = Snackbar.make(rootLayout, "Facebook Login Failure", Snackbar.LENGTH_SHORT);
-                                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(Login_activity.this, R.color.colorPrimary));
-                                        snackbar.show();
+                                        Toast.makeText(Login_activity.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -184,29 +180,23 @@ public class Login_activity extends AppCompatActivity {
 //                    users.getBody().getUsers();
                     if (users.getHeader().getSuccess().equals("1")) {
                         prog.dismiss();
-                        Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                         CustomSharedPrefLogin.setUserObject(Login_activity.this, users.getBody().getUsers());
                         startActivity(new Intent(Login_activity.this, MainActivity.class));
                     } else {
                         prog.dismiss();
-                        Snackbar snackbar = Snackbar.make(rootLayout, users.getHeader().getMessage(), Snackbar.LENGTH_SHORT);
-                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(Login_activity.this, R.color.colorPrimary));
-                        snackbar.show();
+                        Toast.makeText(Login_activity.this, users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<LoginUser> call, Throwable t) {
                     prog.dismiss();
-                    Snackbar snackbar = Snackbar.make(rootLayout, "Login Failure", Snackbar.LENGTH_SHORT);
-                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(Login_activity.this, R.color.colorPrimary));
-                    snackbar.show();
+                    Toast.makeText(Login_activity.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            Snackbar snackbar = Snackbar.make(rootLayout, "Please enter valid email and pwd", Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            snackbar.show();
+            Toast.makeText(Login_activity.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -24,15 +24,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class takeLoyaltyNameDetails extends AppCompatActivity implements View.OnClickListener {
+    public static boolean is_Created = false;
     ImageView backArrow;
     EditText ur_name, card_name, card_notes;
     Button saveButton;
-    private Users cid;
-    private String card_Number;
     String barcodeImage;
-    public static boolean is_Created = false;
     Getloyalty getloyaltyObj;
     String frontImage;
+    private Users cid;
+    private String card_Number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,55 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         barcodeImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("barcodeImage", "none");
         initialization();
         clickEvents();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!is_Created) {
+            card_name.setCursorVisible(false);
+            card_notes.setCursorVisible(false);
+            card_name.setText(getloyaltyObj.getCardname());
+            card_notes.setText(getloyaltyObj.getCarddetail());
+//            Selection.setSelection(card_name.getText(), card_name.getText().length());
+//            card_name.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//                    if (!s.toString().equals(getloyaltyObj.getCardname())) {
+//                        card_name.setText(getloyaltyObj.getCardname());
+////                        Selection.setSelection(card_name.getText(), card_name.getText().length());
+//                    }
+//                }
+//            });
+//            card_notes.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//                    if (!s.toString().equals(getloyaltyObj.getCarddetail())) {
+//                        card_notes.setText(getloyaltyObj.getCarddetail());
+//                    }
+//                }
+//            });
+        }
     }
 
     private void initialization() {
@@ -65,6 +114,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
     private void clickEvents() {
         saveButton.setOnClickListener(this);
+        backArrow.setOnClickListener(this);
     }
 
     @Override

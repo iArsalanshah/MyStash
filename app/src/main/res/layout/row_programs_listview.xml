@@ -2,19 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="75dp"
-    android:layout_marginLeft="6dp"
-    android:layout_marginRight="6dp"
-    android:layout_marginTop="3dp"
+    android:layout_marginTop="6dp"
     android:background="@drawable/red_recycler_bg"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageview_row_programslist"
         android:layout_width="68dp"
         android:layout_height="68dp"
         android:layout_marginLeft="6dp"
-        android:src="@drawable/img_profile" />
+        android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/textViewTitle_row_programslist"

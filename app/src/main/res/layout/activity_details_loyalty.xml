@@ -39,16 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/container_addLoyalty"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_red"
         android:orientation="vertical">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager_Loyalty"
-            android:layout_width="300dp"
+            android:layout_width="250dp"
+            android:layout_height="142.5dp"
             android:layout_gravity="center"
-            android:layout_height="120dp"
             android:layout_marginTop="10dp" />
 
         <com.pixelcan.inkpageindicator.InkPageIndicator
@@ -59,7 +56,7 @@
             app:currentPageIndicatorColor="#ffff"
             app:dotDiameter="8dp"
             app:dotGap="8dp"
-            app:pageIndicatorColor="#ccefa2a2" />
+            app:pageIndicatorColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:layout_width="24dp"

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="fitXY"
-        android:src="@drawable/food_1" />
+        android:src="@drawable/placeholder" />
 
     <ImageView
         android:id="@+id/image2_flyer_row"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="6dp"
-            android:text="-1 days left"
+            android:text=""
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
-            android:text="Test Flyer"
+            android:text=""
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>

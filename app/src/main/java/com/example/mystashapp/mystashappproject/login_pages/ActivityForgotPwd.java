@@ -58,7 +58,7 @@ public class ActivityForgotPwd extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<RegisterUser> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(context, "Internet connection not available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
                 }
             });
 

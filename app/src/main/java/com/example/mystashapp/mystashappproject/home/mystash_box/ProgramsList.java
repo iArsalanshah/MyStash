@@ -25,6 +25,7 @@ import com.example.mystashapp.mystashappproject.pojo.program_stamps.ProgramsStam
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -169,7 +170,13 @@ public class ProgramsList extends AppCompatActivity {
 
             //setting Program Title
             listTitle.setText(data.get(position).getProgramname());
-
+            Picasso.with(context).load(sbID.getLogourl())
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(listImage);
+            if (!data.get(position).getDesc().equals("")) {
+                listDesc.setText(data.get(position).getDesc().toString());
+            }
             return convertView;
         }
     }

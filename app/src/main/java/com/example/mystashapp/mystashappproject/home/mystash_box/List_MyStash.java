@@ -41,7 +41,7 @@ public class List_MyStash extends AppCompatActivity {
         altText = (TextView) findViewById(R.id.list_mystash_altText);
         //Progress Dialog
         prog = new ProgressDialog(this);
-        prog.setProgressStyle(android.R.style.Widget_Holo_Light_ProgressBar_Large_Inverse);
+        prog.setMessage("Loading...");
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh_MyStashList);
 
         //RecyclerView
@@ -83,12 +83,16 @@ public class List_MyStash extends AppCompatActivity {
                     GetMyStash businessResponse = response.body();
                     switch (businessResponse.getHeader().getSuccess()) {
                         case "1":
-                            ArrayList<Stashlist> arrSearchBusiness = new
-                                    ArrayList<>(businessResponse.getBody().getStashlist());
-                            mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
-                            mRecyclerView.setAdapter(mAdapter);
-                            if (businessResponse.getBody().getStashlist().isEmpty() && businessResponse.getBody().getStashlist().size() == 0)
-                                Toast.makeText(List_MyStash.this, "Something fishy", Toast.LENGTH_SHORT).show();
+                            if (businessResponse.getBody().getStashlist().isEmpty() && businessResponse.getBody().getStashlist().size() == 0) {
+                                mRecyclerView.setVisibility(View.GONE);
+                                altText.setVisibility(View.VISIBLE);
+                                Toast.makeText(List_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                ArrayList<Stashlist> arrSearchBusiness = new
+                                        ArrayList<>(businessResponse.getBody().getStashlist());
+                                mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
+                                mRecyclerView.setAdapter(mAdapter);
+                            }
                             break;
                         case "0":
                             mRecyclerView.setVisibility(View.GONE);
@@ -96,6 +100,8 @@ public class List_MyStash extends AppCompatActivity {
                             break;
                         default:
                             Toast.makeText(List_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            mRecyclerView.setVisibility(View.GONE);
+                            altText.setVisibility(View.VISIBLE);
                             break;
                     }
                 } catch (Exception e) {

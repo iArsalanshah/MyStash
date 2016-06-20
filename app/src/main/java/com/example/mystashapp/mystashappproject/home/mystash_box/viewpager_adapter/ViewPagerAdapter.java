@@ -11,17 +11,19 @@ import android.widget.LinearLayout;
 
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
+import com.squareup.picasso.Picasso;
 
 public class ViewPagerAdapter extends PagerAdapter {
-    Searchnearby snb = new Searchnearby();
+    Searchnearby snb;
     private int[] image_resources = {R.drawable.food_1, R.drawable.food_2,
             R.drawable.food_3
     };
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public ViewPagerAdapter(Context context) {
+    public ViewPagerAdapter(Context context, Searchnearby gsonBusiness) {
         this.context = context;
+        snb = gsonBusiness;
     }
 
     @Override
@@ -31,7 +33,17 @@ public class ViewPagerAdapter extends PagerAdapter {
         View item_view = layoutInflater.inflate
                 (R.layout.swipe_layout_mystash_details, container, false);
         ImageView imageView = (ImageView) item_view.findViewById(R.id.swipe_view_Images);
-        imageView.setImageResource(image_resources[position]);
+//        imageView.setImageResource(image_resources[position]);
+        if (!snb.getImages().get(position).toString().isEmpty()
+                && !snb.getImages().get(position).toString().equals("")
+                && snb.getImages().get(position).toString() != null) {
+            Picasso.with(context)
+                    .load(snb.getImages().get(position).toString())
+                    .placeholder(R.drawable.placeholder_shadow)
+                    .error(R.drawable.placeholder_shadow)
+                    .into(imageView);
+        }
+
         container.addView(item_view);
         return item_view;
     }
@@ -43,11 +55,11 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return image_resources.length;
+        return snb.getImages().size();
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return (view == (LinearLayout) object);
+        return (view == object);
     }
 }

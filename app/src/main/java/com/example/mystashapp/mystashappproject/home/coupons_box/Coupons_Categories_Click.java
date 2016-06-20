@@ -39,6 +39,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     private String catID;
     private TextView altTextCouponsSavedList;
     private boolean isTextSavedClick;
+    private boolean isCouponByAdmin;
+    private Users cid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         init();
         clickEvents();
         isTextSavedClick = getIntent().getBooleanExtra("textSavedClick", false);
+        isCouponByAdmin = getIntent().getBooleanExtra("couponByAdmin", false);
+        cid = CustomSharedPrefLogin.getUserObject(this);
     }
 
     @Override
@@ -55,12 +59,39 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         super.onResume();
         if (isTextSavedClick) {
             getSavedCoupons();
+        } else if (isCouponByAdmin) {
+            String uid = getIntent().getStringExtra("adminIDforCoupon");
+            try {
+                getCouponsByAdmin(uid);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         } else
             getAllCoupons();
     }
 
+    private void getCouponsByAdmin(String uid) {
+        Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getCouponsByAdmin(Constant_util.ACTION_GET_COUPONS_BY_ADMIN, cid.getId(), uid);
+        call.enqueue(new Callback<Get_All_Coupons>() {
+            @Override
+            public void onResponse(Call<Get_All_Coupons> call, Response<Get_All_Coupons> response) {
+                Get_All_Coupons coupons = response.body();
+                if (coupons.getHeader().getSuccess().equals("1")) {
+                    listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, coupons.getBody().getCoupons()));
+                } else {
+                    altTextCouponsSavedList.setVisibility(View.VISIBLE);
+                    Toast.makeText(Coupons_Categories_Click.this, "" + coupons.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void getSavedCoupons() {
-        Users cid = CustomSharedPrefLogin.getUserObject(this);
         Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getSavedCoupons(Constant_util.ACTION_GET_MY_SAVED_COUPONS, cid.getId());
         call.enqueue(new Callback<Get_All_Coupons>() {

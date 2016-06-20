@@ -1,8 +1,10 @@
 package com.example.mystashapp.mystashappproject.home.mystash_box;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -45,7 +47,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.mingle.widget.LoadingView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,8 +64,10 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     SupportMapFragment mapFragment;
     TextView altText;
     ImageView search;
+    Marker oldMarkers;
+    Marker userMarker;
     private RecyclerView mRecyclerView;
-    private LoadingView lv;
+    private ProgressDialog lv;
     private SearchView search_view;
     private int attempts = 1;
     private SharedPreferences sharedPreferences;
@@ -73,19 +76,68 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private GoogleMap mGoogleMap;
     private ArrayList<Searchnearby> arrSearchBusiness;
     private Button btnMapSB;
-    private Users objective;
+    private Users userObj;
+    private TextView tvFilter;
+    private boolean boolMapClick;
+    private List<Searchnearby> mStringFilterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_business__mystash);
+        boolMapClick = getIntent().getBooleanExtra("clickOnMap", false);
 
+        //initialization of views
+        init();
+
+        search_view.setOnQueryTextListener(this);
+
+        //Filter Dialog
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+//        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Range");
+        String[] filterItems = {"5km", "10km", "20km", "50km"};
+        alertDialog.setItems(filterItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        getRequest(5000);
+                        break;
+                    case 1:
+                        getRequest(10000);
+                        break;
+                    case 2:
+                        getRequest(20000);
+                        break;
+                    case 3:
+                        getRequest(50000);
+                        break;
+                    default:
+                        getRequest(Constant_util.DEFAULT_RADIUS);
+                        break;
+                }
+            }
+        });
+        tvFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.show();
+            }
+        });
+        if (IS_CHECK_IN) {
+            TextView titleSearchBusiness = (TextView) findViewById(R.id.titleSearchBusiness);
+            titleSearchBusiness.setText("Check In");
+        }
+    }
+
+    private void init() {
         altText = (TextView) findViewById(R.id.list_searchBusiness_altText);
         search_view = (SearchView) findViewById(R.id.search_view);
 
-
         search = (ImageView) findViewById(R.id.img_search_business);
         btnMapSB = (Button) findViewById(R.id.btnMapSB);
+
         //RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_SearchBusiness);
 
@@ -94,13 +146,13 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         }
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        EditText et = (EditText) search_view.findViewById(search_view.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+        et.setTextColor(Color.BLACK);
 
         //LoadingView
-        lv = (LoadingView) findViewById(R.id.loadView);
-        if (lv != null) {
-            lv.setVisibility(View.VISIBLE);
-            btnMapSB.setClickable(false);
-        }
+        lv = new ProgressDialog(this);
+        lv.setMessage("Loading...");
+        btnMapSB.setClickable(false);
 
         //SupportMapFragment
         mapFragment =
@@ -110,36 +162,36 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
         if (mapFragment.getView() != null)
             mapFragment.getView().setVisibility(View.GONE);
-        search_view.setOnQueryTextListener(this);
-        EditText et = (EditText) search_view.findViewById(search_view.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-        et.setTextColor(Color.BLACK);
+
+        tvFilter = (TextView) findViewById(R.id.tvFilter);
     }
 
-    void getRequest() {
+    void getRequest(final float defaultRadius) {
         //for cid
-        objective = CustomSharedPrefLogin.getUserObject(SearchBusiness_MyStash.this);
-
+        userObj = CustomSharedPrefLogin.getUserObject(SearchBusiness_MyStash.this);
+        lv.show();
         //for latlng
         sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
         lat = sharedPreferences.getString(Constant_util.USER_LAT, "0");
         lng = sharedPreferences.getString(Constant_util.USER_LONG, "0");
         Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
-                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, objective.getId(),
+                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(),
                 sharedPreferences.getString(Constant_util.USER_LAT, "0"),
                 sharedPreferences.getString(Constant_util.USER_LONG, "0"),
-                Constant_util.DEFAULT_RADIUS
+                defaultRadius
         );
         call.enqueue(new Callback<SearchBusiness>() {
 
             @Override
             public void onResponse(Call<SearchBusiness> call, Response<SearchBusiness> response) {
-                lv.setVisibility(View.GONE);
+                lv.dismiss();
                 try {
                     SearchBusiness businessResponse = response.body();
                     if (businessResponse.getHeader().getSuccess().equals("1")) {
                         if (businessResponse.getBody().getSearchnearby().isEmpty() && businessResponse.getBody().getSearchnearby().size() == 0) {
-                            btnMapSB.setClickable(false);
+//                            btnMapSB.setClickable(false);
                             altText.setVisibility(View.VISIBLE);
+//                            tvFilter.setClickable(false);
                         } else {
                             arrSearchBusiness = new
                                     ArrayList<>(businessResponse.getBody().getSearchnearby());
@@ -147,9 +199,11 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                             mRecyclerView.setAdapter(mAdapter);
                             btnMapSB.setClickable(true);
                             mAdapter.notifyDataSetChanged();
+                            tvFilter.setClickable(true);
                         }
                     } else if (businessResponse.getHeader().getSuccess().equals("0")) {
                         btnMapSB.setClickable(false);
+                        tvFilter.setClickable(false);
                         Toast.makeText(SearchBusiness_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
@@ -159,8 +213,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
             @Override
             public void onFailure(Call<SearchBusiness> call, Throwable t) {
-                lv.setVisibility(View.GONE);
+                lv.dismiss();
                 btnMapSB.setClickable(false);
+                tvFilter.setClickable(false);
                 Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
@@ -180,29 +235,35 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
     public void BtnMapSearchBusiness(View view) {
         if (servicesOK()) {
+            ArrayList<LatLng> infoDataSetter = null;
             mRecyclerView.setVisibility(View.GONE);
             if (mapFragment.getView() != null) {
                 mapFragment.getView().setVisibility(View.VISIBLE);
                 search.setVisibility(View.GONE);
                 latLngs = new ArrayList<>();
                 try {
-                    for (int i = 0; i < arrSearchBusiness.size(); i++) {
-                        latLngs.add(i, new LatLng(Double.valueOf(arrSearchBusiness.get(i).getLat()), Double.valueOf(arrSearchBusiness.get(i).getLongt())));
+                    for (int i = 0; i < mStringFilterList.size(); i++) {
+                        latLngs.add(i, new LatLng(Double.valueOf(mStringFilterList.get(i).getLat()), Double.valueOf(mStringFilterList.get(i).getLongt())));
                     }
-
+                    infoDataSetter = new ArrayList<>();
                     //for Business Pointers
+                    if (oldMarkers != null) {
+                        oldMarkers.remove();
+                    }
                     MarkerOptions options = new MarkerOptions();
                     if (latLngs.size() > 0)
                         for (LatLng point : latLngs) {
                             options.position(point)
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
-                            mGoogleMap.addMarker(options);
+                            oldMarkers = mGoogleMap.addMarker(options);
+                            infoDataSetter.add(options.getPosition());
                         }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                 }
             }
             if (mGoogleMap != null) {
+                final ArrayList<LatLng> finalInfoDataSetter = infoDataSetter;
                 mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
                     @Override
@@ -216,17 +277,25 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         ImageView img = (ImageView) v.findViewById(R.id.info_img);
                         TextView title = (TextView) v.findViewById(R.id.info_title);
                         TextView address = (TextView) v.findViewById(R.id.info_address);
-                        try {
-                            for (int i = 0; i < arrSearchBusiness.size(); i++) {
-                                title.setText(arrSearchBusiness.get(i).getCompanyname());
-                                address.setText(arrSearchBusiness.get(i).getAddress());
-                                Picasso.with(SearchBusiness_MyStash.this)
-                                        .load(arrSearchBusiness.get(i).getLogourl())
-                                        .placeholder(R.drawable.placeholder_shadow)
-                                        .into(img);
+                        if (marker.getPosition().equals(userMarker.getPosition())) {
+                            img.setVisibility(View.GONE);
+                            title.setText("your location");
+                            address.setVisibility(View.GONE);
+                        } else {
+                            try {
+                                for (int i = 0; i < arrSearchBusiness.size(); i++) {
+                                    if (marker.getPosition().equals(finalInfoDataSetter.get(i))) {
+                                        title.setText(arrSearchBusiness.get(i).getName());
+                                        address.setText(arrSearchBusiness.get(i).getAddress());
+                                        Picasso.with(SearchBusiness_MyStash.this)
+                                                .load(arrSearchBusiness.get(i).getLogourl())
+                                                .placeholder(R.drawable.placeholder)
+                                                .into(img);
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
                         }
                         return v;
                     }
@@ -260,9 +329,13 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     public void onMapReady(GoogleMap googleMap) {
         //User Pointer
         mGoogleMap = googleMap;
+        userMarker = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Double.valueOf(lat), Double.valueOf(lng)))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(lat), Double.valueOf(lng)), 12);
         googleMap.moveCamera(update);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -306,13 +379,20 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     protected void onResume() {
         super.onResume();
         //Retrofit Callback
-        getRequest();
+        getRequest(Constant_util.DEFAULT_RADIUS);
+
+//        if (boolMapClick) {
+//            if (mapFragment.getView() != null) {//TODO need to implement like directly map opens if true
+//                mRecyclerView.setVisibility(View.GONE);
+//                search.setVisibility(View.GONE);
+//                mapFragment.getView().setVisibility(View.VISIBLE);
+//            }
+//        }
     }
 
 
     public class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
         private List<Searchnearby> searchNearbyList;
-        private List<Searchnearby> mStringFilterList;
         private Context mContext;
         View.OnClickListener clickListener = new View.OnClickListener() {
             public int position;
@@ -348,7 +428,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             dialog.show();
             Call<CustomerCheckIn> checkInCall = WebServicesFactory.getInstance()
                     .checkInCustomer(Constant_util.ACTION_CUSTOMER_CHECKIN,
-                            objective.getId(), searchNearbyList.get(position).getId());
+                            userObj.getId(), searchNearbyList.get(position).getId());
 
             checkInCall.enqueue(new Callback<CustomerCheckIn>() {
                 @Override
@@ -385,7 +465,6 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
         public void onBindViewHolder(RecyclerView_SBCustomViewHolder2 customViewHolder, int i) {
             Searchnearby sbNearBy = searchNearbyList.get(i);
-            //setting image using picasso library
             Picasso.with(mContext).load(sbNearBy.getLogourl())
                     .error(R.drawable.placeholder_shadow) //optional
                     .placeholder(R.drawable.placeholder_shadow) //optional

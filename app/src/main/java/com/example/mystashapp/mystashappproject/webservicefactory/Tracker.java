@@ -39,7 +39,7 @@ public class Tracker implements LocationListener {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isNetworkEnabled && !isGpsEnabled) {
-                Toast.makeText(mContext, "No Network Enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Please enable GPS", Toast.LENGTH_SHORT).show();
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {

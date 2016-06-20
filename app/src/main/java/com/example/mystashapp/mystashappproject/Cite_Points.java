@@ -1,6 +1,6 @@
 package com.example.mystashapp.mystashappproject;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,63 +10,72 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.mystashapp.mystashappproject.pojo.pojo_cite_points.CitePointsTransactions;
+import com.example.mystashapp.mystashappproject.pojo.pojo_cite_points.History;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Cite_Points extends AppCompatActivity {
     ListView listView;
     TextView tvCPNumber;
-    ArrayList<String> listDate, listBname, listPoints;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cite_point);
         init();
-        listPoints = new ArrayList<>();
-        listBname = new ArrayList<>();
-        listDate = new ArrayList<>();
-
-        listPoints.add("1234");
-        listPoints.add("3214");
-        listPoints.add("56456");
-        listPoints.add("1234");
-        listPoints.add("3214");
-        listPoints.add("56456");
-        listPoints.add("1234");
-        listPoints.add("3214");
-        listPoints.add("56456");
-        listDate.add("2001-12-20");
-        listDate.add("2014-25-22");
-        listDate.add("2016-23-01");
-        listDate.add("2001-12-20");
-        listDate.add("2014-25-22");
-        listDate.add("2016-23-01");
-        listDate.add("2001-12-20");
-        listDate.add("2014-25-22");
-        listDate.add("2016-23-01");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        listBname.add("River View");
-        //List<CitePoints> citePoints = new List<CitePoints>;
-        listView.setAdapter(new CitePointsAdapter(this));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     private void init() {
         listView = (ListView) findViewById(R.id.listView_citePointsHistory);
         tvCPNumber = (TextView) findViewById(R.id.textView_CitePointsNumber);
-        tvCPNumber.setText("56209");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCitePoints();
+    }
+
+    private void getCitePoints() {
+        final ProgressDialog dlg = new ProgressDialog(this);
+        dlg.setMessage("Loading...");
+        dlg.show();
+        String cid = CustomSharedPrefLogin.getUserObject(this).getId();
+        Call<CitePointsTransactions> call = WebServicesFactory.getInstance().getCitePoints(Constant_util.ACTION_GET_CITE_POINTS, cid);
+        call.enqueue(new Callback<CitePointsTransactions>() {
+            @Override
+            public void onResponse(Call<CitePointsTransactions> call, Response<CitePointsTransactions> response) {
+                dlg.dismiss();
+                CitePointsTransactions transactions = response.body();
+                if (transactions.getHeader().getSuccess().equals("1")) {
+                    try {
+                        if (!transactions.getBody().getHistory().isEmpty() && transactions.getBody().getHistory().size() != 0) {
+                            listView.setAdapter(new CitePointsAdapter(Cite_Points.this, transactions.getBody().getHistory()));
+                            tvCPNumber.setText(transactions.getBody().getTotalpoints());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(Cite_Points.this, "" + transactions.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CitePointsTransactions> call, Throwable t) {
+                dlg.dismiss();
+                Toast.makeText(Cite_Points.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void imgBack(View view) {
@@ -74,22 +83,23 @@ public class Cite_Points extends AppCompatActivity {
     }
 
     private class CitePointsAdapter extends BaseAdapter {
-        Activity context;
+        private final List<History> history;
+        Context context;
         private LayoutInflater inflater;
-        //List<CitePoints> citePointses;
 
-        public CitePointsAdapter(Cite_Points cite_points) {
-            context = cite_points;
+        public CitePointsAdapter(Context context, List<History> history) {
+            this.context = context;
+            this.history = history;
         }
 
         @Override
         public int getCount() {
-            return listPoints.size();
+            return history.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return listPoints.get(position);
+            return history.get(position);
         }
 
         @Override
@@ -110,11 +120,14 @@ public class Cite_Points extends AppCompatActivity {
             TextView tvBusinessName = (TextView) convertView.findViewById(R.id.textView_row_citepoint_businessName);
             TextView tvTime = (TextView) convertView.findViewById(R.id.textView_row_citePoints_dateTime);
 
-            String ext = " Points | ";
-            tvPoints.setText(listPoints.get(position) + ext);
-            tvBusinessName.setText(listBname.get(position));
-            tvTime.setText(listDate.get(position));
-
+            tvPoints.setText(history.get(position).getRedeemedpoints());
+            tvBusinessName.setText(history.get(position).getBusinessName());
+            tvTime.setText(history.get(position).getDate());
+            if (history.get(position).getType().equals("Redeemed")) {
+                tvPoints.setTextColor(getColor(R.color.colorPrimaryDark));
+            } else {
+                tvPoints.setTextColor(getColor(R.color.colorCitePointsTypeGreen));
+            }
             return convertView;
         }
     }

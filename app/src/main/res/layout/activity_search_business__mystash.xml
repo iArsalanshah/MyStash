@@ -23,6 +23,7 @@
                 android:src="@drawable/img_toolbar_back" />
 
             <TextView
+                android:id="@+id/titleSearchBusiness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -32,6 +33,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tvFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -118,11 +120,13 @@
             android:layout_below="@id/search_view"
             android:visibility="visible" />
 
-        <com.mingle.widget.LoadingView
-            android:id="@+id/loadView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+        <!--<ProgressBar-->
+        <!--android:id="@+id/loadView"-->
+        <!--style="?android:progressBarStyleLarge"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="gone" />-->
 
         <TextView
             android:id="@+id/list_searchBusiness_altText"

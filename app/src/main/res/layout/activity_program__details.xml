@@ -44,152 +44,177 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_Below_Toolbar"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/relativeLayout_toolbar"
-        android:layout_margin="20dp"
-        android:background="@android:color/white">
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:scrollbarStyle="outsideOverlay">
 
-        <ImageView
-            android:id="@+id/img_programDetails_item"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_margin="4dp"
-            android:src="@drawable/food_1" />
-
-        <TextView
-            android:id="@+id/tv_programDetails_item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/img_programDetails_item"
-            android:layout_toRightOf="@id/img_programDetails_item"
-            android:text="Chicken Chef"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/tv_programDetails_item_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_programDetails_item_title"
-            android:layout_toRightOf="@id/img_programDetails_item"
-            android:maxLength="40"
-            android:maxLines="1"
-            android:text="@string/lorem_ispum"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tv_programDetails_item_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_programDetails_item_address"
-            android:layout_toRightOf="@id/img_programDetails_item"
-            android:text="+1 204-677-2331"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_Below2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/rl_Below_Toolbar"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#737d2d34">
-
-        <ViewFlipper
-            android:id="@+id/viewflipper"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="145dp"
-            android:layout_above="@+id/textRatio">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/img1"
+            <RelativeLayout
+                android:id="@+id/rl_Below_Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/food_1" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/white">
 
-            <ImageView
-                android:id="@+id/img2"
+                <ImageView
+                    android:id="@+id/img_programDetails_item"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_margin="4dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/food_1" />
+
+                <TextView
+                    android:id="@+id/tv_programDetails_item_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/img_programDetails_item"
+                    android:layout_toRightOf="@id/img_programDetails_item"
+                    android:text="Chicken Chef"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tv_programDetails_item_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_programDetails_item_title"
+                    android:layout_toRightOf="@id/img_programDetails_item"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:text="@string/lorem_ispum"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_programDetails_item_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_programDetails_item_address"
+                    android:layout_toRightOf="@id/img_programDetails_item"
+                    android:text="+1 204-677-2331"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_Below2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/food_2" />
+                android:layout_height="235dp"
+                android:layout_below="@id/rl_Below_Toolbar"
+                android:layout_marginBottom="16dp"
+                android:background="#737d2d34">
 
-            <!--<GridView-->
-            <!--android:id="@+id/gridView_img2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+                <ViewFlipper
+                    android:id="@+id/viewflipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="185dp"
+                    android:layout_above="@+id/textRatio">
 
-            <!--</GridView>-->
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/food_1" />
 
-        </ViewFlipper>
+                    <!--<ImageView-->
+                    <!--android:id="@+id/img2"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:scaleType="fitXY"-->
+                    <!--android:src="@drawable/food_2" />-->
+                    <LinearLayout
+                        android:id="@+id/img2_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <!--<ImageView-->
+                        <!--android:id="@+id/img2"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:scaleType="fitXY"-->
+                        <!--android:src="@drawable/food_2" />-->
+                        <GridView
+                            android:id="@+id/gridView_img2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/white"
+                            android:numColumns="5" />
+                    </LinearLayout>
 
-        <TextView
-            android:id="@+id/textRatio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textAvailableDays"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="6dp"
-            android:layout_marginRight="6dp"
-            android:text="1/10"
-            android:textColor="@android:color/white" />
+                </ViewFlipper>
 
-        <TextView
-            android:id="@+id/textAvailableDays"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textTiming"
-            android:layout_marginLeft="6dp"
-            android:text="Available days: "
-            android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/textRatio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/textAvailableDays"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginRight="6dp"
+                    android:text="1/10"
+                    android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/textTiming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="6dp"
-            android:text="Timing: "
-            android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/textAvailableDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/textTiming"
+                    android:layout_marginLeft="6dp"
+                    android:text="Available days: "
+                    android:textColor="@android:color/white" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/textTiming"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="6dp"
+                    android:text="Timing: "
+                    android:textColor="@android:color/white" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl_Below2"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@android:color/white"
-        android:gravity="start|top">
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tnc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="6dp"
-            android:paddingTop="10dp"
-            android:text="@string/terms_conditions"
-            android:textColor="@android:color/black"
-            android:textSize="17sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_Below2"
+                android:background="@android:color/white"
+                android:gravity="start|top">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tnc"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:maxLines="6"
-            android:text="@string/lorem_ispum" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tnc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/terms_conditions"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/programTOC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tnc"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:maxLines="6"
+                    android:text="@string/lorem_ispum" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

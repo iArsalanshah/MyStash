@@ -10,7 +10,7 @@
         android:layout_height="68dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="4dp"
-        android:src="@drawable/img_profile" />
+        android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/textView_row_list_coupons"

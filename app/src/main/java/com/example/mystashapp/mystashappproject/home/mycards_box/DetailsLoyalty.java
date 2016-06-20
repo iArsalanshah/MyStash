@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
@@ -109,11 +108,11 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     }
 
     public void imgBack_LoyaltyDetails(View view) {
-        finish();
+        startActivity(new Intent(DetailsLoyalty.this, Add_LoyaltyCard.class));
     }
 
     public void loyalty_details_img(View view) {
-        Toast.makeText(DetailsLoyalty.this, "Clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(DetailsLoyalty.this, "Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -125,7 +124,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_loyalty_edit:
-                Intent intent = new Intent(DetailsLoyalty.this, CreateACard.class);
+                Intent intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 if (getloyalty.getImageurl().length() > 0) {
                     if (is_Edit) {
                         intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
@@ -148,7 +147,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        //TODO need to implement flow
+        startActivity(new Intent(DetailsLoyalty.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override

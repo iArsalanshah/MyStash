@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:background="#0000">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageViewResideMenuProfile"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:paddingLeft="25dp"
-        android:paddingTop="25dp"
-        android:src="@drawable/img_profile" />
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/textViewNameResideMenu"

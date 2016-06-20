@@ -7,4 +7,5 @@
     <color name="colorFbLoginBtn">#415D99</color>
     <color name="colorToolbarLogin">#B42E3C</color>
     <color name="colorRegisterBtn">#BF1531</color>
+    <color name="colorCitePointsTypeGreen">#59a219</color>
 </resources>

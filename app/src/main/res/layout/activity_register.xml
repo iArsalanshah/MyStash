@@ -72,6 +72,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/pwdContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
@@ -88,6 +89,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/confPwdContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
@@ -166,7 +168,8 @@
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
                     android:hint=" Categories"
-                    android:onClick="CategoriesRegister" />
+                    android:onClick="CategoriesRegister"
+                    android:singleLine="true" />
 
                 <Spinner
                     android:id="@+id/spinnerAreaOfInterestRegister"
@@ -188,7 +191,8 @@
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
                     android:hint=" Area of interest"
-                    android:onClick="AreaOfInterestRegoster" />
+                    android:onClick="AreaOfInterestRegister"
+                    android:singleLine="true" />
 
                 <Button
                     android:id="@+id/btnId_Register"
@@ -201,7 +205,20 @@
                     android:text="@string/btn_reg_login"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btnId_updatePwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:background="@color/colorLoginBtn"
+                    android:text="Change Password"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btnId_updateRegister"
@@ -226,15 +243,26 @@
             <!--android:layout_marginTop="5dp"-->
             <!--android:contentDescription="User Profile Image"-->
             <!--android:src="@drawable/img_profile" />-->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageProfileRegister"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:contentDescription="User Profile Image"
-                android:src="@drawable/img_profile" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageProfileRegister"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/placeholder" />
+
+                <ImageView
+                    android:id="@+id/imageProfileRegisterThumb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/camera_thumb" />
+            </FrameLayout>
         </FrameLayout>
     </ScrollView>
 </RelativeLayout>

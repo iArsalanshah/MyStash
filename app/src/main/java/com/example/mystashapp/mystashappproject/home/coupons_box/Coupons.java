@@ -62,7 +62,14 @@ public class Coupons extends AppCompatActivity {
         progDialog.setMessage("Loading...");
         progDialog.show();
         //Retrofit2.0 call
-        getCategories();
+        if (isFlyer) {
+            getFlyers();
+        } else
+            getCategories();
+    }
+
+    private void getFlyers() {
+
     }
 
     private void getCategories() {
@@ -75,14 +82,14 @@ public class Coupons extends AppCompatActivity {
                 if (resp.getHeader().getSuccess().equals("1")) {
                     listView.setAdapter(new ListAdapterCategories(Coupons.this, resp.getBody().getCategories()));
                 } else {
-                    Toast.makeText(Coupons.this, "Found 0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Coupons.this, "" + resp.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<CategoriesCoupons> call, Throwable t) {
                 progDialog.dismiss();
-                Toast.makeText(Coupons.this, "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -106,10 +113,10 @@ public class Coupons extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (isFlyer) {
-                    Toast.makeText(Coupons.this, "" + position, Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Coupons.this, Flyers_Available.class));
+                    Intent intent = new Intent(Coupons.this, Flyers_Available.class);
+                    intent.putExtra("catID", resp.getBody().getCategories().get(position).getId());
+                    startActivity(intent);
                 } else {
-                    Toast.makeText(Coupons.this, "" + position, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Coupons.this, Coupons_Categories_Click.class);
                     intent.putExtra("textSavedClick", false);
                     intent.putExtra("catID", resp.getBody().getCategories().get(position).getId());
@@ -175,8 +182,8 @@ public class Coupons extends AppCompatActivity {
             final RelativeLayout layoutBack = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_cat_row_listview);
             TextView titleLabel = (TextView) convertView.findViewById(R.id.textView_row_Categories_Listview);
             Picasso.with(context).load(categories.get(position).getImgurl())
-                    .placeholder(R.drawable.placeholder_shadow)
-                    .error(R.drawable.placeholder_shadow)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

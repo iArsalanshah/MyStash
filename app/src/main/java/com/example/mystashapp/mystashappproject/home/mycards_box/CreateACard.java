@@ -44,6 +44,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     TextView textview_front_of_card;
     ImageView frontCard, backArrow;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+    String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +52,14 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_create_acard);
         initialization();
         clickListeners();
-        textview_front_of_card.setVisibility(View.VISIBLE);
-        retake.setVisibility(View.GONE);
+//        textview_front_of_card.setVisibility(View.VISIBLE);
+//        retake.setVisibility(View.GONE);
         boolean comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
         if (comesFromDetailActivity) {
-            String url = getIntent().getStringExtra("frontCard");
+            url = getIntent().getStringExtra("frontCard");
             if (!url.equals("")) {
-                textview_front_of_card.setVisibility(View.GONE);
-                retake.setVisibility(View.VISIBLE);
+//                textview_front_of_card.setVisibility(View.GONE);
+//                retake.setVisibility(View.VISIBLE);
                 Picasso.with(this).load(url)
                         .placeholder(R.drawable.placeholder_shadow)
                         .error(R.drawable.placeholder_shadow)
@@ -69,7 +70,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 
     private void initialization() {
         next = (Button) findViewById(R.id.button_loyaltyDetails_next);
-        retake = (Button) findViewById(R.id.button_loyaltyDetails_retake);
+//        retake = (Button) findViewById(R.id.button_loyaltyDetails_retake);
         frontCard = (ImageView) findViewById(R.id.imageView_captureFrontCard);
         backArrow = (ImageView) findViewById(R.id.imageview_backToolbar);
         textview_front_of_card = (TextView) findViewById(R.id.textview_front_of_card);
@@ -77,7 +78,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 
     private void clickListeners() {
         next.setOnClickListener(this);
-        retake.setOnClickListener(this);
+//        retake.setOnClickListener(this);
         frontCard.setOnClickListener(this);
         backArrow.setOnClickListener(this);
         textview_front_of_card.setOnClickListener(this);
@@ -86,11 +87,11 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_loyaltyDetails_retake:
-                selectImage();
-                break;
+//            case R.id.button_loyaltyDetails_retake:
+//                selectImage();
+//                break;
             case R.id.button_loyaltyDetails_next:
-                if (retake.getVisibility() == View.VISIBLE) {
+                if (frontCard.isPressed() || !url.equals("")) { //TODO need new idea
                     uploadImageView();
                     takeLoyaltyNameDetails.is_Created = true;
                     Intent intent = new Intent(CreateACard.this, takeLoyaltyBarCode.class);
@@ -99,12 +100,12 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(CreateACard.this, "Please add front card", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureFrontCard:
+                selectImage();
                 break;
             case R.id.imageview_backToolbar:
-                finish();
+                startActivity(new Intent(CreateACard.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.textview_front_of_card:
-                selectImage();
                 break;
             default:
                 break;
@@ -204,8 +205,8 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         }
 
         frontCard.setImageBitmap(thumbnail);
-        retake.setVisibility(View.VISIBLE);
-        textview_front_of_card.setVisibility(View.GONE);
+//        retake.setVisibility(View.VISIBLE);
+//        textview_front_of_card.setVisibility(View.GONE);
     }
 
     @SuppressWarnings("deprecation")
@@ -232,8 +233,8 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         options.inJustDecodeBounds = false;
         bm = BitmapFactory.decodeFile(selectedImagePath, options);
         frontCard.setImageBitmap(bm);
-        retake.setVisibility(View.VISIBLE);
-        textview_front_of_card.setVisibility(View.GONE);
+//        retake.setVisibility(View.VISIBLE);
+//        textview_front_of_card.setVisibility(View.GONE);
     }
 
     @Override
@@ -250,6 +251,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
-
+        startActivity(new Intent(CreateACard.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

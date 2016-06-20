@@ -54,8 +54,8 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
 
         //setting image using picasso library
         Picasso.with(context).load(sbNearBy.getLogourl())
-                .error(R.drawable.placeholder_shadow) //optional
-                .placeholder(R.drawable.placeholder_shadow) //optional
+                .error(R.drawable.placeholder) //optional
+                .placeholder(R.drawable.placeholder) //optional
                 .into(holder.imageViewAvatar);
 
         holder.tvRecyclerTitle.setText(sbNearBy.getName());

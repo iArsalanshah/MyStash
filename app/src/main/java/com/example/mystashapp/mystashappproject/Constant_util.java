@@ -22,6 +22,7 @@ public class Constant_util {
     public static final String ACTION_GET_MY_SAVED_COUPONS = "customer_get_saved_coupons";
     public static final String ACTION_GET_ALL_COUPONS_LIST = "customer_get_coupons";
     public static final String ACTION_SAVE_A_COUPON = "customer_save_coupons";
+    public static final String ACTION_GET_COUPONS_BY_ADMIN = "get_coupons_by_adminid";
     public static final String PREFS_NAME = "LoginPrefs";
     public static final String IS_LOGIN = "IsLoggedIn";
     public static final String LOG_TAG = "MyStash_LOG_TAG";
@@ -37,6 +38,9 @@ public class Constant_util {
     public static final String ACTION_UPLOAD_LOYALTY_IMAGE = "upload_loyalty_image";
     public static final String ACTION_UPLOAD_PROFILE_IMAGE = "upload_image";
     public static final String ACTION_CUSTOMER_CHECKIN = "customer_checkin";
-    public static final String DEFAULT_RADIUS = "50";
+    public static final float DEFAULT_RADIUS = 50000;
 
+    public static final String ACTION_DELETE_LOYALTY_CARD = "delete_customer_loyalty_card";
+    public static final String ACTION_GET_CITE_POINTS = "get_customer_transactions";
+    public static final String ACTION_GET_ALL_FLYERS = "get_all_flyers";
 }
