@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,7 @@ public class Flyers_Available extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flyers__available);
         catId = getIntent().getStringExtra("catID");
-        Log.d(Constant_util.LOG_TAG, "onCreate: " + catId);
+//        Log.d(Constant_util.LOG_TAG, "onCreate: " + catId);
         init();
 //        gridView.setAdapter(new GridCustomAdapter(this));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

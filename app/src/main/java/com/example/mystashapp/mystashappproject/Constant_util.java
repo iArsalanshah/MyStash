@@ -1,7 +1,8 @@
 package com.example.mystashapp.mystashappproject;
 
 public class Constant_util {
-    public static final String BASE_URL = "http://pioneerfoodclub.com/";
+    public static final String BASE_URL = "http://www.mystash.ca";//http://www.mystash.ca/mobileservice_new.php
+
     public static final String ACTION_REGISTER_CUSTOMER = "customer_register";
     public static final String ACTION_UPDATE_REGISTER_CUSTOMER = "customer_register_edit";
     public static final String ACTION_LOGIN_CUSTOMER = "customer_login";

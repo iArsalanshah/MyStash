@@ -108,7 +108,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     }
 
     public void imgBack_LoyaltyDetails(View view) {
-        startActivity(new Intent(DetailsLoyalty.this, Add_LoyaltyCard.class));
+        startActivity(new Intent(DetailsLoyalty.this, MyCards.class));
     }
 
     public void loyalty_details_img(View view) {
@@ -147,7 +147,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(DetailsLoyalty.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override

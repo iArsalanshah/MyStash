@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -55,7 +54,7 @@ public class CouponsList_Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupons_list__details);
         String objCoupon = getIntent().getStringExtra("couponObj");
-        Log.d(Constant_util.LOG_TAG, objCoupon);
+//        Log.d(Constant_util.LOG_TAG, objCoupon);
         cObj = new Gson().fromJson(objCoupon, Coupon.class);
         cid = CustomSharedPrefLogin.getUserObject(CouponsList_Details.this);
         init();
@@ -125,7 +124,7 @@ public class CouponsList_Details extends AppCompatActivity {
                 Calendar cal2 = Calendar.getInstance();
                 cal2.setTime(date);
                 String formatedDate = cal2.get(Calendar.YEAR) + "-" + (cal2.get(Calendar.MONTH) + 1) + "-" + cal2.get(Calendar.DATE);
-                Log.d(Constant_util.LOG_TAG, "" + formatedDate);
+//                Log.d(Constant_util.LOG_TAG, "" + formatedDate);
                 Call<RemindMe> call = WebServicesFactory.getInstance().getRemindCoupon(Constant_util.ACTION_REMINDME_COUPON, cid.getId(), cObj.getId(), cObj.getUid(), formatedDate, msg);
                 call.enqueue(new Callback<RemindMe>() {
                     @Override

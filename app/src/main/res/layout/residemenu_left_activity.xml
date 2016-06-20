@@ -10,7 +10,7 @@
         android:layout_height="80dp"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="25dp"
-        android:src="@drawable/placeholder" />
+        android:src="@drawable/profile_image" />
 
     <TextView
         android:id="@+id/textViewNameResideMenu"

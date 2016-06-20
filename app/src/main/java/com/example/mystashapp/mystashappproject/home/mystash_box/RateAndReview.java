@@ -77,7 +77,7 @@ public class RateAndReview extends AppCompatActivity {
 
                             } else {
                                 String comments = etComments.getText().toString();
-                                Call<ADDReview> call2 = WebServicesFactory.getInstance().getPostReview(Constant_util.ACTION_ADD_REVIEW, cId, uId, comments);
+                                Call<ADDReview> call2 = WebServicesFactory.getInstance().getPostReview(Constant_util.ACTION_ADD_REVIEW, cId, bId, comments);
                                 call2.enqueue(new Callback<ADDReview>() {
                                     @Override
                                     public void onResponse(Call<ADDReview> call, Response<ADDReview> response) {

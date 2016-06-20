@@ -45,6 +45,7 @@ MyCards extends AppCompatActivity {
     ListView listView;
     private ProgressDialog progress;
     private ListViewMyCards adapterListview;
+    private TextView alternateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,7 @@ MyCards extends AppCompatActivity {
     private void init() {
         listView = (ListView) findViewById(R.id.listView_MyCards);
         progress = new ProgressDialog(this);
+        alternateText = (TextView) findViewById(R.id.alternateText);
     }
 
     @Override
@@ -127,7 +129,8 @@ MyCards extends AppCompatActivity {
                     listView.setAdapter(adapterListview);
                     adapterListview.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MyCards.this, "" + getloyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    alternateText.setVisibility(View.VISIBLE);
+//                    Toast.makeText(MyCards.this, "" + getloyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     }
 
     private void getSavedCoupons() {
-        Log.d(Constant_util.LOG_TAG, cid.getId());
+//        Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getSavedCoupons(Constant_util.ACTION_GET_MY_SAVED_COUPONS, cid.getId());
         call.enqueue(new Callback<Get_All_Coupons>() {
             @Override
@@ -117,7 +116,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
     private void getAllCoupons() {
         Users cid = CustomSharedPrefLogin.getUserObject(this);
-        Log.d(Constant_util.LOG_TAG, cid.getId());
+//        Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getAllCoupons(Constant_util.ACTION_GET_ALL_COUPONS_LIST, catID, cid.getId());
         call.enqueue(new Callback<Get_All_Coupons>() {
             @Override
@@ -202,8 +201,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             ImageView listImage = (ImageView) convertView.findViewById(R.id.imageView_row_list_coupons);
             listLabel.setText(coupons.get(position).getCouponName());
             Picasso.with(context).load(coupons.get(position).getImgurl())
-                    .placeholder(R.drawable.img_profile)
-                    .error(R.drawable.img_profile)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
                     .into(listImage);
             couponObj = coupons;
             return convertView;

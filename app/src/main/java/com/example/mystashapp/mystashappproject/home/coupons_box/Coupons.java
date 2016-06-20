@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +61,10 @@ public class Coupons extends AppCompatActivity {
         progDialog.setMessage("Loading...");
         progDialog.show();
         //Retrofit2.0 call
-        if (isFlyer) {
-            getFlyers();
-        } else
-            getCategories();
+//        if (isFlyer) {
+//            getFlyers();
+//        } else
+        getCategories();
     }
 
     private void getFlyers() {
@@ -103,6 +102,7 @@ public class Coupons extends AppCompatActivity {
         //Setting of Toolbar Title;
         if (isFlyer) {
             textTitleToolbar.setText("Flyers");
+            textSaved.setVisibility(View.GONE);
         }
     }
 
@@ -192,12 +192,12 @@ public class Coupons extends AppCompatActivity {
 
                         @Override
                         public void onBitmapFailed(Drawable errorDrawable) {
-                            Log.d(Constant_util.LOG_TAG, "Prepare Load");
+//                            Log.d(Constant_util.LOG_TAG, "Prepare Load");
                         }
 
                         @Override
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
-                            Log.d(Constant_util.LOG_TAG, "Prepare Load");
+//                            Log.d(Constant_util.LOG_TAG, "Prepare Load");
                         }
                     });
             titleLabel.setText(categories.get(position).getName());

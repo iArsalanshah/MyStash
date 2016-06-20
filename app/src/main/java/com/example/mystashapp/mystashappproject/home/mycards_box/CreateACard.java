@@ -134,7 +134,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     UploadLoyaltyImage uploadLoyaltyImage = response.body();
                     if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
                         Toast.makeText(CreateACard.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                        String frontImage = "http://pioneerfoodclub.com/mystash/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
+                        String frontImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
                         SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                         editor.putString("frontImage", frontImage);
                         editor.apply();

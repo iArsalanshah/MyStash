@@ -253,7 +253,7 @@
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/placeholder" />
+                    android:src="@drawable/profile_image" />
 
                 <ImageView
                     android:id="@+id/imageProfileRegisterThumb"
@@ -261,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:layout_marginBottom="16dp"
-                    android:src="@drawable/camera_thumb" />
+                    android:src="@drawable/camera_thumb_black" />
             </FrameLayout>
         </FrameLayout>
     </ScrollView>

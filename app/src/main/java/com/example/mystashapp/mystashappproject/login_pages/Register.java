@@ -405,8 +405,8 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 if (!imgURL.equals("")) {
                     Picasso.with(this)
                             .load(imgURL)
-                            .error(R.drawable.img_profile)
-                            .placeholder(R.drawable.img_profile)
+                            .error(R.drawable.profile_image)
+                            .placeholder(R.drawable.profile_image)
                             .into(imageProfileRegister); //TODO image is not loading
                 }
             } catch (Exception ex) {
@@ -586,7 +586,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
 
             // MultipartBody.Part is used to send also the actual file name
             MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
+                    MultipartBody.Part.createFormData("uploaded_file", "upload_image", requestFile);
             Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadProfileImage(Constant_util.ACTION_UPLOAD_PROFILE_IMAGE, body);
             call.enqueue(new Callback<UploadLoyaltyImage>() {
                 @Override
@@ -594,8 +594,8 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     UploadLoyaltyImage uploadImage = response.body();
                     dlg.dismiss();
                     if (uploadImage.getHeader().getSuccess().equals("1")) {
-                        Log.d(Constant_util.LOG_TAG, "Upload Profile Image onResponse: " + uploadImage);
-                        imgURL = "http://pioneerfoodclub.com/mystash/" + uploadImage.getBody().getFiles().getFilepath();
+                        imgURL = "http://www.mystash.ca/" + uploadImage.getBody().getFiles().getFilepath();
+                        Log.d(TAG, "onResponse: " + "http://www.mystash.ca/" + uploadImage.getBody().getFiles().getFilepath());
                         imageProfileRegister.setImageBitmap(thumbnail);
                     } else {
                         Log.d(Constant_util.LOG_TAG, "Upload Profile Image onResponse: " + uploadImage + uploadImage.getHeader().getMessage());

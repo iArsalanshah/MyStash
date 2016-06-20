@@ -34,7 +34,6 @@ import retrofit2.Response;
 
 public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeListener, OnDrawListener, OnLoadCompleteListener {
 
-    public static final String SAMPLE_FILE = "company_profile.pdf";
     PDFView pdfView;
     int pgNo = 1;
     private String pdfUrl;
@@ -97,6 +96,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
         textDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                startActivity(new Intent(Flyers_pdfview.this, Flyers_Available.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
         });

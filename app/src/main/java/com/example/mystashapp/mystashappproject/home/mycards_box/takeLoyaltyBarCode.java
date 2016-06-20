@@ -147,7 +147,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                             UploadLoyaltyImage uploadLoyaltyImage = response.body();
                             if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
                                 Toast.makeText(takeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                                String barcodeImage = "http://pioneerfoodclub.com/mystash/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
+                                String barcodeImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
                                 SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                                 editor.putString("barcodeImage", barcodeImage);
                                 editor.apply();
