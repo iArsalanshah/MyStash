@@ -1,1 +1,1 @@
-include ':app', ':android-pdfview'
+include ':app', ':android-pdfview', ':android-image-zoom-crop'

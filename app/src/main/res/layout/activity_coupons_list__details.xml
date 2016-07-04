@@ -80,7 +80,7 @@
         android:layout_height="160dp"
         android:layout_below="@+id/linearLayout_Below_Toolbar"
         android:scaleType="fitXY"
-        android:src="@drawable/food_1" />
+        android:src="@drawable/placeholder_img_not_found" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="First Coupons1"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/textView_Coupons_Details_expiry"
@@ -113,7 +113,7 @@
                 android:layout_marginTop="6dp"
                 android:text="EXPIRES: "
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_Coupons_Details_usedDate"
@@ -123,7 +123,7 @@
                 android:layout_marginTop="6dp"
                 android:text="COUPONS USED: "
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_Coupons_Details_Desc"
@@ -133,7 +133,7 @@
                 android:layout_marginTop="12dp"
                 android:text="Description: asd asd sd"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
     </ScrollView>
 
@@ -147,5 +147,6 @@
         android:layout_marginBottom="20dp"
         android:background="#50322c2c"
         android:text="Redeem Now"
+        android:textAllCaps="false"
         android:textColor="@android:color/white" />
 </RelativeLayout>

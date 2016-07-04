@@ -1,15 +1,12 @@
 package com.example.mystashapp.mystashappproject.home.mycards_box;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -28,10 +25,7 @@ import com.example.mystashapp.mystashappproject.helper.BarcodeGeneratorActivity;
 import com.example.mystashapp.mystashappproject.helper.SimpleScannerActivity;
 import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 
 import java.io.ByteArrayOutputStream;
 
@@ -55,7 +49,6 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_loyalty_bar_code);
-
         //initialization of views
         init();
         clickListenerBind();
@@ -66,27 +59,11 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         super.onResume();
         if (!SimpleScannerActivity.barcodeText.equals("")) {
             editText_generator_barcode.setText(SimpleScannerActivity.barcodeText);
-            com.google.zxing.MultiFormatWriter writer = new MultiFormatWriter();
-
-            String finaldata = Uri.encode(SimpleScannerActivity.barcodeText, "utf-8");
-
-            BitMatrix bm = null;
-            try {
-                bm = writer.encode(finaldata, BarcodeFormat.CODE_128, 150, 150);
-            } catch (WriterException e) {
-                e.printStackTrace();
-            }
-            Bitmap ImageBitmap = Bitmap.createBitmap(220, 100, Bitmap.Config.ARGB_8888);
-
-            for (int i = 0; i < 220; i++) {//width
-                for (int j = 0; j < 100; j++) {//height
-                    if (bm != null) {
-                        ImageBitmap.setPixel(i, j, bm.get(i, j) ? Color.BLACK : Color.TRANSPARENT);
-                    }
-                }
-            }
-
-            imageView_captureBarcode.setImageBitmap(ImageBitmap);
+            String barcode = editText_generator_barcode.getText().toString();
+            generateBarcode(barcode);
+            imageView_captureBarcode.setImageBitmap(bitmap);
+        } else {
+            editText_generator_barcode.setText("");
         }
     }
 
@@ -111,11 +88,11 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imagview_backTopbar:
-                finish();
+                startActivity(new Intent(takeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_generate_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 5) {
-                    generateBarcode();
+                if (editText_generator_barcode.getText().toString().length() > 2) {
+                    generateBarcode(editText_generator_barcode.getText().toString());
                     imageView_captureBarcode.setImageBitmap(bitmap);
                 } else
                     Toast.makeText(takeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
@@ -125,46 +102,9 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
                     //Convert to byte array
                     if (bitmap == null) {
-                        generateBarcode();
+                        generateBarcode(editText_generator_barcode.getText().toString());
                     }
-
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-                    // create RequestBody instance from file
-                    RequestBody requestFile =
-                            RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOutputStream.toByteArray());
-
-                    // MultipartBody.Part is used to send also the actual file name
-                    MultipartBody.Part body =
-                            MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
-
-                    Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
-
-                    call.enqueue(new Callback<UploadLoyaltyImage>() {
-                        @Override
-                        public void onResponse(Call<UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
-                            UploadLoyaltyImage uploadLoyaltyImage = response.body();
-                            if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
-                                Toast.makeText(takeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                                String barcodeImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
-                                SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-                                editor.putString("barcodeImage", barcodeImage);
-                                editor.apply();
-                                Intent intent = new Intent(takeLoyaltyBarCode.this, takeLoyaltyNameDetails.class);
-                                intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(takeLoyaltyBarCode.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<UploadLoyaltyImage> call, Throwable t) {
-                            Log.d(Constant_util.LOG_TAG, "onFailure: " + t.getMessage());
-                            Toast.makeText(takeLoyaltyBarCode.this, "Network Connection Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    uploadBarcodeImage();
                 } else
                     Toast.makeText(takeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
                 break;
@@ -176,11 +116,51 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
+    private void uploadBarcodeImage() {
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait...");
+        dialog.setCancelable(false);
+        dialog.show();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+        // create RequestBody instance from file
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOutputStream.toByteArray());
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
+
+        Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+
+        call.enqueue(new Callback<UploadLoyaltyImage>() {
+            @Override
+            public void onResponse(Call<UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
+                dialog.dismiss();
+                UploadLoyaltyImage uploadLoyaltyImage = response.body();
+                if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
+//                                Toast.makeText(takeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                    String barcodeImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
+                    SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+                    editor.putString("barcodeImage", barcodeImage);
+                    editor.apply();
+                    Intent intent = new Intent(takeLoyaltyBarCode.this, takeLoyaltyNameDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
+                    SimpleScannerActivity.barcodeText = "";
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(takeLoyaltyBarCode.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadLoyaltyImage> call, Throwable t) {
+                dialog.dismiss();
+                Log.d(Constant_util.LOG_TAG, "onFailure: " + t.getMessage());
+                Toast.makeText(takeLoyaltyBarCode.this, "Barcode upload failed, please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void launchActivity(Class<?> clss) {
@@ -195,10 +175,10 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void generateBarcode() {
+    public void generateBarcode(String barcode) {//
         BarcodeGeneratorActivity barcodeGeneratorActivity = new BarcodeGeneratorActivity();
         try {
-            bitmap = barcodeGeneratorActivity.encodeAsBitmap(editText_generator_barcode.getText().toString(), BarcodeFormat.CODE_128, 600, 300);
+            bitmap = barcodeGeneratorActivity.encodeAsBitmap(barcode, SimpleScannerActivity.barcodeFormat, 600, 300);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -221,6 +201,6 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        startActivity(new Intent(takeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

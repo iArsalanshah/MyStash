@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerViewHolder_MyStashList> {
+    //    private final ViewBinderHelper binderHelper;
     Context context;
     private ArrayList<Stashlist> searchNearbyList;
     View.OnClickListener clickListener = new View.OnClickListener() {
@@ -41,6 +42,8 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
     public RecyclerAdapter_MyStashList(Context context, ArrayList<Stashlist> searchnearbies) {
         this.context = context;
         this.searchNearbyList = searchnearbies;
+//        binderHelper = new ViewBinderHelper();
+//        binderHelper.setOpenOnlyOne(true);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         return new RecyclerViewHolder_MyStashList(v);
     }
 
-    public void onBindViewHolder(RecyclerViewHolder_MyStashList holder, int position) {
+    public void onBindViewHolder(RecyclerViewHolder_MyStashList holder, final int position) {
         Stashlist sbNearBy = searchNearbyList.get(position);
 
         //setting image using picasso library
@@ -62,7 +65,71 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         holder.tvRecyclerDesc.setText(sbNearBy.getAddress());
         holder.layout.setOnClickListener(clickListener);
         holder.layout.setTag(holder);
+//        binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
+//        holder.deleteView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                removeItem(searchNearbyList.get(position).getId());
+//            }
+//        });
     }
+
+//    private void removeItem(final String id) {
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+//        dialog.setTitle("Confirmation");
+//        dialog.setMessage("Are you sure you want to remove this business " +
+//                "from your stash, doing so will prevent  you from  receiving " +
+//                "specials and VIP offers from this merchant.");
+//        dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.setNegativeButton("REMOVE", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//                onRemoveStashItem(id);
+//            }
+//        });
+//        dialog.show();
+//    }
+//
+//    private void onRemoveStashItem(String id) {
+//        // webservice should be called here.
+//        final ProgressDialog dialog = new ProgressDialog(context);
+//        dialog.setMessage("Deleting...");
+//        dialog.show();
+//        Call<DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
+//                .getRemoveStash(Constant_util.ACTION_REMOVE_STASH,
+//                        id);
+//        call.enqueue(new Callback<DeleteLoyaltyCard>() {
+//            @Override
+//            public void onResponse(Call<DeleteLoyaltyCard> call, Response<DeleteLoyaltyCard> response) {
+//                dialog.dismiss();
+//                DeleteLoyaltyCard deleteLoyaltyCard = response.body();
+//
+//                if (deleteLoyaltyCard.getHeader().getSuccess().equals("1")) {
+//                    Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+////                        runOnUiThread(new Runnable() {
+////                            public void run() {
+//                    startActivity(new Intent(MyCards.this, MyCards.class));
+////                            }
+////                        });
+//                } else {
+//                    Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
+//                dialog.dismiss();
+//                Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//    }
 
     public int getItemCount() {
         return searchNearbyList.size();

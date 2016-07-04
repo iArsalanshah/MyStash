@@ -33,6 +33,7 @@
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/imageview_row_programslist"
+        android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/lorem_ispum"
         android:textColor="@android:color/white"

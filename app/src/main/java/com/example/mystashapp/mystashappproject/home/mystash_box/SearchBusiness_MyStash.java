@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.pojo.add_stash.AddStash;
 import com.example.mystashapp.mystashappproject.pojo.customer_check_in.CustomerCheckIn;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.SearchBusiness;
@@ -331,7 +332,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         mGoogleMap = googleMap;
         userMarker = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.valueOf(lat), Double.valueOf(lng)))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));//fromResource(R.drawable.home_location)
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(lat), Double.valueOf(lng)), 12);
         googleMap.moveCamera(update);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -339,28 +340,30 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(SearchBusiness_MyStash.this, ListDetails_MyStash.class);
-                String intVal = marker.getId().replaceAll("[^0-9]", "");
-                Log.d(Constant_util.LOG_TAG, intVal);
-                String json = (new Gson().toJson(arrSearchBusiness.get(Integer.valueOf(intVal))));
-                intent.putExtra("id", json);
-                startActivity(intent);
+//                Intent intent = new Intent(SearchBusiness_MyStash.this, ListDetails_MyStash.class);
+//                String intVal = marker.getId().replaceAll("[^0-9]", "");
+//                Log.d(Constant_util.LOG_TAG, intVal);
+//                String json = (new Gson().toJson(arrSearchBusiness.get(Integer.valueOf(intVal))));
+//                intent.putExtra("id", json);
+//                startActivity(intent);
             }
         });
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        try {
+            mAdapter.getFilter().filter(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        try {
-
-            mAdapter.getFilter().filter(newText);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (newText.equals("")) {
+            Log.d(Constant_util.LOG_TAG, "onQueryTextChange: " + "empty");
         }
         return false;
     }
@@ -380,14 +383,6 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         super.onResume();
         //Retrofit Callback
         getRequest(Constant_util.DEFAULT_RADIUS);
-
-//        if (boolMapClick) {
-//            if (mapFragment.getView() != null) {//TODO need to implement like directly map opens if true
-//                mRecyclerView.setVisibility(View.GONE);
-//                search.setVisibility(View.GONE);
-//                mapFragment.getView().setVisibility(View.VISIBLE);
-//            }
-//        }
     }
 
 
@@ -399,11 +394,10 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
             @Override
             public void onClick(View view) {
-
+                RecyclerView_SBCustomViewHolder2 holder =
+                        (RecyclerView_SBCustomViewHolder2) view.getTag();
+                position = holder.getAdapterPosition();
                 if (!SearchBusiness_MyStash.IS_CHECK_IN) {
-                    RecyclerView_SBCustomViewHolder2 holder =
-                            (RecyclerView_SBCustomViewHolder2) view.getTag();
-                    position = holder.getAdapterPosition();
                     Searchnearby s = searchNearbyList.get(position);
                     String jsonBusiness = (new Gson()).toJson(s);
                     Intent intent = new Intent(mContext, ListDetails_MyStash.class);
@@ -422,7 +416,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             this.mContext = context;
         }
 
-        private void getCheckingService(int position) {
+        private void getCheckingService(final int position) {
             final ProgressDialog dialog = new ProgressDialog(mContext);
             dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large);
             dialog.show();
@@ -437,7 +431,38 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                     CustomerCheckIn checkIn = response.body();
                     switch (checkIn.getHeader().getSuccess()) {
                         case "1":
-                            Toast.makeText(mContext, "Thanks for visiting", Toast.LENGTH_SHORT).show();
+                            if (searchNearbyList.get(position).getIsstash().equals("1")) {
+                                new AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                        .setCancelable(false)
+                                        .setTitle("Thanks for visiting")
+                                        .setMessage("Present yourself at the cash counter " +
+                                                "and mention your name when making " +
+                                                "your purchase. See you again soon")
+                                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        }).show();
+                            } else {
+                                new AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                        .setCancelable(false)
+                                        .setTitle("Thanks for visiting")
+                                        .setMessage("To start earning rewards please add us to your stash")
+                                        .setPositiveButton("Add to stash", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                addStash(searchNearbyList.get(position));
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        })
+                                        .show();
+                            }
                             break;
                         case "0":
                             Toast.makeText(mContext, "Checkin Unsuccessful", Toast.LENGTH_SHORT).show();
@@ -456,6 +481,39 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 }
             });
         }
+
+        public void addStash(Searchnearby searchnearby) {
+            String check = Constant_util.ACTION_ADD_STASH + "**** ADD ****" + searchnearby.getId() + " " + userObj.getId();
+            Log.d(Constant_util.LOG_TAG, check);
+            Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), userObj.getId());
+            call.enqueue(new Callback<AddStash>() {
+                @Override
+                public void onResponse(Call<AddStash> call, Response<AddStash> response) {
+                    AddStash stash = response.body();
+                    if (stash.getHeader().getSuccess().equals("1")) {
+//                    Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        new android.support.v7.app.AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                .setMessage(stash.getHeader().getMessage())
+                                .setTitle("Message")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                })
+                                .show();
+                    } else if (stash.getHeader().getSuccess().equals("0")) {
+                        Toast.makeText(SearchBusiness_MyStash.this, "Stash Already Exist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddStash> call, Throwable t) {
+                    Toast.makeText(SearchBusiness_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
         @Override
         public RecyclerView_SBCustomViewHolder2 onCreateViewHolder(ViewGroup viewGroup, int i) {

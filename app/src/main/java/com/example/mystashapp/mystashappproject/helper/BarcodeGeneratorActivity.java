@@ -19,6 +19,16 @@ public class BarcodeGeneratorActivity {
     private static final int BLACK = 0xFF000000;
     private static final int TRANSPARENT = R.color.colorPrimary;
 
+    private static String guessAppropriateEncoding(CharSequence contents) {
+        // Very crude at the moment
+        for (int i = 0; i < contents.length(); i++) {
+            if (contents.charAt(i) > 0xFF) {
+                return "UTF-8";
+            }
+        }
+        return null;
+    }
+
     public Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = contents;
         if (contentsToEncode == null) {
@@ -27,7 +37,7 @@ public class BarcodeGeneratorActivity {
         Map<EncodeHintType, Object> hints = null;
         String encoding = guessAppropriateEncoding(contentsToEncode);
         if (encoding != null) {
-            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.CHARACTER_SET, encoding);
         }
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -44,7 +54,7 @@ public class BarcodeGeneratorActivity {
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : Color.TRANSPARENT;
+                pixels[offset + x] = result.get(x, y) ? BLACK : Color.WHITE;
             }
         }
 
@@ -52,16 +62,6 @@ public class BarcodeGeneratorActivity {
                 Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
-    }
-
-    private static String guessAppropriateEncoding(CharSequence contents) {
-        // Very crude at the moment
-        for (int i = 0; i < contents.length(); i++) {
-            if (contents.charAt(i) > 0xFF) {
-                return "UTF-8";
-            }
-        }
-        return null;
     }
 
 }

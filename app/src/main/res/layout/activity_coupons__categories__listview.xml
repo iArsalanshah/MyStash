@@ -21,6 +21,7 @@
             android:src="@drawable/img_toolbar_back" />
 
         <TextView
+            android:id="@+id/titleSavedCoupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -29,6 +30,15 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/img_Saved_Coupons"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/saved_icon" />
     </RelativeLayout>
 
     <ListView

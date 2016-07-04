@@ -2,16 +2,17 @@ package com.example.mystashapp.mystashappproject.home.mystash_box;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -32,7 +33,7 @@ public class Program_Details extends AppCompatActivity {
 
     private ViewFlipper viewFlipper;
     private ImageView img1;//, img2;
-    private LinearLayout img2_layout;
+    //    private LinearLayout img2_layout;
     private String pid;
     private Datum stampObject;
     private ImageView img_item;
@@ -68,7 +69,7 @@ public class Program_Details extends AppCompatActivity {
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
         img1 = (ImageView) findViewById(R.id.img1);
 //        img2 = (ImageView) findViewById(R.id.img2);
-        img2_layout = (LinearLayout) findViewById(R.id.img2_layout);
+//        img2_layout = (LinearLayout) findViewById(R.id.img2_layout);
         gridView_img2 = (GridView) findViewById(R.id.gridView_img2);
         img_item = (ImageView) findViewById(R.id.img_programDetails_item);
         tvTitle_item = (TextView) findViewById(R.id.tv_programDetails_item_title);
@@ -214,7 +215,7 @@ public class Program_Details extends AppCompatActivity {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT); //http://genzeb.github.io/flip/
+                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT); //http://genzeb.github.io/flip/
             }
         });
 //        img2_layout.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +227,7 @@ public class Program_Details extends AppCompatActivity {
         gridView_img2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
             }
         });
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +250,7 @@ public class Program_Details extends AppCompatActivity {
     }
 
     private class ImageAdapter extends BaseAdapter {
+        private final float px;
         Context context;
         int totalStamps;
         int filledStamps;
@@ -259,6 +261,8 @@ public class Program_Details extends AppCompatActivity {
             this.context = context;
             totalStamps = Integer.parseInt(stampObject.getTotalstamp());
             filledStamps = Integer.parseInt(stampObject.getStampcount());
+            Resources r = Resources.getSystem();
+            px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, r.getDisplayMetrics());
         }
 
         @Override
@@ -282,9 +286,10 @@ public class Program_Details extends AppCompatActivity {
 
             if (convertView == null) {
                 imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+
+                imageView.setLayoutParams(new GridView.LayoutParams((int) px, (int) px));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 0);
+                imageView.setPadding(16, 8, 8, 8);
             } else {
                 imageView = (ImageView) convertView;
             }

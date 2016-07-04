@@ -11,12 +11,16 @@ import com.example.mystashapp.mystashappproject.R;
 
 public class RecyclerViewHolder_MyStashList extends RecyclerView.ViewHolder {
 
+    //    final FrameLayout deleteView;
+//    final SwipeRevealLayout swipeLayout;
     TextView tvRecyclerTitle, tvRecyclerDesc;
     ImageView imageViewAvatar;
     RelativeLayout layout;
 
     public RecyclerViewHolder_MyStashList(View itemView) {
         super(itemView);
+//        deleteView = (FrameLayout) itemView.findViewById(R.id.delete_layout);
+//        swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
 
         tvRecyclerTitle = (TextView) itemView.findViewById(R.id.row_recyclerview_title_mystash);
         tvRecyclerDesc = (TextView) itemView.findViewById(R.id.row_recyclerview_desc_mystash);

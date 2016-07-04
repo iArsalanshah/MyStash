@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mystashapp.mystashappproject">
 
+    <uses-sdk android:maxSdkVersion="22" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -113,6 +115,10 @@
         <activity
             android:name=".home.mycards_box.CreateACard"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".helper.ImageCropActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".businessMapActivity"></activity>
     </application>
 
 </manifest>

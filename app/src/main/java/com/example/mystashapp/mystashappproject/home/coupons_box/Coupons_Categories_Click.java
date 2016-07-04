@@ -33,10 +33,10 @@ import retrofit2.Response;
 public class Coupons_Categories_Click extends AppCompatActivity {
 
     List<Coupon> couponObj;
-    private ImageView imgBack;
+    private ImageView imgBack, imgSavedCoupons;
     private ListView listView;
     private String catID;
-    private TextView altTextCouponsSavedList;
+    private TextView altTextCouponsSavedList, titleSavedCoupon;
     private boolean isTextSavedClick;
     private boolean isCouponByAdmin;
     private Users cid;
@@ -57,11 +57,13 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (isTextSavedClick) {
+            titleSavedCoupon.setText("Saved Coupons");
+            imgSavedCoupons.setVisibility(View.GONE);
             getSavedCoupons();
         } else if (isCouponByAdmin) {
-            String uid = getIntent().getStringExtra("adminIDforCoupon");
+            String bid = getIntent().getStringExtra("adminIDforCoupon");
             try {
-                getCouponsByAdmin(uid);
+                getCouponsByAdmin(bid);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -69,8 +71,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             getAllCoupons();
     }
 
-    private void getCouponsByAdmin(String uid) {
-        Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getCouponsByAdmin(Constant_util.ACTION_GET_COUPONS_BY_ADMIN, cid.getId(), uid);
+    private void getCouponsByAdmin(String bid) {
+        Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getCouponsByAdmin(Constant_util.ACTION_GET_COUPONS_BY_ADMIN, cid.getId(), bid);
         call.enqueue(new Callback<Get_All_Coupons>() {
             @Override
             public void onResponse(Call<Get_All_Coupons> call, Response<Get_All_Coupons> response) {
@@ -109,7 +111,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -134,7 +136,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -155,12 +157,22 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imgSavedCoupons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Coupons_Categories_Click.this, Coupons_Categories_Click.class);
+                intent.putExtra("textSavedClick", true);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init() {
         imgBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
+        imgSavedCoupons = (ImageView) findViewById(R.id.img_Saved_Coupons);
         listView = (ListView) findViewById(R.id.listView_Categories_Coupons);
         altTextCouponsSavedList = (TextView) findViewById(R.id.altTextCouponsSavedList);
+        titleSavedCoupon = (TextView) findViewById(R.id.titleSavedCoupon);
     }
 
     private class ListAdapter_Categorries extends BaseAdapter {
@@ -198,8 +210,10 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                 convertView = layoutInflater.inflate(R.layout.row_categories_details_listview, parent, false);
 
             TextView listLabel = (TextView) convertView.findViewById(R.id.textView_row_list_coupons);
+            TextView tv_item_details = (TextView) convertView.findViewById(R.id.tv_item_details);
             ImageView listImage = (ImageView) convertView.findViewById(R.id.imageView_row_list_coupons);
             listLabel.setText(coupons.get(position).getCouponName());
+            tv_item_details.setText(coupons.get(position).getCouponDesc());
             Picasso.with(context).load(coupons.get(position).getImgurl())
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)

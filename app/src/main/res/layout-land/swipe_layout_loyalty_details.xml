@@ -9,5 +9,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_loyalty_card_front" />
+        android:src="@drawable/placeholder_img_not_found" />
 </LinearLayout>

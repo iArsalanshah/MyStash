@@ -1,10 +1,12 @@
 package com.example.mystashapp.mystashappproject.home.coupons_box;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -48,6 +50,7 @@ public class CouponsList_Details extends AppCompatActivity {
     private TextView textViewCouponsDesc;
     private Coupon cObj;
     private Users cid;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,25 @@ public class CouponsList_Details extends AppCompatActivity {
         textViewCouponsUSED.append(cObj.getRedeemedCount() + "/" + cObj.getTotalCount());
         Picasso.with(this)
                 .load(cObj.getImgurl())
-                .error(R.drawable.placeholder_shadow)
+                .error(R.drawable.placeholder_img_not_found)
                 .placeholder(R.drawable.placeholder_shadow)
                 .into(imgView);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
+    }
+
+    private void init() {
+        btnRedeemNow = (Button) findViewById(R.id.button_redeemNow);
+        btnShare = (Button) findViewById(R.id.btn_Share_coupons);
+        btnRemind = (Button) findViewById(R.id.btn_RemindMe_coupons);
+        btnSave = (Button) findViewById(R.id.btn_Save_coupons);
+        imgView = (ImageView) findViewById(R.id.imageView_Coupons_Details);
+        imgBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
+        textViewCouponsName = (TextView) findViewById(R.id.textView_Coupons_Details_Name);
+        textViewCouponsExp = (TextView) findViewById(R.id.textView_Coupons_Details_expiry);
+        textViewCouponsUSED = (TextView) findViewById(R.id.textView_Coupons_Details_usedDate);
+        textViewCouponsDesc = (TextView) findViewById(R.id.textView_Coupons_Details_Desc);
+        progressDialog = new ProgressDialog(CouponsList_Details.this);
     }
 
     private void clickEvents() {
@@ -89,59 +108,11 @@ public class CouponsList_Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "MyStash share.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Who does'nt like rewards? With the STASH APP, you can get rewards at all of your favorite retailers when you shop. Download it today for So many great deals and offers.\n" +
+                        "www.mystashapp.com");
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Stash App");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
-            }
-        });
-
-        //Button Remind me
-        btnRemind.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String msg = "Reminder of Coupon";
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                Date result = null;
-                try {
-                    result = df.parse(cObj.getCouponExpdate());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(result);
-                cal.add(Calendar.DATE, -1);
-                result = cal.getTime();
-                DateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-                Date date = null;
-                try {
-                    date = formatter.parse(result.toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Calendar cal2 = Calendar.getInstance();
-                cal2.setTime(date);
-                String formatedDate = cal2.get(Calendar.YEAR) + "-" + (cal2.get(Calendar.MONTH) + 1) + "-" + cal2.get(Calendar.DATE);
-//                Log.d(Constant_util.LOG_TAG, "" + formatedDate);
-                Call<RemindMe> call = WebServicesFactory.getInstance().getRemindCoupon(Constant_util.ACTION_REMINDME_COUPON, cid.getId(), cObj.getId(), cObj.getUid(), formatedDate, msg);
-                call.enqueue(new Callback<RemindMe>() {
-                    @Override
-                    public void onResponse(Call<RemindMe> call, Response<RemindMe> response) {
-                        RemindMe remindMe = response.body();
-                        if (remindMe.getHeader().getSuccess().equals("1")) {
-                            Toast.makeText(CouponsList_Details.this, "Reminder Added", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(CouponsList_Details.this, "Found Error:" + remindMe.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RemindMe> call, Throwable t) {
-                        Toast.makeText(CouponsList_Details.this, "Network Error:", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
 
@@ -149,39 +120,36 @@ public class CouponsList_Details extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(CouponsList_Details.this)
-                        .setCancelable(true)
-                        .setTitle("Title")
-                        .setMessage("Dialog Message")
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Call<ToSaveCoupon> call = WebServicesFactory.getInstance().getToSaveCoupon(Constant_util.ACTION_SAVE_A_COUPON, cObj.getUid(), cid.getId(), cObj.getId());
-                                call.enqueue(new Callback<ToSaveCoupon>() {
-                                    @Override
-                                    public void onResponse(Call<ToSaveCoupon> call, Response<ToSaveCoupon> response) {
-                                        ToSaveCoupon saveCoupon = response.body();
-                                        if (saveCoupon.getHeader().getSuccess().equals("1")) {
-                                            Toast.makeText(CouponsList_Details.this, "Coupon Saved", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(CouponsList_Details.this, "Failed: " + saveCoupon.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.show();
+                Call<ToSaveCoupon> call = WebServicesFactory.getInstance().getToSaveCoupon(Constant_util.ACTION_SAVE_A_COUPON, cObj.getUid(), cid.getId(), cObj.getId());
+                call.enqueue(new Callback<ToSaveCoupon>() {
+                    @Override
+                    public void onResponse(Call<ToSaveCoupon> call, Response<ToSaveCoupon> response) {
+                        progressDialog.dismiss();
+                        ToSaveCoupon saveCoupon = response.body();
+                        if (saveCoupon.getHeader().getSuccess().equals("1")) {
+                            new AlertDialog.Builder(CouponsList_Details.this)
+                                    .setTitle("Message")
+                                    .setMessage("Coupon saved successfully")
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
                                         }
-                                    }
+                                    })
+                                    .show();
+                        } else {
+                            Toast.makeText(CouponsList_Details.this, saveCoupon.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                                    @Override
-                                    public void onFailure(Call<ToSaveCoupon> call, Throwable t) {
-                                        Toast.makeText(CouponsList_Details.this, "Network Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        })
-                        .show();
+                    @Override
+                    public void onFailure(Call<ToSaveCoupon> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -202,21 +170,35 @@ public class CouponsList_Details extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                progressDialog.show();
                                 Call<RedeemCoupon> call = WebServicesFactory.getInstance().getRedeemCoupon(Constant_util.ACTION_REDEEM_COUPON, cObj.getUid(), cid.getId(), cObj.getId());
                                 call.enqueue(new Callback<RedeemCoupon>() {
                                     @Override
                                     public void onResponse(Call<RedeemCoupon> call, Response<RedeemCoupon> response) {
+                                        progressDialog.dismiss();
                                         RedeemCoupon redeemCoupon = response.body();
                                         if (redeemCoupon.getHeader().getSuccess().equals("1")) {
-                                            Toast.makeText(CouponsList_Details.this, "Coupon Redeemed", Toast.LENGTH_SHORT).show();
+                                            new AlertDialog.Builder(CouponsList_Details.this)
+                                                    .setTitle("Message")
+                                                    .setMessage("Coupon redeemed successfully")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.dismiss();
+                                                            finish();
+                                                        }
+                                                    })
+                                                    .show();
                                         } else {
-                                            Toast.makeText(CouponsList_Details.this, "Can't Redeem Coupon: \n" + redeemCoupon.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(CouponsList_Details.this, redeemCoupon.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<RedeemCoupon> call, Throwable t) {
-                                        Toast.makeText(CouponsList_Details.this, "Network Error", Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -224,18 +206,111 @@ public class CouponsList_Details extends AppCompatActivity {
                         .show();
             }
         });
+
+        //Button Remind me
+        btnRemind.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                final String msg = "Reminder of Coupon";
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data1: " + df);
+
+                Date result = null;
+                Date soonResult = null;
+                Date cDate = null;
+                try {
+                    result = df.parse(cObj.getCouponExpdate());
+                    Log.d(Constant_util.LOG_TAG, "Reminder Data2: " + result);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Calendar cal = Calendar.getInstance();
+                Log.d(Constant_util.LOG_TAG, "Reminder Data3: " + cal);
+
+                cal.setTime(result);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data4: " + cal);
+
+                cal.add(Calendar.DATE, -3);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data5: " + cal);
+
+                result = cal.getTime();
+                soonResult = result;
+                Log.d(Constant_util.LOG_TAG, "Reminder Data6: " + result);
+                DateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data7: " + formatter);
+
+                Calendar cal2 = Calendar.getInstance();
+                Log.d(Constant_util.LOG_TAG, "Reminder Data9: " + cal2);
+                cDate = cal2.getTime();
+                Date date = null;
+                try {
+                    date = formatter.parse(result.toString());
+                    Log.d(Constant_util.LOG_TAG, "Reminder Data8: " + date + " " + cDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                cal2.setTime(date);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data10: " + cal2);
+
+                final String formatedDate = cal2.get(Calendar.YEAR) + "-" + (cal2.get(Calendar.MONTH) + 1) + "-" + cal2.get(Calendar.DATE);
+                Log.d(Constant_util.LOG_TAG, "Reminder Data11: " + formatedDate);
+                if (cDate != null && cDate.after(date)) {
+                    Log.d(Constant_util.LOG_TAG, "onClick: SUCCESS");
+                    new AlertDialog.Builder(CouponsList_Details.this)
+                            .setTitle("Message")
+                            .setMessage("This coupon will be expire Soon")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                } else {
+                    new AlertDialog.Builder(CouponsList_Details.this)
+                            .setTitle("Message")
+                            .setMessage("You will be notified, 03 days before this coupon expires")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressDialog.show();
+                                    Call<RemindMe> call = WebServicesFactory.getInstance().getRemindCoupon(Constant_util.ACTION_REMINDME_COUPON, cid.getId(), cObj.getId(), cObj.getUid(), formatedDate, msg);
+                                    call.enqueue(new Callback<RemindMe>() {
+                                        @Override
+                                        public void onResponse(Call<RemindMe> call, Response<RemindMe> response) {
+                                            progressDialog.dismiss();
+                                            RemindMe remindMe = response.body();
+                                            if (remindMe.getHeader().getSuccess().equals("1")) {
+                                                remindMeDialog("Message", "Reminder has been set for coupon");
+                                            } else {
+                                                Toast.makeText(CouponsList_Details.this, remindMe.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<RemindMe> call, Throwable t) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }).show();
+                }
+            }
+        });
     }
 
-    private void init() {
-        btnRedeemNow = (Button) findViewById(R.id.button_redeemNow);
-        btnShare = (Button) findViewById(R.id.btn_Share_coupons);
-        btnRemind = (Button) findViewById(R.id.btn_RemindMe_coupons);
-        btnSave = (Button) findViewById(R.id.btn_Save_coupons);
-        imgView = (ImageView) findViewById(R.id.imageView_Coupons_Details);
-        imgBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
-        textViewCouponsName = (TextView) findViewById(R.id.textView_Coupons_Details_Name);
-        textViewCouponsExp = (TextView) findViewById(R.id.textView_Coupons_Details_expiry);
-        textViewCouponsUSED = (TextView) findViewById(R.id.textView_Coupons_Details_usedDate);
-        textViewCouponsDesc = (TextView) findViewById(R.id.textView_Coupons_Details_Desc);
+    public void remindMeDialog(String title, String msg) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 }

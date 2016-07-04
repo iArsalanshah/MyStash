@@ -1,8 +1,11 @@
 package com.example.mystashapp.mystashappproject.home.mystash_box;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.businessMapActivity;
 import com.example.mystashapp.mystashappproject.home.coupons_box.Coupons_Categories_Click;
 import com.example.mystashapp.mystashappproject.home.mystash_box.viewpager_adapter.ViewPagerAdapter;
 import com.example.mystashapp.mystashappproject.pojo.add_stash.AddStash;
@@ -94,7 +98,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListDetails_MyStash.this, Coupons_Categories_Click.class);
-                intent.putExtra("adminIDforCoupon", searchnearby.getUid());
+                intent.putExtra("adminIDforCoupon", searchnearby.getId());
                 intent.putExtra("couponByAdmin", true);
                 startActivity(intent);
             }
@@ -125,54 +129,91 @@ public class ListDetails_MyStash extends AppCompatActivity {
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String check = Constant_util.ACTION_ADD_STASH + "**** ADD ****" + searchnearby.getId() + " " + users_obj.getId();
-                Log.d(Constant_util.LOG_TAG, check);
-                Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), users_obj.getId());
-                call.enqueue(new Callback<AddStash>() {
-                    @Override
-                    public void onResponse(Call<AddStash> call, Response<AddStash> response) {
-                        AddStash stash = response.body();
-                        if (stash.getHeader().getSuccess().equals("1")) {
-                            Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                            imgAdd.setVisibility(View.GONE);
-                            imgRemove.setVisibility(View.VISIBLE);
-                        } else if (stash.getHeader().getSuccess().equals("0")) {
-                            Toast.makeText(ListDetails_MyStash.this, "Stash Already Exist", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AddStash> call, Throwable t) {
-                        Toast.makeText(ListDetails_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                addStash(searchnearby);
             }
         });
 
         imgRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String check = Constant_util.ACTION_ADD_STASH + " ***** DELETE **** " + users_obj.getId() + " " + searchnearby.getId() + " " + searchnearby.getUid();
-                Log.d(Constant_util.LOG_TAG, check);
-                Call<RemoveStash> call = WebServicesFactory.getInstance().getRemoveStash(Constant_util.ACTION_REMOVE_STASH, searchnearby.getId(), users_obj.getId());
-                call.enqueue(new Callback<RemoveStash>() {
-                    @Override
-                    public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
-                        RemoveStash stash = response.body();
-                        if (stash.getHeader().getSuccess().equals("1")) {
-                            Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                            imgRemove.setVisibility(View.GONE);
-                            imgAdd.setVisibility(View.VISIBLE);
-                        } else if (stash.getHeader().getSuccess().equals("0")) {
-                            Toast.makeText(ListDetails_MyStash.this, "Already Removed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                new AlertDialog.Builder(ListDetails_MyStash.this)
+                        .setMessage("Are you sure you want to remove this\n" +
+                                "business from your stash, doing so will\n" +
+                                "prevent you from receiving specials\n" +
+                                "and VIP offers from this merchant.")
+                        .setTitle("Confirmation")
+                        .setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeStash(searchnearby);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
 
-                    @Override
-                    public void onFailure(Call<RemoveStash> call, Throwable t) {
-                        Toast.makeText(ListDetails_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    public void removeStash(Searchnearby searchnearby) {
+        String check = Constant_util.ACTION_ADD_STASH + " ***** DELETE **** " + users_obj.getId() + " " + searchnearby.getId() + " " + searchnearby.getUid();
+        Log.d(Constant_util.LOG_TAG, check);
+        Call<RemoveStash> call = WebServicesFactory.getInstance().getRemoveStash(Constant_util.ACTION_REMOVE_STASH, searchnearby.getId(), users_obj.getId());
+        call.enqueue(new Callback<RemoveStash>() {
+            @Override
+            public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
+                RemoveStash stash = response.body();
+                if (stash.getHeader().getSuccess().equals("1")) {
+//                    Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    imgRemove.setVisibility(View.GONE);
+                    imgAdd.setVisibility(View.VISIBLE);
+                } else if (stash.getHeader().getSuccess().equals("0")) {
+                    Toast.makeText(ListDetails_MyStash.this, "Already Removed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemoveStash> call, Throwable t) {
+                Toast.makeText(ListDetails_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addStash(Searchnearby searchnearby) {
+        String check = Constant_util.ACTION_ADD_STASH + "**** ADD ****" + searchnearby.getId() + " " + users_obj.getId();
+        Log.d(Constant_util.LOG_TAG, check);
+        Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), users_obj.getId());
+        call.enqueue(new Callback<AddStash>() {
+            @Override
+            public void onResponse(Call<AddStash> call, Response<AddStash> response) {
+                AddStash stash = response.body();
+                if (stash.getHeader().getSuccess().equals("1")) {
+//                    Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(ListDetails_MyStash.this)
+                            .setMessage(stash.getHeader().getMessage())
+                            .setTitle("Message")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
+                    imgAdd.setVisibility(View.GONE);
+                    imgRemove.setVisibility(View.VISIBLE);
+                } else if (stash.getHeader().getSuccess().equals("0")) {
+                    Toast.makeText(ListDetails_MyStash.this, "Stash Already Exist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddStash> call, Throwable t) {
+                Toast.makeText(ListDetails_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -248,8 +289,15 @@ public class ListDetails_MyStash extends AppCompatActivity {
     }
 
     public void onClickMapIcon(View view) {
-        Intent intent = new Intent(this, SearchBusiness_MyStash.class);
-        intent.putExtra("clickOnMap", true);
+        Intent intent = new Intent(this, businessMapActivity.class);
+        intent.putExtra("lat", gsonBusiness.getLat());
+        intent.putExtra("lng", gsonBusiness.getLongt());
+        intent.putExtra("businessName", gsonBusiness.getName());
+        startActivity(intent);
+    }
+
+    public void callContactNumber(View view) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + gsonBusiness.getContact()));
         startActivity(intent);
     }
 }

@@ -25,6 +25,15 @@ public class Getloyalty {
     @Expose
     private String imageurl;
 
+    public Getloyalty(String id, String cardname, String carddetail, String companyinfo, String companylogo, String imageurl) {
+        this.id = id;
+        this.cardname = cardname;
+        this.carddetail = carddetail;
+        this.companyinfo = companyinfo;
+        this.companylogo = companylogo;
+        this.imageurl = imageurl;
+    }
+
     /**
      * @return The id
      */

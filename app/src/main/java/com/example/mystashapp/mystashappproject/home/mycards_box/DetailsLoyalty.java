@@ -1,7 +1,11 @@
 package com.example.mystashapp.mystashappproject.home.mycards_box;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -15,14 +19,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
-import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalty;
+import com.example.mystashapp.mystashappproject.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.Loyaltycard;
+import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.squareup.picasso.Picasso;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailsLoyalty extends AppCompatActivity implements View.OnClickListener {
     public static boolean is_Edit = false;
@@ -30,19 +40,18 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     TextView etCard, etName, etBusiness, etDetails;
     InkPageIndicator inkPageIndicator;
     Button edit;
-    private Class<?> mClass;
     private Loyaltycard convertedObjEdit;
     private String cardNumber, urName, cardName, cardNote, frontCard, backCard;
-    //String barcodeImage;
-    private int[] image_resources = {R.drawable.ic_loyalty_card_front, R.drawable.ic_loyalty_card_bk};
-    private Getloyalty getloyalty;
-    private ImageView gotViewForConfig;
+    private int[] image_resources = {R.drawable.placeholder_shadow, R.drawable.placeholder_shadow};
+    //    private Getloyalty getloyalty;
+    private ImageView imgChangeConfiguration;
+    private ImageView deleteLoyaltyImg;
+    private String loyaltyPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_loyalty);
-
         //
         //Extra Intent from save loyalty
         //
@@ -50,6 +59,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             cardNumber = getIntent().getStringExtra("cardNumber");
             urName = getIntent().getStringExtra("urName");
             cardName = getIntent().getStringExtra("cardName");
+            loyaltyPosition = getIntent().getStringExtra("loyaltyPosition");
             cardNote = getIntent().getStringExtra("cardNotes");
             frontCard = getIntent().getStringExtra("frontCard");
             backCard = getIntent().getStringExtra("backCard");
@@ -62,8 +72,8 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         String objectEdit = getIntent().getStringExtra("editLoyaltyObject");
         convertedObjEdit = new Gson().fromJson(objectEdit, Loyaltycard.class);
 
-        String addLoyaltyObj = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");
-        getloyalty = new Gson().fromJson(addLoyaltyObj, Getloyalty.class);
+//        String addLoyaltyObj = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("", "addLoyaltyObject"); //todo id delete issue
+//        getloyalty = new Gson().fromJson(addLoyaltyObj, Getloyalty.class);
 
         init();
 
@@ -75,10 +85,6 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         settingData();
     }
 
-    private void settingDataForEdit() {
-
-    }
-
     private void init() {
         viewPager = (ViewPager) findViewById(R.id.view_pager_Loyalty);
         etCard = (EditText) findViewById(R.id.edittext_loyalty_cardNo);
@@ -87,6 +93,8 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         etDetails = (EditText) findViewById(R.id.edittext_loyalty_details);
         edit = (Button) findViewById(R.id.button_loyalty_edit);
         inkPageIndicator = (InkPageIndicator) findViewById(R.id.ink_indicator_loyalty);
+        imgChangeConfiguration = (ImageView) findViewById(R.id.imgChangeConfiguration);
+        deleteLoyaltyImg = (ImageView) findViewById(R.id.deleteLoyaltyImg);
     }
 
     private void settingData() {
@@ -104,11 +112,68 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                 etDetails.setText(cardNote);
             }
             edit.setOnClickListener(this);
+            imgChangeConfiguration.setOnClickListener(this);
+            deleteLoyaltyImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(DetailsLoyalty.this);
+                    dialog.setTitle("Confirmation");
+                    dialog.setMessage("Delete loyalty card?");
+                    dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            if (is_Edit)
+                                onDeleteLoyaltyCard(convertedObjEdit.getId());
+                            else onDeleteLoyaltyCard(loyaltyPosition);
+                        }
+                    });
+                    dialog.show();
+                }
+            });
         }
     }
 
+    private void onDeleteLoyaltyCard(final String position) {
+
+        // webservice should be called here.
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Deleting...");
+        dialog.show();
+        Call<DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
+                .deleteLoyaltyCard(Constant_util.ACTION_DELETE_LOYALTY_CARD,
+                        position);
+        call.enqueue(new Callback<DeleteLoyaltyCard>() {
+            @Override
+            public void onResponse(Call<DeleteLoyaltyCard> call, Response<DeleteLoyaltyCard> response) {
+                dialog.dismiss();
+                DeleteLoyaltyCard deleteLoyaltyCard = response.body();
+
+                if (deleteLoyaltyCard.getHeader().getSuccess().equals("1")) {
+                    Toast.makeText(DetailsLoyalty.this, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                } else {
+                    Toast.makeText(DetailsLoyalty.this, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(DetailsLoyalty.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     public void imgBack_LoyaltyDetails(View view) {
-        startActivity(new Intent(DetailsLoyalty.this, MyCards.class));
+        startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     public void loyalty_details_img(View view) {
@@ -122,23 +187,37 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.button_loyalty_edit:
                 Intent intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                if (getloyalty.getImageurl().length() > 0) {
-                    if (is_Edit) {
-                        intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
-                        intent.putExtra("comesFromDetail", true);
-                        startActivity(intent);
-                    } else {
-                        intent.putExtra("frontCard", frontCard);
-                        intent.putExtra("comesFromDetail", true);
-                        startActivity(intent);
-                    }
+                SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+                editor.putString("loyaltyID", loyaltyPosition);
+                editor.putBoolean("updateLoyaltyCard", true).apply();
+//                if (convertedObjEdit.getImageurl().length() > 0) {
+                if (is_Edit) {
+                    intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
+                    intent.putExtra("comesFromDetail", true);
+                    startActivity(intent);
                 } else {
-                    intent.putExtra("comesFromDetail", false);
+                    intent.putExtra("frontCard", frontCard);
+                    intent.putExtra("comesFromDetail", true);
                     startActivity(intent);
                 }
+//                } else {
+//                    intent.putExtra("comesFromDetail", false);
+//                    startActivity(intent);
+//                }
+                break;
+            case R.id.imgChangeConfiguration:
+//                Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+//                final int orientation = display.getOrientation();
+//                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//                }
+//                else {
+//                    setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                }
                 break;
             default:
                 break;
@@ -192,7 +271,6 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             View item_view = layoutInflater.inflate
                     (R.layout.swipe_layout_loyalty_details, container, false);
             ImageView imageView = (ImageView) item_view.findViewById(R.id.swipe_view_Images_loyalty);
-            gotViewForConfig = imageView;
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -3,8 +3,10 @@ package com.example.mystashapp.mystashappproject.helper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -15,6 +17,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class SimpleScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
 
     public static String barcodeText = "";
+    public static BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
     private ZXingScannerView mScannerView;
 
     @Override
@@ -42,11 +45,17 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
     public void handleResult(Result result) {
         // do something with result here
         Log.d(Constant_util.LOG_TAG, "" + result.getBarcodeFormat().toString());
-        Log.d(Constant_util.LOG_TAG, "" + result.getText());
+        Log.d(Constant_util.LOG_TAG, "" + result.getText() + "" + result.getBarcodeFormat());
         Log.d(Constant_util.LOG_TAG, "" + result.getResultMetadata());
+        if (result.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
+            mScannerView.resumeCameraPreview(this);
+            Toast.makeText(SimpleScannerActivity.this, "QR code does not support", Toast.LENGTH_SHORT).show();
+        } else {
+            mScannerView.stopCamera();
+            finish();
+        }
         barcodeText = result.getText();
-        mScannerView.stopCamera();
-        finish();
+        barcodeFormat = result.getBarcodeFormat();
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
     }

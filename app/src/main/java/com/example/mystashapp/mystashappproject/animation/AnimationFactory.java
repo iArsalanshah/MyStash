@@ -20,7 +20,7 @@ import android.widget.ViewAnimator;
  */
 public class AnimationFactory {
 
-    private static final int DEFAULT_FLIP_TRANSITION_DURATION = 500;
+    private static final int DEFAULT_FLIP_TRANSITION_DURATION = 250;
 
     /**
      * Create a pair of {@link FlipAnimation} that can be used to flip 3D transition from {@code fromView} to {@code toView}. A typical use case is with {@link ViewAnimator} as an out and in transition.

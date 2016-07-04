@@ -37,7 +37,7 @@ import retrofit2.Response;
 public class Coupons extends AppCompatActivity {
 
     private ImageView imageViewBack;
-    private TextView textSaved;
+    private ImageView img_Saved_Coupons;
     private TextView textTitleToolbar;
     private ListView listView;
     private boolean isFlyer;
@@ -61,18 +61,14 @@ public class Coupons extends AppCompatActivity {
         progDialog.setMessage("Loading...");
         progDialog.show();
         //Retrofit2.0 call
-//        if (isFlyer) {
-//            getFlyers();
-//        } else
-        getCategories();
+        if (isFlyer) {
+            getCategories("flyers");
+        } else
+            getCategories("coupons");
     }
 
-    private void getFlyers() {
-
-    }
-
-    private void getCategories() {
-        Call<CategoriesCoupons> call = WebServicesFactory.getInstance().getcategoriesCoupons(Constant_util.ACTION_GET_CATEGORIES_COUPONS);
+    private void getCategories(String type) {
+        Call<CategoriesCoupons> call = WebServicesFactory.getInstance().getcategoriesCoupons(Constant_util.ACTION_GET_CATEGORIES_COUPONS, type);
         call.enqueue(new Callback<CategoriesCoupons>() {
             @Override
             public void onResponse(Call<CategoriesCoupons> call, Response<CategoriesCoupons> response) {
@@ -94,7 +90,7 @@ public class Coupons extends AppCompatActivity {
     }
 
     private void init() {
-        textSaved = (TextView) findViewById(R.id.textView_Saved_Coupons);
+        img_Saved_Coupons = (ImageView) findViewById(R.id.img_Saved_Coupons);
         textTitleToolbar = (TextView) findViewById(R.id.textView_TitleToolbar_Coupons);
         imageViewBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
         listView = (ListView) findViewById(R.id.listview_Coupons);
@@ -102,7 +98,7 @@ public class Coupons extends AppCompatActivity {
         //Setting of Toolbar Title;
         if (isFlyer) {
             textTitleToolbar.setText("Flyers");
-            textSaved.setVisibility(View.GONE);
+            img_Saved_Coupons.setVisibility(View.GONE);
         }
     }
 
@@ -126,7 +122,7 @@ public class Coupons extends AppCompatActivity {
         });
 
         //Saved textView
-        textSaved.setOnClickListener(new View.OnClickListener() {
+        img_Saved_Coupons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Coupons.this, Coupons_Categories_Click.class);

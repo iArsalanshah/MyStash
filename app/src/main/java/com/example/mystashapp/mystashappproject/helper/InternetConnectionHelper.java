@@ -13,6 +13,6 @@ public class InternetConnectionHelper {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
-                activeNetwork.isConnected() && activeNetwork.isAvailable();
+                activeNetwork.isConnectedOrConnecting() && activeNetwork.isAvailable();
     }
 }

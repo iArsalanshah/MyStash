@@ -36,16 +36,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/container_toolbar"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         card_view:cardBackgroundColor="@color/colorPrimary"
         card_view:cardCornerRadius="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
 
             <TextView
                 android:id="@+id/textview_front_of_card"
@@ -60,13 +61,11 @@
 
             <ImageView
                 android:id="@+id/imageView_captureFrontCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_front_of_card"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="60dp"
-                android:maxHeight="160dp"
-                android:maxWidth="250dp"
+                android:layout_width="250dp"
+                android:layout_height="145dp"
+                android:layout_centerInParent="true"
+                android:minHeight="145dp"
+                android:minWidth="250dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/camera_pic" />
 

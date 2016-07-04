@@ -1,6 +1,5 @@
 package com.example.mystashapp.mystashappproject.home.mycards_box;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,11 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFac
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,17 +45,35 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class
-MyCards extends AppCompatActivity {
+MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
     ListView listView;
     private ProgressDialog progress;
     private ListViewMyCards adapterListview;
     private TextView alternateText;
+    private SearchView searchView_cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cards);
         init();
+        bindingData();
+    }
+
+    private void bindingData() {
+        searchView_cards.setOnQueryTextListener(this);
+        // Catch event on [x] button inside search view
+        int searchCloseButtonId = searchView_cards.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView) this.searchView_cards.findViewById(searchCloseButtonId);
+// Set on click listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
     }
 
 //    private void swipeMenuCreator() {
@@ -104,16 +126,17 @@ MyCards extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView_MyCards);
         progress = new ProgressDialog(this);
         alternateText = (TextView) findViewById(R.id.alternateText);
+        searchView_cards = (SearchView) findViewById(R.id.searchView_cards);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        progress.setMessage("Loading...");
+        progress.setMessage("Please wait...");
+        progress.setCancelable(false);
         progress.show();
         //Retrofit2 Call
         getCards();
-//        swipeMenuCreator();
     }
 
     private void getCards() {
@@ -130,6 +153,7 @@ MyCards extends AppCompatActivity {
                     adapterListview.notifyDataSetChanged();
                 } else {
                     alternateText.setVisibility(View.VISIBLE);
+                    searchView_cards.setVisibility(View.GONE);
 //                    Toast.makeText(MyCards.this, "" + getloyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -137,6 +161,7 @@ MyCards extends AppCompatActivity {
             @Override
             public void onFailure(Call<GetMycards> call, Throwable t) {
                 progress.dismiss();
+                searchView_cards.setVisibility(View.GONE);
                 Log.d(Constant_util.LOG_TAG, t.getMessage());
                 Toast.makeText(MyCards.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
@@ -151,20 +176,49 @@ MyCards extends AppCompatActivity {
         startActivity(new Intent(this, Add_LoyaltyCard.class));
     }
 
-    /*
-    *
-    *List Adapter Custom
-    *
-    * */
-    private class ListViewMyCards extends BaseAdapter {
-        private final ViewBinderHelper binderHelper;
-        Activity context;
-        List<Loyaltycard> loyaltycards;
-        private LayoutInflater layoutInflater;
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        try {
+            adapterListview.getFilter().filter(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        hidesoftkeyboard(getCurrentFocus());
+        return false;
+    }
 
-        public ListViewMyCards(MyCards context, List<Loyaltycard> loyaltycards) {
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    private void hidesoftkeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(MyCards.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    }
+
+    /*
+        *
+        *List Adapter Custom
+        *
+        * */
+    private class ListViewMyCards extends BaseAdapter implements Filterable {
+        private final ViewBinderHelper binderHelper;
+        Context context;
+        List<Loyaltycard> loyaltycards;
+        List<Loyaltycard> mFilterloyaltycards;
+        private LayoutInflater layoutInflater;
+        private ValueFilter valueFilter;
+
+        public ListViewMyCards(Context context, List<Loyaltycard> loyaltycards) {
             this.context = context;
             this.loyaltycards = loyaltycards;
+            mFilterloyaltycards = loyaltycards;
             binderHelper = new ViewBinderHelper();
             binderHelper.setOpenOnlyOne(true);
         }
@@ -249,11 +303,11 @@ MyCards extends AppCompatActivity {
 
                     if (deleteLoyaltyCard.getHeader().getSuccess().equals("1")) {
                         Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                getCards();
-                            }
-                        });
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+                        startActivity(new Intent(MyCards.this, MyCards.class));
+//                            }
+//                        });
                     } else {
                         Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -272,7 +326,7 @@ MyCards extends AppCompatActivity {
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setTitle("Confirmation");
-            dialog.setMessage("delete loyalty card?");
+            dialog.setMessage("Delete loyalty card?");
             dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -287,6 +341,46 @@ MyCards extends AppCompatActivity {
                 }
             });
             dialog.show();
+        }
+
+        @Override
+        public Filter getFilter() {
+            if (valueFilter == null) {
+                valueFilter = new ValueFilter();
+            }
+            return valueFilter;
+        }
+
+        private class ValueFilter extends Filter {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                if (constraint != null && constraint.length() > 0) {
+                    ArrayList<Loyaltycard> filterList = new ArrayList<>();
+                    for (int i = 0; i < mFilterloyaltycards.size(); i++) {
+                        if (mFilterloyaltycards.get(i).getCardname().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                            Loyaltycard lCard = new Loyaltycard(mFilterloyaltycards.get(i).getId(), mFilterloyaltycards.get(i).getLoyaltyId(),
+                                    mFilterloyaltycards.get(i).getCid(), mFilterloyaltycards.get(i).getCardno(), mFilterloyaltycards.get(i).getNotes(),
+                                    mFilterloyaltycards.get(i).getIsRegisterdCompany(), mFilterloyaltycards.get(i).getCardname(), mFilterloyaltycards.get(i).getCarddetail(),
+                                    mFilterloyaltycards.get(i).getCompanyinfo(), mFilterloyaltycards.get(i).getCompanylogo(), mFilterloyaltycards.get(i).getImageurl(),
+                                    mFilterloyaltycards.get(i).getList(), mFilterloyaltycards.get(i).getFrontimage(), mFilterloyaltycards.get(i).getBackimage());
+                            filterList.add(lCard);
+                        }
+                    }
+                    results.count = filterList.size();
+                    results.values = filterList;
+                } else {
+                    results.count = mFilterloyaltycards.size();
+                    results.values = mFilterloyaltycards;
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                loyaltycards = (ArrayList<Loyaltycard>) results.values;
+                notifyDataSetChanged();
+            }
         }
     }
 }

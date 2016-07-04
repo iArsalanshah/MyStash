@@ -15,9 +15,6 @@ import com.squareup.picasso.Picasso;
 
 public class ViewPagerAdapter extends PagerAdapter {
     Searchnearby snb;
-    private int[] image_resources = {R.drawable.food_1, R.drawable.food_2,
-            R.drawable.food_3
-    };
     private Context context;
     private LayoutInflater layoutInflater;
 

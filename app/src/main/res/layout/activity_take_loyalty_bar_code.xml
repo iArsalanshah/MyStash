@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="16dp"
                 android:text="Tap to scan barcode"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -68,10 +68,12 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/white"
-                android:backgroundTint="@android:color/transparent"
+                android:backgroundTint="@android:color/white"
                 android:hint="Enter your code manually"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:paddingLeft="6dp"
+                android:singleLine="true"
                 android:textColorHint="#a2a3a3a3" />
 
             <TextView

@@ -39,9 +39,14 @@ public class Constant_util {
     public static final String ACTION_UPLOAD_LOYALTY_IMAGE = "upload_loyalty_image";
     public static final String ACTION_UPLOAD_PROFILE_IMAGE = "upload_image";
     public static final String ACTION_CUSTOMER_CHECKIN = "customer_checkin";
-    public static final float DEFAULT_RADIUS = 50000;
+    public static final float DEFAULT_RADIUS = 5000;
 
     public static final String ACTION_DELETE_LOYALTY_CARD = "delete_customer_loyalty_card";
     public static final String ACTION_GET_CITE_POINTS = "get_customer_transactions";
     public static final String ACTION_GET_ALL_FLYERS = "get_all_flyers";
+
+    public static final String ACTION_CAMERA = "action-camera";
+    public static final String ACTION_GALLERY = "action-gallery";
+    public static final String IMAGE_PATH = "image-path";
+    public static final String ACTION_GET_PROFILE_FLYERS = "get_profile_flyers";
 }

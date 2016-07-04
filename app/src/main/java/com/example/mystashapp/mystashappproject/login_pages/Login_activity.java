@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,12 +47,17 @@ public class Login_activity extends AppCompatActivity {
     LoginButton loginButton;
     private RelativeLayout rootLayout;
     private ProgressDialog prog;
+    private boolean isMarshmallow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         callbackManager = CallbackManager.Factory.create();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            //do something about the Android version being too new
+            isMarshmallow = true;
+        }
         setContentView(R.layout.activity_login);
         //btnFB = (Button)findViewById(R.id.fbLoginBtn);
 
@@ -78,6 +84,7 @@ public class Login_activity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
                                         Users Webresponse = response.body().getBody().getUsers();
+                                        Log.d(Constant_util.LOG_TAG, "onResponse: " + Webresponse.getId() + " " + Webresponse.getImgurl() + " " + Webresponse.getCfirstname() + " " + Webresponse.getFbid());
                                         CustomSharedPrefLogin.setUserObject(Login_activity.this, Webresponse);
                                         Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(Login_activity.this, MainActivity.class));
@@ -103,9 +110,10 @@ public class Login_activity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(Constant_util.LOG_TAG, "on Error");
+                Log.d(Constant_util.LOG_TAG, "on Error" + error.toString());
             }
         });
+
     }
 
     private void init() {
@@ -122,7 +130,7 @@ public class Login_activity extends AppCompatActivity {
             String id = object.getString("id");
 
             try {
-                URL profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=200&height=150");
+                URL profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=150&height=150");
                 Log.i("profile_pic", profile_pic + "");
                 bundle.putString("profile_pic", profile_pic.toString());
 
@@ -150,9 +158,22 @@ public class Login_activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
-        if (sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
-            startActivity(new Intent(this, MainActivity.class));
+        if (isMarshmallow) {
+            new AlertDialog.Builder(this).setCancelable(false)
+                    .setTitle("Version Error")
+                    .setMessage("App does not support Marshmallow version")
+                    .setPositiveButton("Exit App", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .show();
+        } else {
+            SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
+            if (sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
+                startActivity(new Intent(this, MainActivity.class));
+            }
         }
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
@@ -162,7 +183,7 @@ public class Login_activity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
+        //AppEventsLogger.deactivateApp(this);
     }
 
     public void btnMainLogin(View view) {
@@ -237,6 +258,7 @@ public class Login_activity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 

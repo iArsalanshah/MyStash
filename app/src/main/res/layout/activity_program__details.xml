@@ -71,7 +71,7 @@
                     android:layout_height="55dp"
                     android:layout_margin="4dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/food_1" />
+                    android:src="@drawable/placeholder" />
 
                 <TextView
                     android:id="@+id/tv_programDetails_item_title"
@@ -124,32 +124,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        android:src="@drawable/food_1" />
+                        android:src="@drawable/placeholder_img_not_found" />
 
-                    <!--<ImageView-->
-                    <!--android:id="@+id/img2"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:scaleType="fitXY"-->
-                    <!--android:src="@drawable/food_2" />-->
-                    <LinearLayout
+                    <FrameLayout
                         android:id="@+id/img2_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <!--<ImageView-->
-                        <!--android:id="@+id/img2"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:scaleType="fitXY"-->
-                        <!--android:src="@drawable/food_2" />-->
+                        android:layout_height="match_parent">
                         <GridView
                             android:id="@+id/gridView_img2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/white"
                             android:numColumns="5" />
-                    </LinearLayout>
+                    </FrameLayout>
 
                 </ViewFlipper>
 

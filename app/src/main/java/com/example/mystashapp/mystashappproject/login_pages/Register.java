@@ -204,11 +204,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 !gender.equals("") && email.matches(emailPattern)) {
             progressDialog.show();
             gettingEdittextData();
-            if (!newPassword.equals("")) {
-                pwd = newPassword;
-            } else {
-                pwd = CustomSharedPrefLogin.getUserObject(this).getPassword();
+            if (!CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")) {
+                if (!newPassword.equals("")) {
+                    pwd = newPassword;
+                } else {
+                    pwd = CustomSharedPrefLogin.getUserObject(this).getPassword();
+                }
             }
+
             //Registering the user
             Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
                     name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest);
@@ -334,22 +337,27 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (userIsInteracting) {
-            switch (parent.getId()) {
-                case R.id.spinnerSexRegister:
-                    if (position != 0) {
-                        etSex.setText(parent.getItemAtPosition(position).toString());
-                    }
-                    break;
-                default:
-                    break;
-            }
+        switch (parent.getId()) {
+            case R.id.spinnerSexRegister:
+                if (position != 0) {
+                    etSex.setText(parent.getItemAtPosition(position).toString());
+                }
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+//        switch (parent.getId()){
+//            case R.id.spinnerSexRegister:
+//                String text = etSex.getText().toString();
+//                etSex.setText();
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     private void gettingEdittextData() {
@@ -387,31 +395,49 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     protected void onResume() {
         super.onResume();
         if (isNavigated) {
-            try {
-                etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
-                etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
-                etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
-                imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
-                etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
-                etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
-                etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
-                etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
-                Log.d(Constant_util.LOG_TAG, "onResume: " + CustomSharedPrefLogin.getUserObject(this).getBirthday());
-                btnRegisterID.setVisibility(View.GONE); //TODO after taking picture this does not work sometimes
-                findViewById(R.id.pwdContainer).setVisibility(View.GONE);
-                findViewById(R.id.confPwdContainer).setVisibility(View.GONE);
-                btnId_updateRegister.setVisibility(View.VISIBLE);
-                btnId_updatePwd.setVisibility(View.VISIBLE);
+            imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
+            etEmail.setFocusable(false);
+            etEmail.setCursorVisible(false);
+            etEmail.setClickable(false);
+            btnRegisterID.setVisibility(View.GONE);
+            findViewById(R.id.pwdContainer).setVisibility(View.GONE);
+            findViewById(R.id.confPwdContainer).setVisibility(View.GONE);
+            btnId_updateRegister.setVisibility(View.VISIBLE);
+            if (CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")) {
                 if (!imgURL.equals("")) {
                     Picasso.with(this)
                             .load(imgURL)
                             .error(R.drawable.profile_image)
                             .placeholder(R.drawable.profile_image)
-                            .into(imageProfileRegister); //TODO image is not loading
+                            .into(imageProfileRegister);
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
+                etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
+                etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
+                btnId_updatePwd.setVisibility(View.GONE);
+            } else {
+                try {
+                    etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
+                    etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
+                    etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
+                    etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
+                    etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
+                    etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
+                    etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
+                    Log.d(Constant_util.LOG_TAG, "onResume: " + CustomSharedPrefLogin.getUserObject(this).getBirthday());
+                    btnId_updatePwd.setVisibility(View.VISIBLE);
+                    if (!imgURL.equals("")) {
+                        Picasso.with(this)
+                                .load(imgURL)
+                                .error(R.drawable.profile_image)
+                                .placeholder(R.drawable.profile_image)
+                                .into(imageProfileRegister);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+
             CustomSharedPrefLogin.getUserObject(this);
             Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getCfirstname());
             Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getSex());

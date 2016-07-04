@@ -8,6 +8,7 @@ import com.example.mystashapp.mystashappproject.pojo.all_flyers_by_categ.GetAllF
 import com.example.mystashapp.mystashappproject.pojo.categories_coupons_pojo.CategoriesCoupons;
 import com.example.mystashapp.mystashappproject.pojo.customer_check_in.CustomerCheckIn;
 import com.example.mystashapp.mystashappproject.pojo.delete_loyalty_card.DeleteLoyaltyCard;
+import com.example.mystashapp.mystashappproject.pojo.editloyalty_pojo.EditLoyalty;
 import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.GetCardsList;
@@ -132,23 +133,24 @@ public interface WebService {
                                    @Query("notes") String notes,
                                    @Query("frontimage") String frontImage,
                                    @Query("backimage") String barcodeImage);
-//
-//    @GET("/mobileservice_new.php")
-//    Call<EditLoyalty> getEditLoyalty(@Query("action") String edit_customer_loyalty_card,
-//                                     @Query("cid") String cid_userid,
-//                                     @Query("cardname") String cardname,
-//                                     @Query("carddetail") String carddetail,
-//                                     @Query("companyinfo") String companyinfo,
-//                                     @Query("companylogo") String companylogo,
-//                                     @Query("cardno") String cardno,
-//                                     @Query("notes") String notes,
-//                                     @Query("frontimage") String frontimage,
-//                                     @Query("backimage") String backimage,
-//                                     @Query("is_registerd_company") String is_registerd_company,
-//                                     @Query("id") String id);
 
     @GET("/mobileservice_new.php")
-    Call<CategoriesCoupons> getcategoriesCoupons(@Query("action") String customer_get_coupon_categories);
+    Call<EditLoyalty> getEditLoyalty(@Query("action") String edit_customer_loyalty_card,
+                                     @Query("cid") String cid_userid,
+                                     @Query("cardname") String cardname,
+                                     @Query("carddetail") String carddetail,
+                                     @Query("companyinfo") String companyinfo,
+                                     @Query("companylogo") String companylogo,
+                                     @Query("cardno") String cardno,
+                                     @Query("notes") String notes,
+                                     @Query("frontimage") String frontimage,
+                                     @Query("backimage") String backimage,
+                                     @Query("is_registerd_company") String is_registerd_company,
+                                     @Query("id") String id);
+
+    @GET("/mobileservice_new.php")
+    Call<CategoriesCoupons> getcategoriesCoupons(@Query("action") String customer_get_coupon_categories,
+                                                 @Query("type") String coupons_or_flyers);
 
     @GET("/mobileservice_new.php")
     Call<Get_All_Coupons> getAllCoupons(@Query("action") String action,
@@ -206,13 +208,13 @@ public interface WebService {
     @GET("/mobileservice_new.php")
     Call<Get_All_Coupons> getCouponsByAdmin(@Query("action") String get_coupons_by_adminid,
                                             @Query("cid") String cid,
-                                            @Query("uid") String uid);
+                                            @Query("uid") String bid);
 
     @GET("/mobileservice_new.php")
     Call<GetAllFlyersWebService> getAllFlyers(@Query("action") String get_all_flyers,
                                               @Query("categoryid") String categoryid);
 
-    // option 2: using a dynamic URL
+    //using a dynamic URL
     @Streaming
     @GET
     Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);

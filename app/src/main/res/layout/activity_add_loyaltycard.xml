@@ -34,12 +34,23 @@
 
     </RelativeLayout>
 
+    <SearchView
+        android:id="@+id/searchView_Addcards"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/container_addLoyalty"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@android:color/white" />
+
     <ListView
         android:id="@+id/listView_Add_LoyaltyCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/button_create_loyalty"
-        android:layout_below="@+id/container_addLoyalty"
+        android:layout_below="@+id/searchView_Addcards"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"

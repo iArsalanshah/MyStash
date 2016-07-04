@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,11 +56,22 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
+    <SearchView
+        android:id="@+id/searchView_cards"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@id/container_MycardsList"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@android:color/white" />
+
     <ListView
         android:id="@+id/listView_MyCards"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/container_MycardsList"
+        android:layout_below="@+id/searchView_cards"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"

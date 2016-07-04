@@ -49,6 +49,23 @@ public class Loyaltycard {
     @Expose
     private String backimage;
 
+    public Loyaltycard(String id, String loyaltyId, String cid, String cardno, String notes, String isRegisterdCompany, String cardname, String carddetail, String companyinfo, String companylogo, String imageurl, String list, String frontimage, String backimage) {
+        this.id = id;
+        this.loyaltyId = loyaltyId;
+        this.cid = cid;
+        this.cardno = cardno;
+        this.notes = notes;
+        this.isRegisterdCompany = isRegisterdCompany;
+        this.cardname = cardname;
+        this.carddetail = carddetail;
+        this.companyinfo = companyinfo;
+        this.companylogo = companylogo;
+        this.imageurl = imageurl;
+        this.list = list;
+        this.frontimage = frontimage;
+        this.backimage = backimage;
+    }
+
     /**
      * @return The id
      */
