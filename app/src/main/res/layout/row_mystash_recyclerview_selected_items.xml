@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_layout"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layoutStash"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="6dp">
+    android:layout_marginBottom="6dp"
+    android:padding="0dp"
+    app:dragEdge="right"
+    app:mode="same_level">
 
-    <!--<FrameLayout-->
-    <!--android:id="@+id/delete_layout"-->
-    <!--android:layout_width="70dp"-->
-    <!--android:layout_height="68dp"-->
-    <!--android:background="@android:color/black">-->
+    <FrameLayout
+        android:id="@+id/delete_layoutStash"
+        android:layout_width="70dp"
+        android:layout_height="68dp"
+        android:background="@android:color/black">
 
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:text="Delete"-->
-    <!--android:textColor="@android:color/white" />-->
-    <!--</FrameLayout>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Delete"
+            android:textColor="@android:color/white" />
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -27,8 +31,7 @@
         <RelativeLayout
             android:id="@+id/container_item_mystash_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/row_recyclerview_avatar_mystash"
@@ -68,4 +71,4 @@
         </RelativeLayout>
 
     </FrameLayout>
-</RelativeLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.home.mystash_box.recyclerview_util_mystashlist.RecyclerAdapter_MyStashList;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
@@ -92,6 +93,7 @@ public class List_MyStash extends AppCompatActivity {
                                         ArrayList<>(businessResponse.getBody().getStashlist());
                                 mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
                                 mRecyclerView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
                             }
                             break;
                         case "0":
@@ -119,7 +121,7 @@ public class List_MyStash extends AppCompatActivity {
     }
 
     public void backMyStashRecyclerViewImageBtn(View view) {
-        finish();
+        startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     public void PlusMyStashRecyclerImageView(View view) {

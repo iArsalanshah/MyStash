@@ -79,15 +79,12 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private Button btnMapSB;
     private Users userObj;
     private TextView tvFilter;
-    private boolean boolMapClick;
     private List<Searchnearby> mStringFilterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_business__mystash);
-        boolMapClick = getIntent().getBooleanExtra("clickOnMap", false);
-
         //initialization of views
         init();
 
@@ -95,6 +92,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
         //Filter Dialog
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
 //        alertDialog.setCancelable(false);
         alertDialog.setTitle("Range");
         String[] filterItems = {"5km", "10km", "20km", "50km"};

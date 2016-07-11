@@ -1,25 +1,42 @@
 package com.example.mystashapp.mystashappproject.home.mystash_box.recyclerview_util_mystashlist;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.home.mystash_box.ListDetails_MyStash;
+import com.example.mystashapp.mystashappproject.home.mystash_box.List_MyStash;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.Stashlist;
+import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
+import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerViewHolder_MyStashList> {
-    //    private final ViewBinderHelper binderHelper;
+    private final ViewBinderHelper binderHelper;
+    private final Users userObject;
     Context context;
+    SharedPreferences sharedPreferences;
     private ArrayList<Stashlist> searchNearbyList;
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -42,8 +59,9 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
     public RecyclerAdapter_MyStashList(Context context, ArrayList<Stashlist> searchnearbies) {
         this.context = context;
         this.searchNearbyList = searchnearbies;
-//        binderHelper = new ViewBinderHelper();
-//        binderHelper.setOpenOnlyOne(true);
+        binderHelper = new ViewBinderHelper();
+        binderHelper.setOpenOnlyOne(true);
+        userObject = CustomSharedPrefLogin.getUserObject(context);
     }
 
     @Override
@@ -65,71 +83,71 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         holder.tvRecyclerDesc.setText(sbNearBy.getAddress());
         holder.layout.setOnClickListener(clickListener);
         holder.layout.setTag(holder);
-//        binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
-//        holder.deleteView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                removeItem(searchNearbyList.get(position).getId());
-//            }
-//        });
+        binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
+        holder.deleteView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(searchNearbyList.get(position).getId());
+            }
+        });
     }
 
-//    private void removeItem(final String id) {
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-//        dialog.setTitle("Confirmation");
-//        dialog.setMessage("Are you sure you want to remove this business " +
-//                "from your stash, doing so will prevent  you from  receiving " +
-//                "specials and VIP offers from this merchant.");
-//        dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.setNegativeButton("REMOVE", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                onRemoveStashItem(id);
-//            }
-//        });
-//        dialog.show();
-//    }
-//
-//    private void onRemoveStashItem(String id) {
-//        // webservice should be called here.
-//        final ProgressDialog dialog = new ProgressDialog(context);
-//        dialog.setMessage("Deleting...");
-//        dialog.show();
-//        Call<DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
-//                .getRemoveStash(Constant_util.ACTION_REMOVE_STASH,
-//                        id);
-//        call.enqueue(new Callback<DeleteLoyaltyCard>() {
-//            @Override
-//            public void onResponse(Call<DeleteLoyaltyCard> call, Response<DeleteLoyaltyCard> response) {
-//                dialog.dismiss();
-//                DeleteLoyaltyCard deleteLoyaltyCard = response.body();
-//
-//                if (deleteLoyaltyCard.getHeader().getSuccess().equals("1")) {
-//                    Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-////                        runOnUiThread(new Runnable() {
-////                            public void run() {
-//                    startActivity(new Intent(MyCards.this, MyCards.class));
-////                            }
-////                        });
-//                } else {
-//                    Toast.makeText(context, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
-//                dialog.dismiss();
-//                Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//    }
+    private void removeItem(final String id) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Confirmation");
+        dialog.setMessage("Are you sure you want to remove this business " +
+                "from your stash, doing so will prevent  you from  receiving " +
+                "specials and VIP offers from this merchant.");
+        dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setNegativeButton("REMOVE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                onRemoveStashItem(id);
+            }
+        });
+        dialog.show();
+    }
+
+    private void onRemoveStashItem(String id) {
+        // webservice should be called here.
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Deleting...");
+        dialog.show();
+        Call<RemoveStash> call = WebServicesFactory.getInstance()
+                .getRemoveStash(Constant_util.ACTION_REMOVE_STASH, id
+                        , userObject.getId());
+        call.enqueue(new Callback<RemoveStash>() {
+            @Override
+            public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
+                dialog.dismiss();
+                RemoveStash removeStash = response.body();
+
+                if (removeStash.getHeader().getSuccess().equals("1")) {
+                    Toast.makeText(context, "" + removeStash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+                    context.startActivity(new Intent(context, List_MyStash.class));
+//                            }
+//                        });
+                } else {
+                    Toast.makeText(context, "" + removeStash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemoveStash> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     public int getItemCount() {
         return searchNearbyList.size();
