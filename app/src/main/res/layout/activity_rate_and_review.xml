@@ -74,7 +74,7 @@
             android:layout_marginLeft="26dp"
             android:layout_marginRight="26dp"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@android:color/transparent"
+            android:backgroundTint="@android:color/white"
             android:gravity="left|top"
             android:hint=" write your comments here"
             android:maxLines="12"

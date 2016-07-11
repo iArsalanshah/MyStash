@@ -131,6 +131,10 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     private void init() {
+        //for latlng
+        sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
+        lat = sharedPreferences.getString(Constant_util.USER_LAT, "0");
+        lng = sharedPreferences.getString(Constant_util.USER_LONG, "0");
         altText = (TextView) findViewById(R.id.list_searchBusiness_altText);
         search_view = (SearchView) findViewById(R.id.search_view);
 
@@ -169,16 +173,11 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         //for cid
         userObj = CustomSharedPrefLogin.getUserObject(SearchBusiness_MyStash.this);
         lv.show();
-        //for latlng
-        sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
-        lat = sharedPreferences.getString(Constant_util.USER_LAT, "0");
-        lng = sharedPreferences.getString(Constant_util.USER_LONG, "0");
         Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
-                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(),
-                sharedPreferences.getString(Constant_util.USER_LAT, "0"),
-                sharedPreferences.getString(Constant_util.USER_LONG, "0"),
+                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), lat, lng,
                 defaultRadius
         );
+        Log.d(Constant_util.LOG_TAG, "getRequest: " + lat + " " + lng);
         call.enqueue(new Callback<SearchBusiness>() {
 
             @Override
@@ -226,6 +225,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
     public void BtnListSearchBusiness(View view) {
         if (mapFragment.getView() != null) {
+            tvFilter.setClickable(true);
             mapFragment.getView().setVisibility(View.GONE);
             search.setVisibility(View.VISIBLE);
         }
@@ -236,6 +236,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         if (servicesOK()) {
             ArrayList<LatLng> infoDataSetter = null;
             mRecyclerView.setVisibility(View.GONE);
+            tvFilter.setClickable(false);
             if (mapFragment.getView() != null) {
                 mapFragment.getView().setVisibility(View.VISIBLE);
                 search.setVisibility(View.GONE);
@@ -280,6 +281,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                             img.setVisibility(View.GONE);
                             title.setText("your location");
                             address.setVisibility(View.GONE);
+                            v.findViewById(R.id.infoWindowContainer).setMinimumWidth(150 / (160));
                         } else {
                             try {
                                 for (int i = 0; i < arrSearchBusiness.size(); i++) {
@@ -330,6 +332,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         mGoogleMap = googleMap;
         userMarker = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.valueOf(lat), Double.valueOf(lng)))
+                .snippet("your location")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));//fromResource(R.drawable.home_location)
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(lat), Double.valueOf(lng)), 12);
         googleMap.moveCamera(update);
