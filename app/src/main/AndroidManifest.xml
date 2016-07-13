@@ -11,7 +11,26 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Lets app receive data messages. -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- Google Services requires a Google account -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.example.mystashapp.mystashappproject.permission.C2D_MESSAGE" />
+    <!-- <uses-permission android:name="com.example.mystashapp.mystashappproject.gcm.permission.C2D_MESSAGE" /> -->
+
+    <permission
+        android:name="com.example.mystashapp.mystashappproject.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!-- <permission -->
+    <!-- android:name="com.example.mystashapp.mystashappproject.gcm.permission.C2D_MESSAGE" -->
+    <!-- android:protectionLevel="signature" /> -->
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -118,7 +137,45 @@
         <activity
             android:name=".helper.ImageCropActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".businessMapActivity"></activity>
+        <activity
+            android:name=".businessMapActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- START Added for GCM -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.example.mystashapp.mystashappproject" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".gcm.MyGCMListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".gcm.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <!-- To get the registration token -->
+
+        <service
+            android:name=".gcm.RegistrationIntentService"
+            android:exported="false" />
+        <!-- END Added for GCM -->
+
+        <activity android:name=".Messages"></activity>
     </application>
 
 </manifest>

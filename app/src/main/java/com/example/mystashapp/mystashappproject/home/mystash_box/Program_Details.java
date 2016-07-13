@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
@@ -49,7 +47,7 @@ public class Program_Details extends AppCompatActivity {
     private String programOtherDetails;
     private Searchnearby pOthersObj;
     private GridView gridView_img2;
-    private TextView programTOC;
+    private TextView programTOC, programDsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +80,7 @@ public class Program_Details extends AppCompatActivity {
         tvShare = (TextView) findViewById(R.id.tv_programDetails_share);
         tvTitle = (TextView) findViewById(R.id.tv_programDetails_Title);
         programTOC = (TextView) findViewById(R.id.programTOC);
+        programDsc = (TextView) findViewById(R.id.programDsc);
     }
 
     private void settingData() {
@@ -107,14 +106,27 @@ public class Program_Details extends AppCompatActivity {
         //Splitting Days
         StringBuilder stringBuilder = new StringBuilder();
         String allDaysEvaluated = "";
+        boolean allday = false;
         String[] daysStrings = stampObject.getDays().split(",");
         for (int i = 0; i < daysStrings.length; i++) {
+            if (allday) break;
             switch (i) {
                 case 0:
-                    if (daysStrings[i].equals("1"))
-                        stringBuilder.append("Mon");
+                    if (daysStrings[i].equals("1")) {
+                        allDaysEvaluated = "All Week";
+                        allday = true;
+                    }
                     break;
                 case 1:
+                    if (daysStrings[i].equals("1")) {
+//                        if (daysStrings[i - 1].equals("1"))
+//                            stringBuilder.append(",Tue");
+//                        else
+                        stringBuilder.append("Mon");
+                    }
+                    break;
+
+                case 2:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1"))
                             stringBuilder.append(",Tue");
@@ -122,8 +134,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Tue");
                     }
                     break;
-
-                case 2:
+                case 3:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1"))
                             stringBuilder.append(",Wed");
@@ -131,7 +142,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Wed");
                     }
                     break;
-                case 3:
+                case 4:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                 || daysStrings[i - 3].equals("1"))
@@ -140,7 +151,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Thu");
                     }
                     break;
-                case 4:
+                case 5:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                 || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1"))
@@ -149,7 +160,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Fri");
                     }
                     break;
-                case 5:
+                case 6:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                 || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
@@ -159,7 +170,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Sat");
                     }
                     break;
-                case 6:
+                case 7:
                     if (daysStrings[i].equals("1")) {
                         if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                 || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
@@ -169,13 +180,7 @@ public class Program_Details extends AppCompatActivity {
                             stringBuilder.append("Sun");
                     }
                     break;
-                case 7:
-                    if (daysStrings[i].equals("1")) {
-                        allDaysEvaluated = "All Week";
-                    }
-                    break;
                 default:
-                    Log.d(Constant_util.LOG_TAG, "settingData: ");
                     break;
             }
         }
@@ -209,6 +214,9 @@ public class Program_Details extends AppCompatActivity {
         if (!stampObject.getToc().isEmpty() && stampObject.getToc() != null) {
             programTOC.setText(stampObject.getToc());
         }
+        if (!stampObject.getDesc().isEmpty() && stampObject.getDesc() != null) {
+            programDsc.setText(stampObject.getDesc());
+        }
     }
 
     private void clickEvents() {
@@ -241,8 +249,8 @@ public class Program_Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "MyStash share.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }

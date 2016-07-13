@@ -1,0 +1,61 @@
+{
+  "project_info": {
+    "project_number": "456789105121",
+    "project_id": "mystash-1274"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456789105121:android:3b90cb4941ddd2cd",
+        "android_client_info": {
+          "package_name": "com.example.devarsalan.whitecab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkj3SWO4OIKD62afz6_JT3SHvVEtVtysg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456789105121:android:932ba757fd41af17",
+        "android_client_info": {
+          "package_name": "com.example.mystashapp.mystashappproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkj3SWO4OIKD62afz6_JT3SHvVEtVtysg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

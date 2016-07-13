@@ -5,29 +5,25 @@
     android:layout_height="match_parent"
     tools:context="com.example.mystashapp.mystashappproject.home.mystash_box.SearchBusiness_MyStash">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarMyStashSearchBusiness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
         <RelativeLayout
+            android:id="@+id/toolbarMyStashSearchBusiness"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorPrimary">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:onClick="backMyStashRecyclerViewImageBtn"
+                android:padding="12dp"
                 android:src="@drawable/img_toolbar_back" />
 
             <TextView
                 android:id="@+id/titleSearchBusiness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:text="Search Business"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
@@ -38,13 +34,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:padding="3dp"
+                android:layout_marginRight="8dp"
+                android:padding="6dp"
                 android:text="Filter"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:id="@+id/containerRLofListMapBtn"
@@ -92,6 +87,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:onClick="searchButton"
+            android:padding="3dp"
             android:src="@android:drawable/ic_menu_search"
             android:visibility="visible" />
 

@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.home.coupons_box.Coupons;
 import com.example.mystashapp.mystashappproject.home.mycards_box.MyCards;
@@ -26,6 +25,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.residemenu_util.ResideMenu;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.Tracker;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         resideMenu.closeMenu();
-                        Toast.makeText(MainActivity.this, "In Progress", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, Messages.class));
                         break;
                     case 2:
                         resideMenu.closeMenu();
@@ -123,14 +123,15 @@ public class MainActivity extends AppCompatActivity {
                         resideMenu.closeMenu();
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "MyStash share.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
                         sendIntent.setType("text/plain");
                         startActivity(sendIntent);
                         break;
                     case 5:
                         resideMenu.closeMenu();
-                        LoginManager.getInstance().logOut();
+                        if (isLoggedIn())
+                            LoginManager.getInstance().logOut();
                         SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.remove(Constant_util.IS_LOGIN);
@@ -191,6 +192,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void myStash_container_home(View view) {
         startActivity(new Intent(this, List_MyStash.class));
+    }
+
+    public boolean isLoggedIn() {
+        return FacebookSdk.isInitialized();
     }
 
     public void checkIn_container_home(View view) {

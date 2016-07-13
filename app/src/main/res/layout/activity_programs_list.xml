@@ -14,10 +14,10 @@
 
         <ImageView
             android:id="@+id/imageViewToolbarBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
+            android:padding="12dp"
             android:src="@drawable/img_toolbar_back" />
 
         <TextView
@@ -27,8 +27,7 @@
             android:layout_centerVertical="true"
             android:text="Programs"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <ListView

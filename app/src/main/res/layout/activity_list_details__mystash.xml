@@ -11,20 +11,16 @@
     <RelativeLayout
         android:id="@+id/container_toolbar_aboveViewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary">
 
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@color/colorPrimary">
-
-            <ImageView
-                android:id="@+id/topbarImageBack"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:gravity="center_vertical"
-                android:src="@drawable/img_toolbar_back" />
-        </android.support.v7.widget.Toolbar>
+        <ImageView
+            android:id="@+id/topbarImageBack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:src="@drawable/img_toolbar_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,15 +143,13 @@
                 android:id="@+id/textView_AreaAddress_myStashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@id/textView_AreaName_myStashDetails"
                 android:layout_marginTop="16dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="9779 boul Lasalle, Lasalle, Quebec, H8R 2N9"
+                android:layout_toLeftOf="@+id/imageView_mycitePoints_mystashDetails"
+                android:text="@string/lorem_ispum"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
-
+            <!--9779 boul Lasalle, Lasalle, Quebec, H8R 2N9-->
             <TextView
                 android:id="@+id/textView_AreaPostalCity_myStashDetails"
                 android:layout_width="wrap_content"

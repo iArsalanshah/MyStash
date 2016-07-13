@@ -49,4 +49,10 @@ public class Constant_util {
     public static final String ACTION_GALLERY = "action-gallery";
     public static final String IMAGE_PATH = "image-path";
     public static final String ACTION_GET_PROFILE_FLYERS = "get_profile_flyers";
+
+    // broadcast receiver intent filters
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer"; //asdsad
+
+    public static final String REGISTRATION_COMPLETE = "registrationComplete"; //asdas
+    public static final String ACTION_GET_MESSAGES = "get_customer_notifications";
 }

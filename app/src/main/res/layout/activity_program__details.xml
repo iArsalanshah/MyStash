@@ -14,10 +14,10 @@
 
         <ImageView
             android:id="@+id/imageViewToolbarBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
+            android:padding="12dp"
             android:src="@drawable/img_toolbar_back" />
 
         <TextView
@@ -29,8 +29,7 @@
             android:maxLength="26"
             android:text="Program Testing"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_programDetails_share"
@@ -38,10 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="8dp"
+            android:padding="6dp"
             android:text="Share"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <ScrollView
@@ -80,7 +80,8 @@
                     android:layout_alignTop="@id/img_programDetails_item"
                     android:layout_toRightOf="@id/img_programDetails_item"
                     android:text="Chicken Chef"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tv_programDetails_item_address"
@@ -110,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="235dp"
                 android:layout_below="@id/rl_Below_Toolbar"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:background="#737d2d34">
 
                 <ViewFlipper
@@ -130,6 +131,7 @@
                         android:id="@+id/img2_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <GridView
                             android:id="@+id/gridView_img2"
                             android:layout_width="match_parent"
@@ -174,9 +176,40 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_Below3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rl_Below2"
+                android:background="@android:color/white"
+                android:gravity="start|top">
+
+                <TextView
+                    android:id="@+id/tvDescTitle_programDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="10dp"
+                    android:text="Description"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/programDsc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvDescTitle_programDetails"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:text="@string/lorem_ispum"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_Below3"
+                android:layout_marginTop="12dp"
                 android:background="@android:color/white"
                 android:gravity="start|top">
 
@@ -188,7 +221,7 @@
                     android:paddingTop="10dp"
                     android:text="@string/terms_conditions"
                     android:textColor="@android:color/black"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/programTOC"
@@ -198,8 +231,8 @@
                     android:layout_marginBottom="12dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
-                    android:maxLines="6"
-                    android:text="@string/lorem_ispum" />
+                    android:text="@string/lorem_ispum"
+                    android:textSize="13sp" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>

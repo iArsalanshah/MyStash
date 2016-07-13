@@ -108,9 +108,8 @@ public class CouponsList_Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Who does'nt like rewards? With the STASH APP, you can get rewards at all of your favorite retailers when you shop. Download it today for So many great deals and offers.\n" +
-                        "www.mystashapp.com");
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Stash App");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }

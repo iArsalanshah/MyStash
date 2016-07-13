@@ -363,9 +363,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (newText.equals("")) {
-            Log.d(Constant_util.LOG_TAG, "onQueryTextChange: " + "empty");
-        }
+//        if (newText.equals("")) {
+//            Log.d(Constant_util.LOG_TAG, "onQueryTextChange: " + "empty");
+//        }
         return false;
     }
 

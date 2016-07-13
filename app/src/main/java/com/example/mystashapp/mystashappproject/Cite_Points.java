@@ -2,6 +2,8 @@ package com.example.mystashapp.mystashappproject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -80,6 +82,10 @@ public class Cite_Points extends AppCompatActivity {
 
     public void imgBack(View view) {
         finish();
+    }
+
+    public void useYourPointClick(View view) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mystash.ca")));
     }
 
     private class CitePointsAdapter extends BaseAdapter {

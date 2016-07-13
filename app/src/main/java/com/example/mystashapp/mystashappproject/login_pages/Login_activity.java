@@ -2,11 +2,14 @@ package com.example.mystashapp.mystashappproject.login_pages;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.gcm.RegistrationIntentService;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
@@ -30,6 +34,8 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.json.JSONObject;
 
@@ -41,6 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Login_activity extends AppCompatActivity {
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9111;
     EditText etEmail, etPwd;
     String email, pwd;
     CallbackManager callbackManager;
@@ -48,6 +55,8 @@ public class Login_activity extends AppCompatActivity {
     private RelativeLayout rootLayout;
     private ProgressDialog prog;
     private boolean isMarshmallow;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private String gcmID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +69,8 @@ public class Login_activity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_login);
         //btnFB = (Button)findViewById(R.id.fbLoginBtn);
+
+        initNotify();
 
         //initializing Views
         init();
@@ -79,11 +90,12 @@ public class Login_activity extends AppCompatActivity {
                                 //WebService
                                 Call<LoginUser> call = WebServicesFactory.getInstance().getFblogin(Constant_util.ACTION_FB_LOGIN,
                                         bFb.getString("email"), bFb.getString("name"),
-                                        bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"));
+                                        bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"), gcmID, "1");
                                 call.enqueue(new Callback<LoginUser>() {
                                     @Override
                                     public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
                                         Users Webresponse = response.body().getBody().getUsers();
+                                        Log.d(Constant_util.LOG_TAG, "Checks " + Webresponse);
                                         Log.d(Constant_util.LOG_TAG, "onResponse: " + Webresponse.getId() + " " + Webresponse.getImgurl() + " " + Webresponse.getCfirstname() + " " + Webresponse.getFbid());
                                         CustomSharedPrefLogin.setUserObject(Login_activity.this, Webresponse);
                                         Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();
@@ -114,6 +126,48 @@ public class Login_activity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        gcmID = sharedPreferences.getString("gcmID", "");
+        Log.d(Constant_util.LOG_TAG, "onCreate: " + gcmID);
+
+    }
+
+    private void initNotify() {
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(Constant_util.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Log.d(Constant_util.LOG_TAG, "gcm works");
+                } else {
+                    Log.d(Constant_util.LOG_TAG, "gcm ERROR");
+                }
+            }
+        };
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(Constant_util.LOG_TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     private void init() {

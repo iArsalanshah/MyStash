@@ -13,6 +13,7 @@ import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Get_Al
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.GetCardsList;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.GetMycards;
+import com.example.mystashapp.mystashappproject.pojo.meesages.MessagesWebService;
 import com.example.mystashapp.mystashappproject.pojo.pojo_cite_points.CitePointsTransactions;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_register.RegisterUser;
@@ -52,7 +53,9 @@ public interface WebService {
                                         @Query("birthday") String bday,
                                         @Query("sex") String sex,
                                         @Query("categories") String category,
-                                        @Query("areaOfInterest") String areaOfInterst);
+                                        @Query("areaOfInterest") String areaOfInterst,
+                                        @Query("android_push_id") String android_push_id,
+                                        @Query("type") String logintype);
 
     @POST("/mobileservice_new.php")
     Call<UpdateRegisteration> postUpdateRegisterUser(@Query("action") String customer_register_edit,
@@ -64,7 +67,8 @@ public interface WebService {
                                                      @Query("birthday") String bday,
                                                      @Query("sex") String gender,
                                                      @Query("categories") String category,
-                                                     @Query("areaOfInterest") String areaOfInterest);
+                                                     @Query("areaOfInterest") String areaOfInterest,
+                                                     @Query("type") String logintype);
 
     @GET("/mobileservice_new.php")
     Call<GetMyStash> getMyStashList(@Query("action") String action,
@@ -83,7 +87,10 @@ public interface WebService {
                                @Query("firstname") String name,
                                @Query("fbid") String fbid,
                                @Query("sex") String gender,
-                               @Query("imgurl") String imgurl);
+                               @Query("imgurl") String imgurl,
+                               @Query("android_push_id") String android_push_id,
+                               @Query("type") String logintype
+    );
 
     @POST("/mobileservice_new.php")
     Call<RegisterUser> getForgotPwd(@Query("action") String action,
@@ -218,4 +225,7 @@ public interface WebService {
     @Streaming
     @GET
     Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);
+
+    @GET("/mobileservice_new.php")
+    Call<MessagesWebService> getMessages(@Query("action") String action, @Query("cid") String cid);
 }

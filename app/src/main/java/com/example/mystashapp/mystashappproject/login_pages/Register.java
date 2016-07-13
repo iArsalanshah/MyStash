@@ -5,12 +5,14 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -75,6 +77,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     private String newPassword = "";
     private ImageView imageProfileRegisterThumb;
     private String TAG = "Register Data check";
+    private String gcmID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,10 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 selectImage();
             }
         });
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        gcmID = sharedPreferences.getString("gcmID", "");
+        Log.d(Constant_util.LOG_TAG, "onCreate: " + gcmID);
     }
 
     private void initialization() {
@@ -211,10 +218,11 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     pwd = CustomSharedPrefLogin.getUserObject(this).getPassword();
                 }
             }
+            final String loginType = CustomSharedPrefLogin.getUserObject(this).getLogintype();
 
             //Registering the user
             Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
-                    name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest);
+                    name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest, loginType);
             Log.d(TAG, "onResponse: " + name + " " + email + " " + pwd + " " + phone + " " + imgURL + " " + bday + " " + gender + " " + category + " " + areaOfInterest);
             call.enqueue(new Callback<UpdateRegisteration>() {
                 @Override
@@ -236,6 +244,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                         obj.setSex(gender);
                         obj.setCategories(category);
                         obj.setAreaOfInterest(areaOfInterest);
+                        obj.setLogintype(loginType);
                         CustomSharedPrefLogin.setUserObject(Register.this, obj);
                         finish();
                     } else {
@@ -403,7 +412,8 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             findViewById(R.id.pwdContainer).setVisibility(View.GONE);
             findViewById(R.id.confPwdContainer).setVisibility(View.GONE);
             btnId_updateRegister.setVisibility(View.VISIBLE);
-            if (CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")) {
+            if (CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")
+                    && CustomSharedPrefLogin.getUserObject(this).getLogintype().equals("1")) {
                 if (!imgURL.equals("")) {
                     Picasso.with(this)
                             .load(imgURL)
@@ -414,6 +424,22 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
                 etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
                 etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
+                if (!CustomSharedPrefLogin.getUserObject(this).getContactnumber().equals(null))
+                    etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
+                try {
+                    if (!CustomSharedPrefLogin.getUserObject(this).getCategories().toString().equals(null)) {
+                        etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
+                    }
+                    if (!CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString().equals(null)) {
+                        etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
+                    }
+                    if (!CustomSharedPrefLogin.getUserObject(this).getBirthday().toString().equals(null)) {
+                        etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
+                    }
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
+                }
+
                 btnId_updatePwd.setVisibility(View.GONE);
             } else {
                 try {
@@ -460,10 +486,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 progressDialog.show();
 //                uploadImage(); //first webservice for uploading image
                 gettingEdittextData();
-
                 //Registering the user
                 Call<RegisterUser> call = WebServicesFactory.getInstance().postRegisterUser(Constant_util.ACTION_REGISTER_CUSTOMER,
-                        name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest);
+                        name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest, gcmID, "0");
                 call.enqueue(new Callback<RegisterUser>() {
                     @Override
                     public void onResponse(Call<RegisterUser> call, Response<RegisterUser> response) {

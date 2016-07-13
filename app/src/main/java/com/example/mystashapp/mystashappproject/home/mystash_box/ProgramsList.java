@@ -72,16 +72,18 @@ public class ProgramsList extends AppCompatActivity {
         Users users_obj = CustomSharedPrefLogin.getUserObject(ProgramsList.this);
 
         Call<ProgramsStamps> call = WebServicesFactory.getInstance().getStamps(Constant_util.ACTION_GET_STAMPS, users_obj.getId(), sbID.getId());
+        Log.d(Constant_util.LOG_TAG, "getStamps: id:" + sbID.getId() + " uid" + sbID.getUid() + " cid" + users_obj.getId());
         call.enqueue(new Callback<ProgramsStamps>() {
             @Override
             public void onResponse(Call<ProgramsStamps> call, Response<ProgramsStamps> response) {
                 stampsObj = response.body();
                 progress.dismiss();
                 if (stampsObj.getHeader().getSuccess().equals("1")) {
-                    altText.setVisibility(View.GONE);
-                    listview.setAdapter(new CustomAdapterPrograms(ProgramsList.this, stampsObj.getBody().getData()));
                     if (stampsObj.getBody().getData().size() == 0) {
                         altText.setVisibility(View.VISIBLE);
+                    } else {
+                        altText.setVisibility(View.GONE);
+                        listview.setAdapter(new CustomAdapterPrograms(ProgramsList.this, stampsObj.getBody().getData()));
                     }
                 } else {
                     altText.setVisibility(View.VISIBLE);
@@ -93,8 +95,7 @@ public class ProgramsList extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProgramsStamps> call, Throwable t) {
                 progress.dismiss();
-                Log.d(Constant_util.LOG_TAG, t.getMessage());
-                Toast.makeText(ProgramsList.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProgramsList.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -108,8 +108,8 @@ public class ListDetails_MyStash extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "MyStash share.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }

@@ -19,7 +19,7 @@
         android:layout_alignLeft="@+id/tv_item_details"
         android:layout_alignStart="@+id/tv_item_details"
         android:layout_alignTop="@+id/imageView_row_list_coupons"
-        android:text="Firt Coupons"
+        android:text="First Coupons"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
@@ -29,13 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView_row_list_coupons"
         android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/imageView_row_list_coupons"
         android:ellipsize="end"
-        android:maxEms="13"
-        android:singleLine="true"
-        android:text="details"
+        android:maxLines="2"
+        android:text="@string/lorem_ispum"
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
 </RelativeLayout>

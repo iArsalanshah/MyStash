@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/delete_layout"
         android:layout_width="70dp"
-        android:layout_height="65dp"
+        android:layout_height="75dp"
         android:background="@android:color/black">
 
         <TextView
@@ -24,7 +24,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="75dp"
         android:background="@drawable/red_recycler_bg">
 
         <RelativeLayout
@@ -35,8 +35,8 @@
 
             <ImageView
                 android:id="@+id/imageView_row_list_myCards"
-                android:layout_width="60dp"
-                android:layout_height="34dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="6dp"
@@ -47,12 +47,12 @@
                 android:id="@+id/textViewTitle_row_list_myCards"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageView_row_list_myCards"
                 android:layout_marginLeft="12dp"
-                android:layout_marginTop="6dp"
                 android:layout_toRightOf="@id/imageView_row_list_myCards"
                 android:text="LAlQila"
                 android:textColor="@android:color/white"
-                android:textSize="17sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewDetails_row_list_myCards"
@@ -64,7 +64,7 @@
                 android:layout_toRightOf="@id/imageView_row_list_myCards"
                 android:text="food"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
 
     </FrameLayout>

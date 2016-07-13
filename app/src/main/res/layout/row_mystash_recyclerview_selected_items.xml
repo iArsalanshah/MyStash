@@ -12,7 +12,7 @@
     <FrameLayout
         android:id="@+id/delete_layoutStash"
         android:layout_width="70dp"
-        android:layout_height="68dp"
+        android:layout_height="75dp"
         android:background="@android:color/black">
 
         <TextView
@@ -25,7 +25,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="75dp"
         android:background="@drawable/red_recycler_bg">
 
         <RelativeLayout
@@ -35,8 +35,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/row_recyclerview_avatar_mystash"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="6dp"
@@ -64,10 +64,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_toRightOf="@+id/row_recyclerview_avatar_mystash"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Place to dive into android programming"
+                android:maxLines="2"
+                android:text="@string/lorem_ispum"
                 android:textColor="#ffff"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
 
     </FrameLayout>
