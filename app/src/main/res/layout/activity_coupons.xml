@@ -27,8 +27,7 @@
             android:layout_centerInParent="true"
             android:text="Coupons"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/img_Saved_Coupons"

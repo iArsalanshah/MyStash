@@ -16,7 +16,11 @@ import com.example.mystashapp.mystashappproject.pojo.meesages.MessagesWebService
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -109,8 +113,21 @@ public class Messages extends AppCompatActivity {
             TextView tvTime = (TextView) convertView.findViewById(R.id.textView_Review_dateTime);
             tvTitle.setText(listPosition.getBusinessName());
             tvDesc.setText(listPosition.getMessage().trim());
-            tvTime.setText(listPosition.getSentTime());
+            tvTime.setText(setTime(listPosition.getSentTime()));
+            setTime(listPosition.getSentTime());
             return convertView;
+        }
+
+        private String setTime(String sentTime) {
+            SimpleDateFormat default_ = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.US);
+            Date t1 = null;
+            try {
+                t1 = default_.parse(sentTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            default_.applyPattern("MMM dd");
+            return default_.format(t1);
         }
     }
 }

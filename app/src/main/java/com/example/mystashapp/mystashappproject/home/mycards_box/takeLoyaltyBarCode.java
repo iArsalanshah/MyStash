@@ -98,7 +98,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                     Toast.makeText(takeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_next_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 5) {
+                if (editText_generator_barcode.getText().toString().length() > 2) {
 
                     //Convert to byte array
                     if (bitmap == null) {

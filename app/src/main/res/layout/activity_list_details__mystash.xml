@@ -143,6 +143,7 @@
                 android:id="@+id/textView_AreaAddress_myStashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_below="@id/textView_AreaName_myStashDetails"
                 android:layout_marginTop="16dp"
                 android:layout_toLeftOf="@+id/imageView_mycitePoints_mystashDetails"

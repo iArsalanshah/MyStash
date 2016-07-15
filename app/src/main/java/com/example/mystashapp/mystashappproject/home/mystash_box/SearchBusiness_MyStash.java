@@ -80,6 +80,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private Users userObj;
     private TextView tvFilter;
     private List<Searchnearby> mStringFilterList;
+    private boolean backToHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,8 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     private void init() {
+        //back to home
+        backToHome = getIntent().getBooleanExtra("backToHome", false);
         //for latlng
         sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
         lat = sharedPreferences.getString(Constant_util.USER_LAT, "0");
@@ -220,7 +223,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     public void backMyStashRecyclerViewImageBtn(View view) {
-        finish();
+        if (!backToHome)
+            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        else finish();
     }
 
     public void BtnListSearchBusiness(View view) {
@@ -386,6 +391,12 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         getRequest(Constant_util.DEFAULT_RADIUS);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!backToHome)
+            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        else finish();
+    }
 
     public class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
         private List<Searchnearby> searchNearbyList;

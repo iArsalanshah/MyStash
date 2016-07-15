@@ -55,6 +55,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <data
+                    android:host="mystash.ca"
+                    android:pathPattern=".*"
+                    android:scheme="http" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".login_pages.Register"
@@ -140,7 +150,9 @@
         <activity
             android:name=".businessMapActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".Messages"
+            android:screenOrientation="portrait" />
         <!-- START Added for GCM -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -174,8 +186,6 @@
             android:name=".gcm.RegistrationIntentService"
             android:exported="false" />
         <!-- END Added for GCM -->
-
-        <activity android:name=".Messages"></activity>
     </application>
 
 </manifest>

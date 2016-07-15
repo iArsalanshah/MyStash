@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,12 +40,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setting toolbar
-        setToolbar();
-
         // attach ResideMenu to current activity;
         setUpMenu();
-
     }
 
     @Override
@@ -76,16 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
     }
 
@@ -123,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                         resideMenu.closeMenu();
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Constant_util.SHARE_TEXT);
                         sendIntent.setType("text/plain");
                         startActivity(sendIntent);
                         break;
@@ -190,23 +175,23 @@ public class MainActivity extends AppCompatActivity {
         return resideMenu.dispatchTouchEvent(ev);
     }
 
-    public void myStash_container_home(View view) {
-        startActivity(new Intent(this, List_MyStash.class));
-    }
-
     public boolean isLoggedIn() {
         return FacebookSdk.isInitialized();
     }
 
+    public void myStash_container_home(View view) {
+        startActivity(new Intent(this, List_MyStash.class));
+    }
+
     public void checkIn_container_home(View view) {
-        SearchBusiness_MyStash checkinLogin = new SearchBusiness_MyStash();
+//        SearchBusiness_MyStash checkinLogin = new SearchBusiness_MyStash();
         SearchBusiness_MyStash.IS_CHECK_IN = true;
-        startActivity(new Intent(this, SearchBusiness_MyStash.class));
+        startActivity(new Intent(this, SearchBusiness_MyStash.class).putExtra("backToHome", true));
     }
 
     public void nearBy_container_home(View view) {
         SearchBusiness_MyStash.IS_CHECK_IN = false;
-        startActivity(new Intent(this, SearchBusiness_MyStash.class));
+        startActivity(new Intent(this, SearchBusiness_MyStash.class).putExtra("backToHome", true));
     }
 
     public void myCards_container_home(View view) {

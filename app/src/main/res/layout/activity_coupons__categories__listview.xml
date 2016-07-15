@@ -28,16 +28,16 @@
             android:layout_centerVertical="true"
             android:text="Coupons"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/img_Saved_Coupons"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="4dp"
+            android:padding="4dp"
             android:src="@drawable/saved_icon" />
     </RelativeLayout>
 

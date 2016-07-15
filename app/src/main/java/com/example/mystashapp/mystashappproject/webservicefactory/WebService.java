@@ -22,6 +22,7 @@ import com.example.mystashapp.mystashappproject.pojo.program_stamps.ProgramsStam
 import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
 import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
+import com.example.mystashapp.mystashappproject.pojo.stampCount.StampCountWebService;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
 import com.example.mystashapp.mystashappproject.pojo.update_registeration.UpdateRegisteration;
 import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
@@ -227,5 +228,11 @@ public interface WebService {
     Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);
 
     @GET("/mobileservice_new.php")
-    Call<MessagesWebService> getMessages(@Query("action") String action, @Query("cid") String cid);
+    Call<MessagesWebService> getMessages(@Query("action") String action,
+                                         @Query("cid") String cid);
+
+    @GET("/mobileservice_new.php")
+    Call<StampCountWebService> getStampCount(@Query("action") String action,
+                                             @Query("cid") String cid,
+                                             @Query("pid") String pid);
 }

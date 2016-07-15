@@ -405,9 +405,12 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         super.onResume();
         if (isNavigated) {
             imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
-            etEmail.setFocusable(false);
-            etEmail.setCursorVisible(false);
-            etEmail.setClickable(false);
+            if (!CustomSharedPrefLogin.getUserObject(this).getEmail().equals("")
+                    || !CustomSharedPrefLogin.getUserObject(this).getEmail().isEmpty()) {
+                etEmail.setFocusable(false);
+                etEmail.setCursorVisible(false);
+                etEmail.setClickable(false);
+            }
             btnRegisterID.setVisibility(View.GONE);
             findViewById(R.id.pwdContainer).setVisibility(View.GONE);
             findViewById(R.id.confPwdContainer).setVisibility(View.GONE);

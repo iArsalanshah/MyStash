@@ -1,9 +1,13 @@
 package com.example.mystashapp.mystashappproject.home.mystash_box;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
@@ -13,12 +17,17 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.Datum;
+import com.example.mystashapp.mystashappproject.pojo.stampCount.StampCountWebService;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -27,10 +36,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Program_Details extends AppCompatActivity {
 
+    public static boolean activity = false;
     private ViewFlipper viewFlipper;
     private ImageView img1;//, img2;
+    private BroadcastReceiver mMyBroadcastReceiver;
     //    private LinearLayout img2_layout;
     private String pid;
     private Datum stampObject;
@@ -48,6 +63,9 @@ public class Program_Details extends AppCompatActivity {
     private Searchnearby pOthersObj;
     private GridView gridView_img2;
     private TextView programTOC, programDsc;
+    private String cid;
+    private AlertDialog dialogP;
+    private ImageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +78,9 @@ public class Program_Details extends AppCompatActivity {
         init();
         clickEvents();
         settingData();
-        gridView_img2.setAdapter(new ImageAdapter(this, stampObject));
+        adapter = new ImageAdapter(this, stampObject, stampObject.getStampcount());
+        gridView_img2.setAdapter(adapter);
+        cid = CustomSharedPrefLogin.getUserObject(this).getId();
     }
 
     private void init() {
@@ -81,6 +101,9 @@ public class Program_Details extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tv_programDetails_Title);
         programTOC = (TextView) findViewById(R.id.programTOC);
         programDsc = (TextView) findViewById(R.id.programDsc);
+        dialogP = new AlertDialog.Builder(this)
+                .setMessage("Please wait...")
+                .setCancelable(false).create();
     }
 
     private void settingData() {
@@ -249,12 +272,63 @@ public class Program_Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Constant_util.SHARE_TEXT);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activity = true;
+        mMyBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // Here you can refresh your listview or other UI
+//                Toast.makeText(getApplicationContext(), "Receiver", Toast.LENGTH_SHORT).show();
+                updateStamps();
+            }
+        };
+        try {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMyBroadcastReceiver, new IntentFilter("your_action"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateStamps() {
+        dialogP.show();
+        Call<StampCountWebService> call = WebServicesFactory.getInstance().getStampCount(Constant_util.ACTION_GET_STAMPS_COUNT, cid, stampObject.getPid());
+        call.enqueue(new Callback<StampCountWebService>() {
+            @Override
+            public void onResponse(Call<StampCountWebService> call, Response<StampCountWebService> response) {
+                dialogP.dismiss();
+                StampCountWebService resp = response.body();
+                if (resp.getHeader().getSuccess().equals("1")) {
+                    tvRation.setText(resp.getBody().getStampcount() + "/" + stampObject.getTotalstamp());
+                    adapter = new ImageAdapter(Program_Details.this, stampObject, resp.getBody().getStampcount());
+                    gridView_img2.setAdapter(adapter);
+                } else {
+                    Toast.makeText(Program_Details.this, resp.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StampCountWebService> call, Throwable t) {
+                dialogP.dismiss();
+                Toast.makeText(Program_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activity = false;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMyBroadcastReceiver);
     }
 
     private class ImageAdapter extends BaseAdapter {
@@ -265,10 +339,10 @@ public class Program_Details extends AppCompatActivity {
         int emptyStampImg = R.drawable.circle_stamp;
         int fillStampImg = R.drawable.circle_with_stamp;
 
-        public ImageAdapter(Context context, Datum stampObject) {
+        public ImageAdapter(Context context, Datum stampObject, String stampcount) {
             this.context = context;
             totalStamps = Integer.parseInt(stampObject.getTotalstamp());
-            filledStamps = Integer.parseInt(stampObject.getStampcount());
+            filledStamps = Integer.parseInt(stampcount);
             Resources r = Resources.getSystem();
             px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, r.getDisplayMetrics());
         }

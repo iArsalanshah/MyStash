@@ -7,18 +7,20 @@
     android:background="@android:color/background_dark"
     tools:context="com.example.mystashapp.mystashappproject.login_pages.Register">
 
-    <android.support.v7.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/toolbarRegister"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:background="@color/colorPrimary">
 
         <ImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
             android:onClick="backRegisterImageBtn"
+            android:padding="12dp"
             android:src="@drawable/img_toolbar_back" />
-    </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"

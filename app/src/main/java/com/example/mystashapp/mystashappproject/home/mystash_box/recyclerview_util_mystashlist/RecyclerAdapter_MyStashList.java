@@ -36,7 +36,6 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
     private final ViewBinderHelper binderHelper;
     private final Users userObject;
     Context context;
-    SharedPreferences sharedPreferences;
     private ArrayList<Stashlist> searchNearbyList;
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -63,6 +62,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         binderHelper.setOpenOnlyOne(true);
         userObject = CustomSharedPrefLogin.getUserObject(context);
     }
+
 
     @Override
     public RecyclerViewHolder_MyStashList onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -23,10 +23,7 @@
     <string name="rate_review"><![CDATA[Rate & Review]]></string>
     <string name="list_alt">There are currently no programs active for this business yet, check back later for changes</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
-    <string name="shareSubject">Stash App</string>
-    <string name="shareText">Who does\'nt like rewards? With the STASH APP, you can get rewards at all of your favorite retailers when you shop. Download it today for So many great deals and offers.
-/www.mystashapp.com
-</string>
+
     <string name="gcm_sender_ID">456789105121</string>
 
     <string-array name="sexRegisterArray">

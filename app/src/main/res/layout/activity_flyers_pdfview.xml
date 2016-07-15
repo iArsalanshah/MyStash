@@ -31,8 +31,7 @@
             android:layout_centerVertical="true"
             android:text="Test Flyer"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <com.joanzapata.pdfview.PDFView

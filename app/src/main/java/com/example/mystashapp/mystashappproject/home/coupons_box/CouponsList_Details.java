@@ -108,8 +108,8 @@ public class CouponsList_Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.shareText);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.shareSubject);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Constant_util.SHARE_TEXT);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }

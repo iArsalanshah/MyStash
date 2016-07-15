@@ -10,11 +10,14 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.MainActivity;
+import com.example.mystashapp.mystashappproject.Messages;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.home.mystash_box.Program_Details;
 import com.example.mystashapp.mystashappproject.login_pages.Login_activity;
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -35,16 +38,16 @@ public class MyGCMListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
         String message = data.getString("message");
-        String bookingID = data.getString("bookingid");
+        String msgType = data.getString("type");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
-        Log.d(TAG, "Booking ID: " + bookingID);
+        Log.d(TAG, "Booking ID: " + msgType);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
+//        if (from.startsWith("/topics/")) {
+//            // message received from some topic.
+//        } else {
+//            // normal downstream message.
+//        }
 //        NotificationCompat.Builder mBuilder =
 //                new NotificationCompat.Builder(this)
 //                        .setSmallIcon(R.drawable.common_plus_signin_btn_icon_light)
@@ -78,7 +81,7 @@ public class MyGCMListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        sendNotification(message);
+        sendNotification(message, msgType);
         // [END_EXCLUDE]
     }
     // [END receive_message]
@@ -87,17 +90,32 @@ public class MyGCMListenerService extends GcmListenerService {
      * Create and show a simple notification containing the received GCM message.
      *
      * @param message GCM message received.
+     * @param msgType
      */
-    private void sendNotification(String message) {
+    private void sendNotification(String message, String msgType) {
 //        Intent intent = new Intent(this, MainActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Intent intent;
-        if (!sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
-            intent = new Intent(this, Login_activity.class);
-            Log.d(TAG, "Login");
-        } else {
-            intent = new Intent(this, MainActivity.class);
-            Log.d(TAG, "Home");
+        Intent intent = null;
+        try {
+
+            if (!sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
+                intent = new Intent(this, Login_activity.class);
+                Log.d(TAG, "Login");
+            } else {
+                if (msgType.equals("message"))
+                    intent = new Intent(this, Messages.class);
+                else {
+                    if (Program_Details.activity) {
+                        intent = new Intent("your_action");
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                    } else {
+                        intent = new Intent(this, MainActivity.class);
+                    }
+                }
+                Log.d(TAG, "Home");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 0); //PendingIntent.FLAG_ONE_SHOT

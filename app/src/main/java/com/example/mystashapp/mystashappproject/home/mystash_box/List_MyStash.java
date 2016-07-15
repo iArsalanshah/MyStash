@@ -30,7 +30,6 @@ import retrofit2.Response;
 public class List_MyStash extends AppCompatActivity {
     RecyclerView mRecyclerView;
     TextView altText;
-    private RecyclerAdapter_MyStashList mAdapter;
     private ProgressDialog prog;
     private SwipeRefreshLayout swipeContainer;
 
@@ -50,7 +49,9 @@ public class List_MyStash extends AppCompatActivity {
         if (mRecyclerView != null) {
             mRecyclerView.setHasFixedSize(true);
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(llm);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -61,13 +62,11 @@ public class List_MyStash extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //Retrofit Callback
         getMyStash();
     }
 
@@ -91,9 +90,8 @@ public class List_MyStash extends AppCompatActivity {
                             } else {
                                 ArrayList<Stashlist> arrSearchBusiness = new
                                         ArrayList<>(businessResponse.getBody().getStashlist());
-                                mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
+                                RecyclerAdapter_MyStashList mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
                                 mRecyclerView.setAdapter(mAdapter);
-                                mAdapter.notifyDataSetChanged();
                             }
                             break;
                         case "0":

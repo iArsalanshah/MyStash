@@ -42,6 +42,7 @@ public class ProgramsList extends AppCompatActivity {
     private ProgressDialog progress;
     private ImageView imgBack;
     private Searchnearby sbID;
+    private String isStampReward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class ProgramsList extends AppCompatActivity {
         //Getting Programs
         programID = getIntent().getExtras().getString("programID");
         sbID = new Gson().fromJson(programID, Searchnearby.class);
-
+//        isStampReward = getIntent().getStringExtra("");
         //initialization of objects
         init();
 

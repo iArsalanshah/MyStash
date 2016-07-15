@@ -8,19 +8,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
+        <RelativeLayout
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?actionBarSize"
             android:background="@color/colorPrimary">
 
             <ImageView
                 android:id="@+id/title_bar_left_menu"
-                android:layout_width="24dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical|start"
-                android:background="@drawable/titlebar_menu_selector" />
-        </android.support.v7.widget.Toolbar>
+                android:layout_width="60dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:padding="16dp"
+                android:src="@drawable/titlebar_menu_selector" />
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="wrap_content"

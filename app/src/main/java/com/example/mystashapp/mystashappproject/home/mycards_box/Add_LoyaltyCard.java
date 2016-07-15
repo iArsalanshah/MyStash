@@ -59,7 +59,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-                editor.putBoolean("updateLoyaltyCard", true).apply();
+                editor.putBoolean("updateLoyaltyCard", false).apply();
                 Intent createIntent = new Intent(Add_LoyaltyCard.this, CreateACard.class);
                 startActivity(createIntent);
             }
