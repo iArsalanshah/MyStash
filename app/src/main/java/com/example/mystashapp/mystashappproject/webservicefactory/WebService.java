@@ -140,7 +140,8 @@ public interface WebService {
                                    @Query("cardno") String cardno,
                                    @Query("notes") String notes,
                                    @Query("frontimage") String frontImage,
-                                   @Query("backimage") String barcodeImage);
+                                   @Query("backimage") String barcodeImage,
+                                   @Query("is_registerd_company") String is_registerd_company);
 
     @GET("/mobileservice_new.php")
     Call<EditLoyalty> getEditLoyalty(@Query("action") String edit_customer_loyalty_card,

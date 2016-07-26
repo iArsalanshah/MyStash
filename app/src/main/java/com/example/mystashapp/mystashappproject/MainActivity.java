@@ -22,7 +22,7 @@ import com.example.mystashapp.mystashappproject.login_pages.Login_activity;
 import com.example.mystashapp.mystashappproject.login_pages.Register;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.residemenu_util.ResideMenu;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.Tracker;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpMenu() {
 
         // attach to current activity;
-        user = CustomSharedPrefLogin.getUserObject(MainActivity.this);
+        user = CustomSharedPref.getUserObject(MainActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
         resideMenu = new ResideMenu(this, R.layout.residemenu_left_activity, R.layout.residemenu_left_activity);
         resideMenu.setBackground(R.drawable.menu_background);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.remove(Constant_util.IS_LOGIN);
-                        CustomSharedPrefLogin.RemoveUserObject(MainActivity.this);
+                        CustomSharedPref.RemoveUserObject(MainActivity.this);
                         editor.apply();
                         startActivity(new Intent(MainActivity.this, Login_activity.class));
                         break;

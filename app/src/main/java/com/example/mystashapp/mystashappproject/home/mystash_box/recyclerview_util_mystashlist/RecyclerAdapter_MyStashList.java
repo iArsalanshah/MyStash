@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +20,7 @@ import com.example.mystashapp.mystashappproject.home.mystash_box.List_MyStash;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.Stashlist;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -60,7 +59,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         this.searchNearbyList = searchnearbies;
         binderHelper = new ViewBinderHelper();
         binderHelper.setOpenOnlyOne(true);
-        userObject = CustomSharedPrefLogin.getUserObject(context);
+        userObject = CustomSharedPref.getUserObject(context);
     }
 
 

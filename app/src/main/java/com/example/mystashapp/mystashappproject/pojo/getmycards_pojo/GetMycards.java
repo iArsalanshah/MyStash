@@ -40,5 +40,4 @@ public class GetMycards {
     public void setBody(Body body) {
         this.body = body;
     }
-
 }

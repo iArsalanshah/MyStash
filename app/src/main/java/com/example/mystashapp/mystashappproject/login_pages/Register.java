@@ -38,7 +38,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_register.RegisterUser;
 import com.example.mystashapp.mystashappproject.pojo.update_registeration.UpdateRegisteration;
 import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.squareup.picasso.Picasso;
 
@@ -182,7 +182,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 String newp = newPwd.getText().toString();
                 String newc = newcPwd.getText().toString();
                 if (!old.equals("") || !newp.equals("") || !newc.equals("")) {
-                    if (old.equals(CustomSharedPrefLogin.getUserObject(Register.this).getPassword())) {
+                    if (old.equals(CustomSharedPref.getUserObject(Register.this).getPassword())) {
                         if (newp.equals(newc)) {
                             hidesoftkeyboard(v);
                             newPassword = newp;
@@ -211,14 +211,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 !gender.equals("") && email.matches(emailPattern)) {
             progressDialog.show();
             gettingEdittextData();
-            if (!CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")) {
+            if (!CustomSharedPref.getUserObject(this).getPassword().equals("")) {
                 if (!newPassword.equals("")) {
                     pwd = newPassword;
                 } else {
-                    pwd = CustomSharedPrefLogin.getUserObject(this).getPassword();
+                    pwd = CustomSharedPref.getUserObject(this).getPassword();
                 }
             }
-            final String loginType = CustomSharedPrefLogin.getUserObject(this).getLogintype();
+            final String loginType = CustomSharedPref.getUserObject(this).getLogintype();
 
             //Registering the user
             Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
@@ -230,9 +230,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     UpdateRegisteration registerResponse = response.body();
                     if (registerResponse.getHeader().getSuccess().equals("1")) {
                         progressDialog.dismiss();
-                        String id = CustomSharedPrefLogin.getUserObject(Register.this).getId();
+                        String id = CustomSharedPref.getUserObject(Register.this).getId();
                         Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        CustomSharedPrefLogin.RemoveUserObject(Register.this);
+                        CustomSharedPref.RemoveUserObject(Register.this);
                         Users obj = new Users();
                         obj.setId(id);
                         obj.setCfirstname(name);
@@ -245,7 +245,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                         obj.setCategories(category);
                         obj.setAreaOfInterest(areaOfInterest);
                         obj.setLogintype(loginType);
-                        CustomSharedPrefLogin.setUserObject(Register.this, obj);
+                        CustomSharedPref.setUserObject(Register.this, obj);
                         finish();
                     } else {
                         progressDialog.dismiss();
@@ -404,9 +404,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     protected void onResume() {
         super.onResume();
         if (isNavigated) {
-            imgURL = CustomSharedPrefLogin.getUserObject(this).getImgurl();
-            if (!CustomSharedPrefLogin.getUserObject(this).getEmail().equals("")
-                    || !CustomSharedPrefLogin.getUserObject(this).getEmail().isEmpty()) {
+            imgURL = CustomSharedPref.getUserObject(this).getImgurl();
+            if (!CustomSharedPref.getUserObject(this).getEmail().equals("")
+                    || !CustomSharedPref.getUserObject(this).getEmail().isEmpty()) {
                 etEmail.setFocusable(false);
                 etEmail.setCursorVisible(false);
                 etEmail.setClickable(false);
@@ -415,8 +415,8 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             findViewById(R.id.pwdContainer).setVisibility(View.GONE);
             findViewById(R.id.confPwdContainer).setVisibility(View.GONE);
             btnId_updateRegister.setVisibility(View.VISIBLE);
-            if (CustomSharedPrefLogin.getUserObject(this).getPassword().equals("")
-                    && CustomSharedPrefLogin.getUserObject(this).getLogintype().equals("1")) {
+            if (CustomSharedPref.getUserObject(this).getPassword().equals("")
+                    && CustomSharedPref.getUserObject(this).getLogintype().equals("1")) {
                 if (!imgURL.equals("")) {
                     Picasso.with(this)
                             .load(imgURL)
@@ -424,20 +424,20 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                             .placeholder(R.drawable.profile_image)
                             .into(imageProfileRegister);
                 }
-                etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
-                etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
-                etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
-                if (!CustomSharedPrefLogin.getUserObject(this).getContactnumber().equals(null))
-                    etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
+                etName.setText(CustomSharedPref.getUserObject(this).getCfirstname());
+                etEmail.setText(CustomSharedPref.getUserObject(this).getEmail());
+                etSex.setText(CustomSharedPref.getUserObject(this).getSex());
+                if (!CustomSharedPref.getUserObject(this).getContactnumber().equals(null))
+                    etPhone.setText(CustomSharedPref.getUserObject(this).getContactnumber());
                 try {
-                    if (!CustomSharedPrefLogin.getUserObject(this).getCategories().toString().equals(null)) {
-                        etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
+                    if (!CustomSharedPref.getUserObject(this).getCategories().toString().equals(null)) {
+                        etCateg.setText(CustomSharedPref.getUserObject(this).getCategories().toString());
                     }
-                    if (!CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString().equals(null)) {
-                        etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
+                    if (!CustomSharedPref.getUserObject(this).getAreaOfInterest().toString().equals(null)) {
+                        etInterest.setText(CustomSharedPref.getUserObject(this).getAreaOfInterest().toString());
                     }
-                    if (!CustomSharedPrefLogin.getUserObject(this).getBirthday().toString().equals(null)) {
-                        etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
+                    if (!CustomSharedPref.getUserObject(this).getBirthday().toString().equals(null)) {
+                        etBday.setText(CustomSharedPref.getUserObject(this).getBirthday().toString());
                     }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
@@ -446,14 +446,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 btnId_updatePwd.setVisibility(View.GONE);
             } else {
                 try {
-                    etName.setText(CustomSharedPrefLogin.getUserObject(this).getCfirstname());
-                    etEmail.setText(CustomSharedPrefLogin.getUserObject(this).getEmail());
-                    etSex.setText(CustomSharedPrefLogin.getUserObject(this).getSex());
-                    etBday.setText(CustomSharedPrefLogin.getUserObject(this).getBirthday().toString());
-                    etCateg.setText(CustomSharedPrefLogin.getUserObject(this).getCategories().toString());
-                    etInterest.setText(CustomSharedPrefLogin.getUserObject(this).getAreaOfInterest().toString());
-                    etPhone.setText(CustomSharedPrefLogin.getUserObject(this).getContactnumber());
-                    Log.d(Constant_util.LOG_TAG, "onResume: " + CustomSharedPrefLogin.getUserObject(this).getBirthday());
+                    etName.setText(CustomSharedPref.getUserObject(this).getCfirstname());
+                    etEmail.setText(CustomSharedPref.getUserObject(this).getEmail());
+                    etSex.setText(CustomSharedPref.getUserObject(this).getSex());
+                    etBday.setText(CustomSharedPref.getUserObject(this).getBirthday().toString());
+                    etCateg.setText(CustomSharedPref.getUserObject(this).getCategories().toString());
+                    etInterest.setText(CustomSharedPref.getUserObject(this).getAreaOfInterest().toString());
+                    etPhone.setText(CustomSharedPref.getUserObject(this).getContactnumber());
+                    Log.d(Constant_util.LOG_TAG, "onResume: " + CustomSharedPref.getUserObject(this).getBirthday());
                     btnId_updatePwd.setVisibility(View.VISIBLE);
                     if (!imgURL.equals("")) {
                         Picasso.with(this)
@@ -467,9 +467,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 }
             }
 
-            CustomSharedPrefLogin.getUserObject(this);
-            Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getCfirstname());
-            Log.d(Constant_util.LOG_TAG, "" + CustomSharedPrefLogin.getUserObject(this).getSex());
+            CustomSharedPref.getUserObject(this);
+            Log.d(Constant_util.LOG_TAG, "" + CustomSharedPref.getUserObject(this).getCfirstname());
+            Log.d(Constant_util.LOG_TAG, "" + CustomSharedPref.getUserObject(this).getSex());
         } else {
             btnRegisterID.setVisibility(View.VISIBLE);
             findViewById(R.id.pwdContainer).setVisibility(View.VISIBLE);
@@ -511,7 +511,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                             obj.setSex(vals.getSex());
                             obj.setCategories(vals.getCategories());
                             obj.setAreaOfInterest(vals.getAreaOfInterest());
-                            CustomSharedPrefLogin.setUserObject(Register.this, obj);
+                            CustomSharedPref.setUserObject(Register.this, obj);
                             startActivity(new Intent(Register.this, MainActivity.class));
                         } else {
                             Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();

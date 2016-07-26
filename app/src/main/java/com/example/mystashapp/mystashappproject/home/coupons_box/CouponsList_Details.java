@@ -20,7 +20,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
 import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -59,7 +59,7 @@ public class CouponsList_Details extends AppCompatActivity {
         String objCoupon = getIntent().getStringExtra("couponObj");
 //        Log.d(Constant_util.LOG_TAG, objCoupon);
         cObj = new Gson().fromJson(objCoupon, Coupon.class);
-        cid = CustomSharedPrefLogin.getUserObject(CouponsList_Details.this);
+        cid = CustomSharedPref.getUserObject(CouponsList_Details.this);
         init();
         clickEvents();
         settingData();

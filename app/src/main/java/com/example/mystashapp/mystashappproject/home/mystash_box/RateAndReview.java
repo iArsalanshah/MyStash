@@ -15,7 +15,7 @@ import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.add_rating_pojo.ADDRating;
 import com.example.mystashapp.mystashappproject.pojo.add_review_pojo.ADDReview;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 
 import retrofit2.Call;
@@ -38,7 +38,7 @@ public class RateAndReview extends AppCompatActivity {
         setContentView(R.layout.activity_rate_and_review);
         uId = getIntent().getExtras().getString("writeUid");
         bId = getIntent().getExtras().getString("writeBid");
-        cId = CustomSharedPrefLogin.getUserObject(this).getId();
+        cId = CustomSharedPref.getUserObject(this).getId();
         init();
         clickEvents();
         progressDialog = new ProgressDialog(this);

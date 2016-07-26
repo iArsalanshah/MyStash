@@ -49,14 +49,11 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_create_acard);
         initialization();
         clickListeners();
-//        textview_front_of_card.setVisibility(View.VISIBLE);
-//        retake.setVisibility(View.GONE);
+
         boolean comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
         if (comesFromDetailActivity) {
             url = getIntent().getStringExtra("frontCard");
             if (!url.equals("")) {
-//                textview_front_of_card.setVisibility(View.GONE);
-//                retake.setVisibility(View.VISIBLE);
                 Picasso.with(this).load(url)
                         .placeholder(R.drawable.placeholder_shadow)
                         .error(R.drawable.placeholder_shadow)
@@ -67,7 +64,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 
     private void initialization() {
         next = (Button) findViewById(R.id.button_loyaltyDetails_next);
-//        retake = (Button) findViewById(R.id.button_loyaltyDetails_retake);
         frontCard = (ImageView) findViewById(R.id.imageView_captureFrontCard);
         backArrow = (ImageView) findViewById(R.id.imageview_backToolbar);
         textview_front_of_card = (TextView) findViewById(R.id.textview_front_of_card);
@@ -78,7 +74,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 
     private void clickListeners() {
         next.setOnClickListener(this);
-//        retake.setOnClickListener(this);
         frontCard.setOnClickListener(this);
         backArrow.setOnClickListener(this);
         textview_front_of_card.setOnClickListener(this);
@@ -87,9 +82,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.button_loyaltyDetails_retake:
-//                selectImage();
-//                break;
             case R.id.button_loyaltyDetails_next:
                 if (isCaptured || !url.equals("")) {
                     uploadImageView();
@@ -132,12 +124,10 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     progressDialog.dismiss();
                     UploadLoyaltyImage uploadLoyaltyImage = response.body();
                     if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
-//                        Toast.makeText(CreateACard.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
                         String frontImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
                         SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                         editor.putString("frontImage", frontImage);
                         editor.apply();
-                        takeLoyaltyNameDetails.is_Created = true;
                         Intent intent = new Intent(CreateACard.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
@@ -248,8 +238,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             frontCard.setImageBitmap(myBitmap);
             isCaptured = true;
         }
-//        retake.setVisibility(View.VISIBLE);
-//        textview_front_of_card.setVisibility(View.GONE);
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Coupon;
 import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -50,7 +50,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         clickEvents();
         isTextSavedClick = getIntent().getBooleanExtra("textSavedClick", false);
         isCouponByAdmin = getIntent().getBooleanExtra("couponByAdmin", false);
-        cid = CustomSharedPrefLogin.getUserObject(this);
+        cid = CustomSharedPref.getUserObject(this);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     }
 
     private void getAllCoupons() {
-        Users cid = CustomSharedPrefLogin.getUserObject(this);
+        Users cid = CustomSharedPref.getUserObject(this);
 //        Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<Get_All_Coupons> call = WebServicesFactory.getInstance().getAllCoupons(Constant_util.ACTION_GET_ALL_COUPONS_LIST, catID, cid.getId());
         call.enqueue(new Callback<Get_All_Coupons>() {

@@ -23,7 +23,7 @@ import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.gcm.RegistrationIntentService;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -77,7 +77,7 @@ public class Login_activity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String accessToken = loginResult.getAccessToken().getToken();
+//                String accessToken = loginResult.getAccessToken().getToken();
                 //Log.i(Constant_util.LOG_TAG, accessToken);
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -94,10 +94,10 @@ public class Login_activity extends AppCompatActivity {
                                 call.enqueue(new Callback<LoginUser>() {
                                     @Override
                                     public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
-                                        Users Webresponse = response.body().getBody().getUsers();
-                                        Log.d(Constant_util.LOG_TAG, "Checks " + Webresponse);
-                                        Log.d(Constant_util.LOG_TAG, "onResponse: " + Webresponse.getId() + " " + Webresponse.getImgurl() + " " + Webresponse.getCfirstname() + " " + Webresponse.getFbid());
-                                        CustomSharedPrefLogin.setUserObject(Login_activity.this, Webresponse);
+                                        Users webResponse = response.body().getBody().getUsers();
+                                        Log.d(Constant_util.LOG_TAG, "Checks " + webResponse);
+                                        Log.d(Constant_util.LOG_TAG, "onResponse: " + webResponse.getId() + " " + webResponse.getImgurl() + " " + webResponse.getCfirstname() + " " + webResponse.getFbid());
+                                        CustomSharedPref.setUserObject(Login_activity.this, webResponse);
                                         Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(Login_activity.this, MainActivity.class));
                                     }
@@ -110,7 +110,7 @@ public class Login_activity extends AppCompatActivity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, email, gender, birthday");
+                parameters.putString("fields", "id, name, email, gender");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -122,6 +122,7 @@ public class Login_activity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
+                Toast.makeText(Login_activity.this, error.toString(), Toast.LENGTH_SHORT).show(); //todo Facebook login Error issue need to solve
                 Log.d(Constant_util.LOG_TAG, "on Error" + error.toString());
             }
         });
@@ -200,8 +201,6 @@ public class Login_activity extends AppCompatActivity {
                 bundle.putString("email", object.getString("email"));
             if (object.has("gender"))
                 bundle.putString("gender", object.getString("gender"));
-            if (object.has("user_birthday"))
-                bundle.putString("user_birthday", object.getString("user_birthday"));
             return bundle;
         } catch (Exception e) {
             e.printStackTrace();
@@ -256,7 +255,7 @@ public class Login_activity extends AppCompatActivity {
                     if (users.getHeader().getSuccess().equals("1")) {
                         prog.dismiss();
                         Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        CustomSharedPrefLogin.setUserObject(Login_activity.this, users.getBody().getUsers());
+                        CustomSharedPref.setUserObject(Login_activity.this, users.getBody().getUsers());
                         startActivity(new Intent(Login_activity.this, MainActivity.class));
                     } else {
                         prog.dismiss();

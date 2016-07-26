@@ -26,6 +26,7 @@ import com.example.mystashapp.mystashappproject.helper.SimpleScannerActivity;
 import com.example.mystashapp.mystashappproject.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.zxing.WriterException;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -44,6 +45,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     TextView button_generate_barcode;
     private Class<?> mClass;
     private Button button_next_barcode;
+    private boolean isComesFromDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,24 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_take_loyalty_bar_code);
         //initialization of views
         init();
+        isComesFromDetail = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
+        if (isComesFromDetail) {
+            editText_generator_barcode.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardNumber", "null"));
+            Picasso.with(this).load(getSharedPreferences
+                    (Constant_util.PREFS_NAME, 0).getString("backCard", null))
+                    .placeholder(R.drawable.placeholder_shadow)
+                    .error(R.drawable.placeholder_shadow)
+                    .into(imageView_captureBarcode);
+        }
         clickListenerBind();
+    }
+
+    private void init() {
+        imageview_backTopbar = (ImageView) findViewById(R.id.imagview_backTopbar);
+        imageView_captureBarcode = (ImageView) findViewById(R.id.imageView_captureBarcode);
+        editText_generator_barcode = (EditText) findViewById(R.id.editText_generator_barcode);
+        button_generate_barcode = (TextView) findViewById(R.id.button_generate_barcode);
+        button_next_barcode = (Button) findViewById(R.id.button_next_barcode);
     }
 
     @Override
@@ -62,17 +81,9 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             String barcode = editText_generator_barcode.getText().toString();
             generateBarcode(barcode);
             imageView_captureBarcode.setImageBitmap(bitmap);
-        } else {
+        } else if (!isComesFromDetail) {
             editText_generator_barcode.setText("");
         }
-    }
-
-    private void init() {
-        imageview_backTopbar = (ImageView) findViewById(R.id.imagview_backTopbar);
-        imageView_captureBarcode = (ImageView) findViewById(R.id.imageView_captureBarcode);
-        editText_generator_barcode = (EditText) findViewById(R.id.editText_generator_barcode);
-        button_generate_barcode = (TextView) findViewById(R.id.button_generate_barcode);
-        button_next_barcode = (Button) findViewById(R.id.button_next_barcode);
     }
 
     private void clickListenerBind() {

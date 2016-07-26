@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.pojo.meesages.Datum;
 import com.example.mystashapp.mystashappproject.pojo.meesages.MessagesWebService;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 
 import java.text.ParseException;
@@ -34,7 +34,7 @@ public class Messages extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-        cid = CustomSharedPrefLogin.getUserObject(this).getId();
+        cid = CustomSharedPref.getUserObject(this).getId();
         msgsList = (ListView) findViewById(R.id.listview_Messages);
     }
 

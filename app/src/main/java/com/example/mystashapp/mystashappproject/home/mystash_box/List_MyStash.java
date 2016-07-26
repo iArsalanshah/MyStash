@@ -18,7 +18,7 @@ import com.example.mystashapp.mystashappproject.home.mystash_box.recyclerview_ut
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.Stashlist;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class List_MyStash extends AppCompatActivity {
 
     private void getMyStash() {
         prog.show();
-        Users cid = CustomSharedPrefLogin.getUserObject(List_MyStash.this);
+        Users cid = CustomSharedPref.getUserObject(List_MyStash.this);
         Call<GetMyStash> call = WebServicesFactory.getInstance().getMyStashList(Constant_util.ACTION_GET_MYSTASH_LIST, cid.getId());
         call.enqueue(new Callback<GetMyStash>() {
             @Override

@@ -16,7 +16,7 @@ import com.example.mystashapp.mystashappproject.pojo.addloyalty_pojo.AddLoyalty;
 import com.example.mystashapp.mystashappproject.pojo.editloyalty_pojo.EditLoyalty;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalty;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 
@@ -36,6 +36,8 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
     private Users cid;
     private String card_Number;
     private boolean isUpdateLoyalty;
+    private String isRegistered;
+    private boolean isComesFromDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,12 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         isUpdateLoyalty = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
         loyaltyID = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("loyaltyID", null);
         initialization();
+        isComesFromDetail = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
+        if (isComesFromDetail) {
+            ur_name.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardUrName", "null"));
+            card_name.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardName", "null"));
+            card_notes.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardNote", "null"));
+        }
         clickEvents();
     }
 
@@ -70,15 +78,17 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         card_name = (EditText) findViewById(R.id.edittext_loyaltDetails_cardName);
         card_notes = (EditText) findViewById(R.id.edittext_loyaltDetails_cardNotes);
         saveButton = (Button) findViewById(R.id.button_loyaltDetails_save);
-        cid = CustomSharedPrefLogin.getUserObject(takeLoyaltyNameDetails.this);
+        cid = CustomSharedPref.getUserObject(takeLoyaltyNameDetails.this);
         String objectLoyalty = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");//getIntent().getStringExtra("addLoyaltyObject");
         getloyaltyObj = new Gson().fromJson(objectLoyalty, Getloyalty.class);
         if (is_Created) {
+            isRegistered = "0";
             //overwrite frontImage from takeImage.class
             frontImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("frontImage", "");
             Log.d("LOG_TAG", "initialization: front image is_created part working");
         } else {
             //overwrite frontImage from GsonObject
+            isRegistered = "1";
             frontImage = getloyaltyObj.getImageurl();
         }
     }
@@ -112,7 +122,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
     private void updateLoyaltyCard(final String loyaltyID) {
         Call<EditLoyalty> call = WebServicesFactory.getInstance().getEditLoyalty(Constant_util.ACTION_EDIT_LOYALTY_CARD,
                 cid.getId(), ur_name.getText().toString(), card_name.getText().toString(), "", "",
-                card_Number, card_notes.getText().toString(), frontImage, barcodeImage, "", loyaltyID);
+                card_Number, card_notes.getText().toString(), frontImage, barcodeImage, isRegistered, loyaltyID);
         call.enqueue(new Callback<EditLoyalty>() {
             @Override
             public void onResponse(Call<EditLoyalty> call, Response<EditLoyalty> response) {
@@ -126,7 +136,9 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     intent.putExtra("cardNotes", card_notes.getText().toString());
                     intent.putExtra("frontCard", frontImage);
                     intent.putExtra("backCard", barcodeImage);
+                    intent.putExtra("isRegistered", isRegistered);
                     intent.putExtra("loyaltyPosition", loyaltyID);
+                    DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
                     Toast.makeText(takeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(),
@@ -144,7 +156,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
     private void addLoyaltyCard() {
         Call<AddLoyalty> call = WebServicesFactory.getInstance().getAddLoyalty(Constant_util.ACTION_ADD_LOYALTY_CARD,
                 cid.getId(), ur_name.getText().toString(), card_name.getText().toString(),
-                card_Number, card_notes.getText().toString(), frontImage, barcodeImage);
+                card_Number, card_notes.getText().toString(), frontImage, barcodeImage, isRegistered);
         call.enqueue(new Callback<AddLoyalty>() {
             @Override
             public void onResponse(Call<AddLoyalty> call, Response<AddLoyalty> response) {
@@ -158,7 +170,9 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     intent.putExtra("cardNotes", card_notes.getText().toString());
                     intent.putExtra("frontCard", frontImage);
                     intent.putExtra("backCard", barcodeImage);
+                    intent.putExtra("isRegistered", isRegistered);
                     intent.putExtra("loyaltyPosition", addLoyalty.getBody().getAddloyaltycards().getId());
+                    DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
                     Toast.makeText(takeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(),

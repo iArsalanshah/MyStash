@@ -26,7 +26,7 @@ import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.Datum;
 import com.example.mystashapp.mystashappproject.pojo.stampCount.StampCountWebService;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -80,7 +80,7 @@ public class Program_Details extends AppCompatActivity {
         settingData();
         adapter = new ImageAdapter(this, stampObject, stampObject.getStampcount());
         gridView_img2.setAdapter(adapter);
-        cid = CustomSharedPrefLogin.getUserObject(this).getId();
+        cid = CustomSharedPref.getUserObject(this).getId();
     }
 
     private void init() {

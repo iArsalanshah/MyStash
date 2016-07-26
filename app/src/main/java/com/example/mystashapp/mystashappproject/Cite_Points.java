@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.mystashapp.mystashappproject.pojo.pojo_cite_points.CitePointsTransactions;
 import com.example.mystashapp.mystashappproject.pojo.pojo_cite_points.History;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class Cite_Points extends AppCompatActivity {
         final ProgressDialog dlg = new ProgressDialog(this);
         dlg.setMessage("Loading...");
         dlg.show();
-        String cid = CustomSharedPrefLogin.getUserObject(this).getId();
+        String cid = CustomSharedPref.getUserObject(this).getId();
         Call<CitePointsTransactions> call = WebServicesFactory.getInstance().getCitePoints(Constant_util.ACTION_GET_CITE_POINTS, cid);
         call.enqueue(new Callback<CitePointsTransactions>() {
             @Override

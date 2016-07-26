@@ -22,7 +22,7 @@ import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.Datum;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.ProgramsStamps;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -70,7 +70,7 @@ public class ProgramsList extends AppCompatActivity {
     }
 
     private void getStamps() {
-        Users users_obj = CustomSharedPrefLogin.getUserObject(ProgramsList.this);
+        Users users_obj = CustomSharedPref.getUserObject(ProgramsList.this);
 
         Call<ProgramsStamps> call = WebServicesFactory.getInstance().getStamps(Constant_util.ACTION_GET_STAMPS, users_obj.getId(), sbID.getId());
         Log.d(Constant_util.LOG_TAG, "getStamps: id:" + sbID.getId() + " uid" + sbID.getUid() + " cid" + users_obj.getId());

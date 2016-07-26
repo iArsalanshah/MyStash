@@ -32,7 +32,7 @@ import com.example.mystashapp.mystashappproject.pojo.delete_loyalty_card.DeleteL
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.GetMycards;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.Loyaltycard;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -124,7 +124,12 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private void init() {
         listView = (ListView) findViewById(R.id.listView_MyCards);
+
         progress = new ProgressDialog(this);
+        progress.setMessage("Please wait...");
+        progress.setCancelable(false);
+        progress.show();
+
         alternateText = (TextView) findViewById(R.id.alternateText);
         searchView_cards = (SearchView) findViewById(R.id.searchView_cards);
     }
@@ -132,15 +137,12 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
     @Override
     protected void onResume() {
         super.onResume();
-        progress.setMessage("Please wait...");
-        progress.setCancelable(false);
-        progress.show();
         //Retrofit2 Call
         getCards();
     }
 
     private void getCards() {
-        Users cid = CustomSharedPrefLogin.getUserObject(MyCards.this);
+        Users cid = CustomSharedPref.getUserObject(MyCards.this);
         Call<GetMycards> call = WebServicesFactory.getInstance().getMyCards(Constant_util.ACTION_GET_MY_LOYALTY_CARDS, cid.getId());
         call.enqueue(new Callback<GetMycards>() {
             @Override

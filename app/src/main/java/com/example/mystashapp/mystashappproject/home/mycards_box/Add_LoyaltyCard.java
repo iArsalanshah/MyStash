@@ -27,7 +27,7 @@ import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.GetCardsList;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalty;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -61,6 +61,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
                 SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                 editor.putBoolean("updateLoyaltyCard", false).apply();
                 Intent createIntent = new Intent(Add_LoyaltyCard.this, CreateACard.class);
+                takeLoyaltyNameDetails.is_Created = true;
                 startActivity(createIntent);
             }
         });
@@ -81,7 +82,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
     }
 
     private void getAddLoyaltyList() {
-        Users cid = CustomSharedPrefLogin.getUserObject(Add_LoyaltyCard.this);
+        Users cid = CustomSharedPref.getUserObject(Add_LoyaltyCard.this);
         Log.d(Constant_util.LOG_TAG, cid.getId());
         Call<GetCardsList> call = WebServicesFactory.getInstance().getCardsList(Constant_util.ACTION_GET_LOYALTY_CARDS_LIST, cid.getId());
         call.enqueue(new Callback<GetCardsList>() {
@@ -205,6 +206,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
                     editor.putString("loyaltyPosition", getloyalties.get(position).getId());
                     editor.putBoolean("updateLoyaltyCard", false).apply();
                     intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
+                    takeLoyaltyNameDetails.is_Created = false;
                     DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 }

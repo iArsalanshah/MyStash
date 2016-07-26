@@ -34,7 +34,7 @@ import com.example.mystashapp.mystashappproject.pojo.customer_check_in.CustomerC
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.SearchBusiness;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -174,7 +174,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
     void getRequest(final float defaultRadius) {
         //for cid
-        userObj = CustomSharedPrefLogin.getUserObject(SearchBusiness_MyStash.this);
+        userObj = CustomSharedPref.getUserObject(SearchBusiness_MyStash.this);
         lv.show();
         Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
                 Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), lat, lng,

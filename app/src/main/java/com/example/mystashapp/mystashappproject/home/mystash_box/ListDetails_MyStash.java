@@ -24,7 +24,7 @@ import com.example.mystashapp.mystashappproject.pojo.add_stash.AddStash;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
-import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPrefLogin;
+import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
@@ -54,7 +54,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
 
         //Getting Intent StringExtra
         s = getIntent().getStringExtra("id");
-        users_obj = CustomSharedPrefLogin.getUserObject(ListDetails_MyStash.this);
+        users_obj = CustomSharedPref.getUserObject(ListDetails_MyStash.this);
 
         //String to Json to check Reviews.has method
         try {

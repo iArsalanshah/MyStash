@@ -47,6 +47,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     private ImageView imgChangeConfiguration;
     private ImageView deleteLoyaltyImg;
     private String loyaltyPosition;
+    private String isRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             cardNote = getIntent().getStringExtra("cardNotes");
             frontCard = getIntent().getStringExtra("frontCard");
             backCard = getIntent().getStringExtra("backCard");
+            isRegistered = getIntent().getStringExtra("isRegistered");
         }
 //        barcodeImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("barcodeImage", "none");
 
@@ -190,17 +192,44 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
         switch (v.getId()) {
             case R.id.button_loyalty_edit:
-                Intent intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent intent;
                 SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-                editor.putString("loyaltyID", loyaltyPosition);
-                editor.putBoolean("updateLoyaltyCard", true).apply();
+
+                editor.putBoolean("updateLoyaltyCard", true);
 //                if (convertedObjEdit.getImageurl().length() > 0) {
                 if (is_Edit) {
-                    intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
+                    editor.putString("loyaltyID", convertedObjEdit.getId());
+                    if (convertedObjEdit.getIsRegisterdCompany().equals("0")) {
+                        intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = true;
+                        intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
+                    } else {
+                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = false;
+                    }
+                    editor.putString("backCard", convertedObjEdit.getBackimage());
+                    editor.putString("cardNumber", convertedObjEdit.getCardno());
+                    editor.putString("cardUrName", convertedObjEdit.getCardno());
+                    editor.putString("cardName", convertedObjEdit.getCardno());
+                    editor.putString("cardNote", convertedObjEdit.getCardno());
+
                     intent.putExtra("comesFromDetail", true);
                     startActivity(intent);
                 } else {
-                    intent.putExtra("frontCard", frontCard);
+                    editor.putString("loyaltyID", loyaltyPosition);
+                    if (isRegistered.equals("0")) {
+                        intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = true;
+                        intent.putExtra("frontCard", frontCard);
+                    } else {
+                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = false;
+                    }
+                    editor.putString("cardNumber", cardNumber);
+                    editor.putString("cardUrName", urName);
+                    editor.putString("cardName", cardName);
+                    editor.putString("cardNote", cardNote);
+                    editor.putString("backCard", backCard).apply();
                     intent.putExtra("comesFromDetail", true);
                     startActivity(intent);
                 }
