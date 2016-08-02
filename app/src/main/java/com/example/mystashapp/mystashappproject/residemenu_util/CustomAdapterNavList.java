@@ -1,4 +1,4 @@
-package com.example.mystashapp.mystashappproject;
+package com.example.mystashapp.mystashappproject.residemenu_util;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.home.MainActivity;
 
 public class CustomAdapterNavList extends ArrayAdapter<String> {
     Activity context;

@@ -17,6 +17,7 @@ import android.widget.Toast;
  * Created by Arsalan on 1/21/2016.
  */
 public class Tracker implements LocationListener {
+    private static boolean shouldStopGPS = false;
     Location location;
     boolean isGpsEnabled = false;
     boolean isNetworkEnabled = false;

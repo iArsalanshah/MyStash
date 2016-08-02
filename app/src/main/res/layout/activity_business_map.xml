@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mystashapp.mystashappproject.businessMapActivity">
+    tools:context=".home.businessMapActivity">
 
     <RelativeLayout
         android:id="@+id/container_toolbar_aboveViewpager"
@@ -13,10 +13,10 @@
 
         <ImageView
             android:id="@+id/topbarImageBackMap"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:padding="12dp"
             android:src="@drawable/img_toolbar_back" />
 
         <TextView

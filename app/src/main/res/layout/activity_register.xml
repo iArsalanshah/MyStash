@@ -148,7 +148,7 @@
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
                     android:hint=" Sex"
-                    android:onClick="SexRegister" />
+                    android:onClick="GenderRegister" />
 
                 <Spinner
                     android:id="@+id/spinnerCategoriesRegister"

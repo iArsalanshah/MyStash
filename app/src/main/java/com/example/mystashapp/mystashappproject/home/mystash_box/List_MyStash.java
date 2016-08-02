@@ -11,9 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
-import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.home.mystash_box.recyclerview_util_mystashlist.RecyclerAdapter_MyStashList;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.GetMyStash;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.Stashlist;
@@ -49,8 +48,7 @@ public class List_MyStash extends AppCompatActivity {
         if (mRecyclerView != null) {
             mRecyclerView.setHasFixedSize(true);
         }
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(llm);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -119,7 +117,7 @@ public class List_MyStash extends AppCompatActivity {
     }
 
     public void backMyStashRecyclerViewImageBtn(View view) {
-        startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
     }
 
     public void PlusMyStashRecyclerImageView(View view) {

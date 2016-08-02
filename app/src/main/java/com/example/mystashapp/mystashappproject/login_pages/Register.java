@@ -1,19 +1,25 @@
 package com.example.mystashapp.mystashappproject.login_pages;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -31,9 +37,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
-import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
+import com.example.mystashapp.mystashappproject.home.MainActivity;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_register.RegisterUser;
 import com.example.mystashapp.mystashappproject.pojo.update_registeration.UpdateRegisteration;
@@ -49,6 +55,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -58,13 +67,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Register extends AppCompatActivity implements AdapterView.OnItemSelectedListener, MultiSpinner.MultiSpinnerListener {
+    private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1234;
     public static boolean isNavigated = false;
     private static String imgURL;
     EditText etName, etEmail, etPwd, etCPwd, etPhone, etBday, etSex, etCateg, etInterest;
     ArrayAdapter<CharSequence> adapterSex;
     RelativeLayout rootLayout;
     int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Spinner spinnerSex;
+    private Spinner spinnerGender;
     private Button btnRegisterID;
     private boolean userIsInteracting = false;
     private String name, email, pwd, cpwd, phone, bday, gender, category, areaOfInterest;
@@ -99,7 +109,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         imageProfileRegisterThumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                getPermisions();
             }
         });
 
@@ -132,7 +142,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         //Spinner
         multiSpinnerCat = (MultiSpinner) findViewById(R.id.multi_spinnerCat);
         multiSpinnerInterest = (MultiSpinner) findViewById(R.id.multi_spinnerInterest);
-        spinnerSex = (Spinner) findViewById(R.id.spinnerSexRegister);
+        spinnerGender = (Spinner) findViewById(R.id.spinnerSexRegister);
         imageProfileRegister = (ImageView) findViewById(R.id.imageProfileRegister);
         imageProfileRegisterThumb = (ImageView) findViewById(R.id.imageProfileRegisterThumb);
         btnId_updateRegister.setOnClickListener(new View.OnClickListener() {
@@ -266,14 +276,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
 
     //Spinner OnItemSelectedListeners
     private void settingSpinnerOnClicks() {
-        spinnerSex.setOnItemSelectedListener(this);
+        spinnerGender.setOnItemSelectedListener(this);
     }
 
     //Spinner Adapter
     private void settingAdapter() {
         adapterSex = ArrayAdapter.createFromResource(this,
                 R.array.sexRegisterArray, android.R.layout.select_dialog_item);
-        spinnerSex.setAdapter(adapterSex);
+        spinnerGender.setAdapter(adapterSex);
 
         // MultiSpinners
         listCat = new ArrayList<>();
@@ -324,9 +334,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         dialog.show();
     }
 
-    public void SexRegister(View view) {
+    public void GenderRegister(View view) {
         hidesoftkeyboard(view);
-        spinnerSex.performClick();
+        spinnerGender.performClick();
     }
 
     public void CategoriesRegister(View view) {
@@ -666,6 +676,103 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             });
         }
 
+    }
+
+    private void getPermisions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            List<String> permissionsNeeded = new ArrayList<>();
+            final List<String> permissionsList = new ArrayList<>();
+            if (!addPermission(permissionsList, Manifest.permission.CAMERA))
+                permissionsNeeded.add("Camera");
+            if (!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
+                permissionsNeeded.add("Read Storage");
+            if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                permissionsNeeded.add("Write Storage");
+            if (permissionsList.size() > 0) {
+
+                if (permissionsNeeded.size() > 0) {
+                    // Need Rationale
+                    String message = "You need to grant access to " + permissionsNeeded.get(0);
+                    for (int i = 1; i < permissionsNeeded.size(); i++)
+                        message = message + ", " + permissionsNeeded.get(i);
+                    showMessageOKCancel(message,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityCompat.requestPermissions(Register.this, permissionsList.toArray(new String[permissionsList.size()]),
+                                            REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                                }
+                            });
+                    return;
+                }
+                ActivityCompat.requestPermissions(Register.this, permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                return;
+            }
+            selectImage();
+        } else selectImage();
+    }
+
+    private boolean addPermission(List<String> permissionsList, String permission) {
+        if (ContextCompat.checkSelfPermission(Register.this, permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+            // Check for Rationale Option
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(Register.this, permission))
+                return false;
+        }
+        return true;
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(Register.this)
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Intent i = new Intent();
+                        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        i.addCategory(Intent.CATEGORY_DEFAULT);
+                        i.setData(Uri.parse("package:" + Register.this.getPackageName()));
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                        Register.this.startActivity(i);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                Map<String, Integer> perms = new HashMap<>();
+                // Initial
+                perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                // Fill with results
+                for (int i = 0; i < permissions.length; i++)
+                    perms.put(permissions[i], grantResults[i]);
+                // Check for ACCESS_FINE_LOCATION
+                if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    // All Permissions Granted
+                    selectImage();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(Register.this, "Some Permission is Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+            break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private class mDateSetListener

@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mystashapp.mystashappproject">
 
-    <uses-sdk android:maxSdkVersion="22" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -39,7 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".home.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,7 +101,7 @@
             android:name=".home.mystash_box.ReviewDetailsList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Cite_Points"
+            android:name=".home.Cite_Points"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.mycards_box.MyCards"
@@ -148,10 +146,10 @@
             android:name=".helper.ImageCropActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".businessMapActivity"
+            android:name=".home.businessMapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Messages"
+            android:name=".home.Messages"
             android:screenOrientation="portrait" />
         <!-- START Added for GCM -->
         <receiver

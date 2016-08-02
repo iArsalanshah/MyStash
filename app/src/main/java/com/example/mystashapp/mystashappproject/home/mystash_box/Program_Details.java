@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;

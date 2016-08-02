@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.helper.BarcodeGeneratorActivity;
 import com.example.mystashapp.mystashappproject.helper.SimpleScannerActivity;
@@ -80,7 +80,10 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             editText_generator_barcode.setText(SimpleScannerActivity.barcodeText);
             String barcode = editText_generator_barcode.getText().toString();
             generateBarcode(barcode);
-            imageView_captureBarcode.setImageBitmap(bitmap);
+            if (bitmap == null) {
+                Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+            } else
+                imageView_captureBarcode.setImageBitmap(bitmap);
         } else if (!isComesFromDetail) {
             editText_generator_barcode.setText("");
         }
@@ -102,20 +105,25 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                 startActivity(new Intent(takeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_generate_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 2) {
+                if (editText_generator_barcode.getText().toString().length() > 0) {
                     generateBarcode(editText_generator_barcode.getText().toString());
-                    imageView_captureBarcode.setImageBitmap(bitmap);
+                    if (bitmap == null) {
+                        Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+                    } else
+                        imageView_captureBarcode.setImageBitmap(bitmap);
                 } else
                     Toast.makeText(takeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_next_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 2) {
-
+                if (editText_generator_barcode.getText().toString().length() > 0) {
                     //Convert to byte array
                     if (bitmap == null) {
                         generateBarcode(editText_generator_barcode.getText().toString());
                     }
-                    uploadBarcodeImage();
+                    if (bitmap == null) {
+                        Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+                    } else
+                        uploadBarcodeImage();
                 } else
                     Toast.makeText(takeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
                 break;
@@ -186,7 +194,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void generateBarcode(String barcode) {//
+    public void generateBarcode(String barcode) {
         BarcodeGeneratorActivity barcodeGeneratorActivity = new BarcodeGeneratorActivity();
         try {
             bitmap = barcodeGeneratorActivity.encodeAsBitmap(barcode, SimpleScannerActivity.barcodeFormat, 600, 300);

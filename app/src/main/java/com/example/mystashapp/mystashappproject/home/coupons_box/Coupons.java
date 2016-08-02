@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.home.flyers_box.Flyers_Available;
 import com.example.mystashapp.mystashappproject.pojo.categories_coupons_pojo.CategoriesCoupons;

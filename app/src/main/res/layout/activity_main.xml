@@ -19,7 +19,8 @@
                 android:layout_width="60dp"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:padding="16dp"
+                android:layout_marginLeft="2dp"
+                android:padding="15dp"
                 android:src="@drawable/titlebar_menu_selector" />
         </RelativeLayout>
 

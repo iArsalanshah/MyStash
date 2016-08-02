@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.GetCardsList;
 import com.example.mystashapp.mystashappproject.pojo.getcardslist_pojo.Getloyalty;
@@ -115,6 +115,17 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
         progress = new ProgressDialog(this);
         createButton = (Button) findViewById(R.id.button_create_loyalty);
         searchView_Addcards = (android.widget.SearchView) findViewById(R.id.searchView_Addcards);
+        int searchCloseButtonId = searchView_Addcards.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView) this.searchView_Addcards.findViewById(searchCloseButtonId);
+// Set on click listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hidesoftkeyboard(v);
+                searchView_Addcards.setQuery("", false);
+            }
+        });
     }
 
     public void imgBack_MyCards(View view) {
@@ -123,17 +134,17 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        try {
-            adapter.getFilter().filter(query);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        hidesoftkeyboard(getCurrentFocus());
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        try {
+            adapter.getFilter().filter(newText);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+//        hidesoftkeyboard(getCurrentFocus());
         return false;
     }
 

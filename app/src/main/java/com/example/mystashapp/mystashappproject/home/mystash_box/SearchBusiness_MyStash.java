@@ -6,18 +6,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -27,13 +24,14 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.pojo.add_stash.AddStash;
 import com.example.mystashapp.mystashappproject.pojo.customer_check_in.CustomerCheckIn;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.SearchBusiness;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
+import com.example.mystashapp.mystashappproject.singleton.MyLocation;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
 import com.google.android.gms.common.ConnectionResult;
@@ -51,7 +49,9 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,26 +61,24 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private static final int ERROR_DIALOG_REQUEST = 9001;
     public static boolean IS_CHECK_IN = false;
     public RecyclerView_SBAdapter2 mAdapter;
-    public ArrayList<LatLng> latLngs;
     SupportMapFragment mapFragment;
     TextView altText;
     ImageView search;
-    Marker oldMarkers;
     Marker userMarker;
+    private ArrayList<Marker> oldMarkers;
     private RecyclerView mRecyclerView;
-    private ProgressDialog lv;
+    private ProgressDialog progressDialog;
     private SearchView search_view;
     private int attempts = 1;
-    private SharedPreferences sharedPreferences;
-    private String lat;
-    private String lng;
+    private double lat;
+    private double lng;
     private GoogleMap mGoogleMap;
-    private ArrayList<Searchnearby> arrSearchBusiness;
-    private Button btnMapSB;
+    private List<Searchnearby> mainSB_List;
     private Users userObj;
     private TextView tvFilter;
-    private List<Searchnearby> mStringFilterList;
-    private boolean backToHome;
+    private List<Searchnearby> filtered_SB_List;
+    private HashMap<Marker, Searchnearby> infoWindowMarkers;
+    private Map<Marker, Integer> markerPositions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,33 +130,34 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     private void init() {
-        //back to home
-        backToHome = getIntent().getBooleanExtra("backToHome", false);
         //for latlng
-        sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
-        lat = sharedPreferences.getString(Constant_util.USER_LAT, "0");
-        lng = sharedPreferences.getString(Constant_util.USER_LONG, "0");
+        MyLocation myLocation = MyLocation.getInstance();
+        lat = myLocation.getLat();
+        lng = myLocation.getLng();
         altText = (TextView) findViewById(R.id.list_searchBusiness_altText);
         search_view = (SearchView) findViewById(R.id.search_view);
 
         search = (ImageView) findViewById(R.id.img_search_business);
-        btnMapSB = (Button) findViewById(R.id.btnMapSB);
 
         //RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_SearchBusiness);
-
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         if (mRecyclerView != null) {
             mRecyclerView.setHasFixedSize(true);
         }
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mainSB_List = new ArrayList<>();
+        filtered_SB_List = new ArrayList<>();
+        mAdapter = new RecyclerView_SBAdapter2(this);
+        mRecyclerView.setAdapter(mAdapter);
+
+
         EditText et = (EditText) search_view.findViewById(search_view.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
         et.setTextColor(Color.BLACK);
-
-        //LoadingView
-        lv = new ProgressDialog(this);
-        lv.setMessage("Loading...");
-        btnMapSB.setClickable(false);
+        //Progress Dialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+//        btnMapSB.setClickable(false);
 
         //SupportMapFragment
         mapFragment =
@@ -170,67 +169,107 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             mapFragment.getView().setVisibility(View.GONE);
 
         tvFilter = (TextView) findViewById(R.id.tvFilter);
+        oldMarkers = new ArrayList<>();
+        markerPositions = new HashMap<>();
+        //Retrofit Callback
+        getRequest(Constant_util.DEFAULT_RADIUS);
     }
 
     void getRequest(final float defaultRadius) {
         //for cid
         userObj = CustomSharedPref.getUserObject(SearchBusiness_MyStash.this);
-        lv.show();
+        progressDialog.show();
         Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
-                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), lat, lng,
+                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), String.valueOf(lat), String.valueOf(lng),
                 defaultRadius
         );
-        Log.d(Constant_util.LOG_TAG, "getRequest: " + lat + " " + lng);
         call.enqueue(new Callback<SearchBusiness>() {
 
             @Override
             public void onResponse(Call<SearchBusiness> call, Response<SearchBusiness> response) {
-                lv.dismiss();
-                try {
-                    SearchBusiness businessResponse = response.body();
-                    if (businessResponse.getHeader().getSuccess().equals("1")) {
-                        if (businessResponse.getBody().getSearchnearby().isEmpty() && businessResponse.getBody().getSearchnearby().size() == 0) {
-//                            btnMapSB.setClickable(false);
-                            altText.setVisibility(View.VISIBLE);
-//                            tvFilter.setClickable(false);
-                        } else {
-                            arrSearchBusiness = new
-                                    ArrayList<>(businessResponse.getBody().getSearchnearby());
-                            mAdapter = new RecyclerView_SBAdapter2(SearchBusiness_MyStash.this, arrSearchBusiness);
-                            mRecyclerView.setAdapter(mAdapter);
-                            btnMapSB.setClickable(true);
-                            mAdapter.notifyDataSetChanged();
-                            tvFilter.setClickable(true);
-                        }
-                    } else if (businessResponse.getHeader().getSuccess().equals("0")) {
-                        btnMapSB.setClickable(false);
-                        tvFilter.setClickable(false);
-                        Toast.makeText(SearchBusiness_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                SearchBusiness webResponse = response.body();
+                if (webResponse == null) {
+                    Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    search.setClickable(false);
+                } else if (webResponse.getHeader().getSuccess().equals("1")) {
+                    if (altText.getVisibility() == View.VISIBLE) {
+                        altText.setVisibility(View.GONE);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (!search.isClickable()) {
+                        search.setClickable(true);
+                    }
+                    if (!SearchBusiness_MyStash.IS_CHECK_IN) {
+                        mainSB_List.clear();
+                        filtered_SB_List.clear();
+                        mainSB_List = webResponse.getBody().getSearchnearby();
+                        filtered_SB_List = webResponse.getBody().getSearchnearby();
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        mainSB_List.clear();
+                        filtered_SB_List.clear();
+                        for (int i = 0; i < webResponse.getBody().getSearchnearby().size(); i++) {
+                            if (webResponse.getBody().getSearchnearby().get(i).getIsstash().equals("0")) {
+                                mainSB_List.add(webResponse.getBody().getSearchnearby().get(i));
+                                filtered_SB_List.add(webResponse.getBody().getSearchnearby().get(i));
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    if (mainSB_List.size() == 0) {
+                        altText.setVisibility(View.VISIBLE);
+                        search.setClickable(false);
+                    }
+                } else {
+                    search.setClickable(false);
+                    Toast.makeText(SearchBusiness_MyStash.this, "" + webResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
+//                try {
+//                    SearchBusiness businessResponse = response.body();
+//                    if (businessResponse.getHeader().getSuccess().equals("1")) {
+//                        if (businessResponse.getBody().getSearchnearby().isEmpty() && businessResponse.getBody().getSearchnearby().size() == 0) {
+////                            btnMapSB.setClickable(false);
+//                            altText.setVisibility(View.VISIBLE);
+////                            tvFilter.setClickable(false);
+//                        } else {
+//                            mainSB_List = new
+//                                    ArrayList<>(businessResponse.getBody().getSearchnearby());
+//                            mAdapter = new RecyclerView_SBAdapter2(SearchBusiness_MyStash.this, mainSB_List);
+//                            mRecyclerView.setAdapter(mAdapter);
+////                            btnMapSB.setClickable(true);
+////                            mAdapter.notifyDataSetChanged();
+////                            tvFilter.setClickable(true);
+//                        }
+//                    } else if (businessResponse.getHeader().getSuccess().equals("0")) {
+//                        btnMapSB.setClickable(false);
+//                        tvFilter.setClickable(false);
+//                        Toast.makeText(SearchBusiness_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
             public void onFailure(Call<SearchBusiness> call, Throwable t) {
-                lv.dismiss();
-                btnMapSB.setClickable(false);
-                tvFilter.setClickable(false);
-                Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                search.setClickable(false);
+                Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void backMyStashRecyclerViewImageBtn(View view) {
-        if (!backToHome)
-            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        else finish();
+        finish();
+//        if (!backToHome)
+//            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//        else finish();
     }
 
     public void BtnListSearchBusiness(View view) {
         if (mapFragment.getView() != null) {
-            tvFilter.setClickable(true);
+            tvFilter.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.GONE);
             search.setVisibility(View.VISIBLE);
         }
@@ -241,36 +280,44 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         if (servicesOK()) {
             ArrayList<LatLng> infoDataSetter = null;
             mRecyclerView.setVisibility(View.GONE);
-            tvFilter.setClickable(false);
             if (mapFragment.getView() != null) {
                 mapFragment.getView().setVisibility(View.VISIBLE);
                 search.setVisibility(View.GONE);
-                latLngs = new ArrayList<>();
+                tvFilter.setVisibility(View.GONE);
                 try {
-                    for (int i = 0; i < mStringFilterList.size(); i++) {
-                        latLngs.add(i, new LatLng(Double.valueOf(mStringFilterList.get(i).getLat()), Double.valueOf(mStringFilterList.get(i).getLongt())));
-                    }
-                    infoDataSetter = new ArrayList<>();
+//                    for (int i = 0; i < filtered_SB_List.size(); i++) {
+//                        latLngs.add(i, new LatLng(Double.valueOf(filtered_SB_List.get(i).getLat()), Double.valueOf(filtered_SB_List.get(i).getLongt())));
+//                    }
+//                    infoDataSetter = new ArrayList<>();
                     //for Business Pointers
                     if (oldMarkers != null) {
-                        oldMarkers.remove();
+                        for (Marker marker : oldMarkers) {
+                            marker.remove();
+                        }
                     }
                     MarkerOptions options = new MarkerOptions();
-                    if (latLngs.size() > 0)
-                        for (LatLng point : latLngs) {
-                            options.position(point)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
-                            oldMarkers = mGoogleMap.addMarker(options);
-                            infoDataSetter.add(options.getPosition());
-                        }
+                    infoWindowMarkers = new HashMap<>();
+                    for (int i = 0; i < filtered_SB_List.size(); i++) {
+                        LatLng latLng = new LatLng(Double.valueOf(filtered_SB_List.get(i).getLat()),
+                                Double.valueOf(filtered_SB_List.get(i).getLongt()));
+                        options.position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
+                        Marker m = mGoogleMap.addMarker(options);
+                        oldMarkers.add(i, m);
+                        infoWindowMarkers.put(oldMarkers.get(i), filtered_SB_List.get(i));
+                        markerPositions.put(m, i);
+                    }
+//
+//                    if (latLngs.size() > 0)
+//                        for (LatLng point : latLngs) {
+//                            options.position(point)
+//                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
+//                            oldMarkers = mGoogleMap.addMarker(options);
+//                            infoDataSetter.add(options.getPosition());
+//                        }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                 }
-            }
-            if (mGoogleMap != null) {
-                final ArrayList<LatLng> finalInfoDataSetter = infoDataSetter;
                 mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
                     @Override
                     public View getInfoWindow(Marker marker) {
                         return null;
@@ -278,32 +325,39 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
                     @Override
                     public View getInfoContents(Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.layout_info_window, null);
-                        ImageView img = (ImageView) v.findViewById(R.id.info_img);
-                        TextView title = (TextView) v.findViewById(R.id.info_title);
-                        TextView address = (TextView) v.findViewById(R.id.info_address);
-                        if (marker.getPosition().equals(userMarker.getPosition())) {
-                            img.setVisibility(View.GONE);
-                            title.setText("your location");
-                            address.setVisibility(View.GONE);
-                            v.findViewById(R.id.infoWindowContainer).setMinimumWidth(150 / (160));
+                        if (userMarker.equals(marker)) {
+                            return null;
                         } else {
+                            final Searchnearby obj = infoWindowMarkers.get(marker);
+                            if (obj == null) {
+                                return null;
+                            }
+                            View v = getLayoutInflater().inflate(R.layout.layout_info_window, null);
+                            ImageView img = (ImageView) v.findViewById(R.id.info_img);
+                            TextView title = (TextView) v.findViewById(R.id.info_title);
+                            TextView address = (TextView) v.findViewById(R.id.info_address);
                             try {
-                                for (int i = 0; i < arrSearchBusiness.size(); i++) {
-                                    if (marker.getPosition().equals(finalInfoDataSetter.get(i))) {
-                                        title.setText(arrSearchBusiness.get(i).getName());
-                                        address.setText(arrSearchBusiness.get(i).getAddress());
-                                        Picasso.with(SearchBusiness_MyStash.this)
-                                                .load(arrSearchBusiness.get(i).getLogourl())
-                                                .placeholder(R.drawable.placeholder)
-                                                .into(img);
-                                    }
-                                }
-                            } catch (Exception ex) {
+                                title.setText(obj.getName());
+                                address.setText(obj.getAddress());
+                                Picasso.with(SearchBusiness_MyStash.this)
+                                        .load(obj.getLogourl())
+                                        .placeholder(R.drawable.placeholder)
+                                        .into(img);
+                            } catch (NullPointerException ex) {
                                 ex.printStackTrace();
                             }
+                            return v;
                         }
-                        return v;
+                    }
+                });
+                mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        for (int i = 0; i < markerPositions.size(); i++) {
+                            if (markerPositions.get(marker).equals(i))
+                                startActivity(new Intent(SearchBusiness_MyStash.this, ListDetails_MyStash.class)
+                                        .putExtra("id", new Gson().toJson(filtered_SB_List.get(i))));
+                        }
                     }
                 });
             }
@@ -336,41 +390,27 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         //User Pointer
         mGoogleMap = googleMap;
         userMarker = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.valueOf(lat), Double.valueOf(lng)))
-                .snippet("your location")
+                .position(new LatLng(lat, lng))
+                .snippet("Your location")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));//fromResource(R.drawable.home_location)
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(lat), Double.valueOf(lng)), 12);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 12);
         googleMap.moveCamera(update);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-//                Intent intent = new Intent(SearchBusiness_MyStash.this, ListDetails_MyStash.class);
-//                String intVal = marker.getId().replaceAll("[^0-9]", "");
-//                Log.d(Constant_util.LOG_TAG, intVal);
-//                String json = (new Gson().toJson(arrSearchBusiness.get(Integer.valueOf(intVal))));
-//                intent.putExtra("id", json);
-//                startActivity(intent);
-            }
-        });
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        try {
-            mAdapter.getFilter().filter(query);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-//        if (newText.equals("")) {
-//            Log.d(Constant_util.LOG_TAG, "onQueryTextChange: " + "empty");
-//        }
+        try {
+            mAdapter.getFilter().filter(newText);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
@@ -384,22 +424,8 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Retrofit Callback
-        getRequest(Constant_util.DEFAULT_RADIUS);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!backToHome)
-            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        else finish();
-    }
-
     public class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
-        private List<Searchnearby> searchNearbyList;
+        //        private List<Searchnearby> searchNearbyList;
         private Context mContext;
         View.OnClickListener clickListener = new View.OnClickListener() {
             public int position;
@@ -410,7 +436,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         (RecyclerView_SBCustomViewHolder2) view.getTag();
                 position = holder.getAdapterPosition();
                 if (!SearchBusiness_MyStash.IS_CHECK_IN) {
-                    Searchnearby s = searchNearbyList.get(position);
+                    Searchnearby s = filtered_SB_List.get(position);
                     String jsonBusiness = (new Gson()).toJson(s);
                     Intent intent = new Intent(mContext, ListDetails_MyStash.class);
                     intent.putExtra("id", jsonBusiness);
@@ -420,112 +446,14 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 }
             }
         };
+
         private ValueFilter valueFilter;
 
-        public RecyclerView_SBAdapter2(Context context, List<Searchnearby> searchnearbies) {
-            searchNearbyList = searchnearbies;
-            mStringFilterList = searchnearbies;
+        public RecyclerView_SBAdapter2(Context context) {
+//            searchNearbyList = searchnearbies;
+//            mStringFilterList = searchnearbies;
             this.mContext = context;
         }
-
-        private void getCheckingService(final int position) {
-            final ProgressDialog dialog = new ProgressDialog(mContext);
-            dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large);
-            dialog.show();
-            Call<CustomerCheckIn> checkInCall = WebServicesFactory.getInstance()
-                    .checkInCustomer(Constant_util.ACTION_CUSTOMER_CHECKIN,
-                            userObj.getId(), searchNearbyList.get(position).getId());
-
-            checkInCall.enqueue(new Callback<CustomerCheckIn>() {
-                @Override
-                public void onResponse(Call<CustomerCheckIn> call, Response<CustomerCheckIn> response) {
-                    dialog.dismiss();
-                    CustomerCheckIn checkIn = response.body();
-                    switch (checkIn.getHeader().getSuccess()) {
-                        case "1":
-                            if (searchNearbyList.get(position).getIsstash().equals("1")) {
-                                new AlertDialog.Builder(SearchBusiness_MyStash.this)
-                                        .setCancelable(false)
-                                        .setTitle("Thanks for visiting")
-                                        .setMessage("Present yourself at the cash counter " +
-                                                "and mention your name when making " +
-                                                "your purchase. See you again soon")
-                                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                            }
-                                        }).show();
-                            } else {
-                                new AlertDialog.Builder(SearchBusiness_MyStash.this)
-                                        .setCancelable(false)
-                                        .setTitle("Thanks for visiting")
-                                        .setMessage("To start earning rewards please add us to your stash")
-                                        .setPositiveButton("Add to stash", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                addStash(searchNearbyList.get(position));
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                            }
-                                        })
-                                        .show();
-                            }
-                            break;
-                        case "0":
-                            Toast.makeText(mContext, "Checkin Unsuccessful", Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Toast.makeText(mContext, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<CustomerCheckIn> call, Throwable t) {
-                    dialog.dismiss();
-                    Toast.makeText(mContext, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        public void addStash(Searchnearby searchnearby) {
-            String check = Constant_util.ACTION_ADD_STASH + "**** ADD ****" + searchnearby.getId() + " " + userObj.getId();
-            Log.d(Constant_util.LOG_TAG, check);
-            Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), userObj.getId());
-            call.enqueue(new Callback<AddStash>() {
-                @Override
-                public void onResponse(Call<AddStash> call, Response<AddStash> response) {
-                    AddStash stash = response.body();
-                    if (stash.getHeader().getSuccess().equals("1")) {
-//                    Toast.makeText(ListDetails_MyStash.this, " " + stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        new android.support.v7.app.AlertDialog.Builder(SearchBusiness_MyStash.this)
-                                .setMessage(stash.getHeader().getMessage())
-                                .setTitle("Message")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                })
-                                .show();
-                    } else if (stash.getHeader().getSuccess().equals("0")) {
-                        Toast.makeText(SearchBusiness_MyStash.this, "Stash Already Exist", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AddStash> call, Throwable t) {
-                    Toast.makeText(SearchBusiness_MyStash.this, "onFailure...", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
 
         @Override
         public RecyclerView_SBCustomViewHolder2 onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -534,24 +462,119 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         }
 
         public void onBindViewHolder(RecyclerView_SBCustomViewHolder2 customViewHolder, int i) {
-            Searchnearby sbNearBy = searchNearbyList.get(i);
-            Picasso.with(mContext).load(sbNearBy.getLogourl())
+            Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
                     .error(R.drawable.placeholder_shadow) //optional
                     .placeholder(R.drawable.placeholder_shadow) //optional
                     .into(customViewHolder.thumbnail);
 
             //Setting text view title,address,rating,distance
-            customViewHolder.tvTileAddress.setText(sbNearBy.getName());
-            customViewHolder.tvAreaAddress.setText(sbNearBy.getAddress());
-            customViewHolder.tvMeterAddress.setText(String.valueOf(sbNearBy.getDistance().intValue()) + "m");
-            customViewHolder.rattingBar.setRating(sbNearBy.getRatingvalue());
+            customViewHolder.tvTileAddress.setText(filtered_SB_List.get(i).getName());
+            customViewHolder.tvAreaAddress.setText(filtered_SB_List.get(i).getAddress());
+            customViewHolder.tvMeterAddress.setText(String.valueOf(filtered_SB_List.get(i).getDistance().intValue()) + "m");
+            customViewHolder.rattingBar.setRating(filtered_SB_List.get(i).getRatingvalue());
             customViewHolder.thumbnail.setOnClickListener(clickListener);
             customViewHolder.thumbnail.setTag(customViewHolder);
         }
 
         @Override
         public int getItemCount() {
-            return searchNearbyList.size();
+            return filtered_SB_List.size();
+        }
+
+
+        private void getCheckingService(final int position) {
+            final ProgressDialog dialog = new ProgressDialog(mContext);
+            dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large);
+            dialog.show();
+            Call<CustomerCheckIn> checkInCall = WebServicesFactory.getInstance()
+                    .checkInCustomer(Constant_util.ACTION_CUSTOMER_CHECKIN,
+                            userObj.getId(), filtered_SB_List.get(position).getId());
+
+            checkInCall.enqueue(new Callback<CustomerCheckIn>() {
+                @Override
+                public void onResponse(Call<CustomerCheckIn> call, Response<CustomerCheckIn> response) {
+                    dialog.dismiss();
+                    CustomerCheckIn checkIn = response.body();
+                    if (checkIn == null) {
+                        Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    } else if (checkIn.getHeader().getSuccess().equals("1")) {
+                        if (filtered_SB_List.get(position).getIsstash().equals("1")) {  //todo due to new update this will always false
+                            new AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                    .setCancelable(false)
+                                    .setTitle("Thanks for visiting")
+                                    .setMessage("Present yourself at the cash counter " +
+                                            "and mention your name when making " +
+                                            "your purchase. See you again soon")
+                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    }).show();
+                        } else {
+                            new AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                    .setCancelable(false)
+                                    .setTitle("Thanks for visiting")
+                                    .setMessage("To start earning rewards please add us to your stash")
+                                    .setPositiveButton("Add to stash", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            addStash(filtered_SB_List.get(position), position);
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    } else {
+                        Toast.makeText(mContext,
+                                checkIn.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CustomerCheckIn> call, Throwable t) {
+                    dialog.dismiss();
+                    Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        public void addStash(Searchnearby searchnearby, final int position) {
+            Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), userObj.getId());
+            call.enqueue(new Callback<AddStash>() {
+                @Override
+                public void onResponse(Call<AddStash> call, Response<AddStash> response) {
+                    AddStash stash = response.body();
+                    if (stash == null) {
+                        Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    } else if (stash.getHeader().getSuccess().equals("1")) {
+                        filtered_SB_List.remove(position);
+                        mAdapter.notifyDataSetChanged();
+                        new android.support.v7.app.AlertDialog.Builder(SearchBusiness_MyStash.this)
+                                .setMessage("Add my stash successful")
+                                .setTitle("Message")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                })
+                                .show();
+                    } else {
+                        Toast.makeText(SearchBusiness_MyStash.this, stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddStash> call, Throwable t) {
+                    Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override
@@ -586,34 +609,34 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 FilterResults results = new FilterResults();
                 if (constraint != null && constraint.length() > 0) {
                     ArrayList<Searchnearby> filterList = new ArrayList<>();
-                    for (int i = 0; i < mStringFilterList.size(); i++) {
-                        if (mStringFilterList.get(i).getName().toUpperCase().contains(constraint.toString().toUpperCase())) {
-                            Searchnearby sb = new Searchnearby(mStringFilterList.get(i).getSelected(), mStringFilterList.get(i).getId(),
-                                    mStringFilterList.get(i).getName(), mStringFilterList.get(i).getCompanyname(), mStringFilterList.get(i).getAddress(),
-                                    mStringFilterList.get(i).getContact(), mStringFilterList.get(i).getEmail(), mStringFilterList.get(i).getLogourl(),
-                                    mStringFilterList.get(i).getUid(), mStringFilterList.get(i).getCity(), mStringFilterList.get(i).getPostalcode(),
-                                    mStringFilterList.get(i).getProvince(), mStringFilterList.get(i).getCountry(), mStringFilterList.get(i).getContactname(),
-                                    mStringFilterList.get(i).getLat(), mStringFilterList.get(i).getLongt(), mStringFilterList.get(i).getRatingCount(),
-                                    mStringFilterList.get(i).getRating(), mStringFilterList.get(i).getIsCitepoint(), mStringFilterList.get(i).getStatus(),
-                                    mStringFilterList.get(i).getIsStamp(), mStringFilterList.get(i).getImages(), mStringFilterList.get(i).getRatingvalue(),
-                                    mStringFilterList.get(i).getStashid(), mStringFilterList.get(i).getIsstash(), mStringFilterList.get(i).getDistance(),
-                                    mStringFilterList.get(i).getReviews());
+                    for (int i = 0; i < mainSB_List.size(); i++) {
+                        if (mainSB_List.get(i).getName().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                            Searchnearby sb = new Searchnearby(mainSB_List.get(i).getSelected(), mainSB_List.get(i).getId(),
+                                    mainSB_List.get(i).getName(), mainSB_List.get(i).getCompanyname(), mainSB_List.get(i).getAddress(),
+                                    mainSB_List.get(i).getContact(), mainSB_List.get(i).getEmail(), mainSB_List.get(i).getLogourl(),
+                                    mainSB_List.get(i).getUid(), mainSB_List.get(i).getCity(), mainSB_List.get(i).getPostalcode(),
+                                    mainSB_List.get(i).getProvince(), mainSB_List.get(i).getCountry(), mainSB_List.get(i).getContactname(),
+                                    mainSB_List.get(i).getLat(), mainSB_List.get(i).getLongt(), mainSB_List.get(i).getRatingCount(),
+                                    mainSB_List.get(i).getRating(), mainSB_List.get(i).getIsCitepoint(), mainSB_List.get(i).getStatus(),
+                                    mainSB_List.get(i).getIsStamp(), mainSB_List.get(i).getImages(), mainSB_List.get(i).getRatingvalue(),
+                                    mainSB_List.get(i).getStashid(), mainSB_List.get(i).getIsstash(), mainSB_List.get(i).getDistance(),
+                                    mainSB_List.get(i).getReviews());
                             filterList.add(sb);
                         }
                     }
                     results.count = filterList.size();
                     results.values = filterList;
                 } else {
-                    results.count = mStringFilterList.size();
-                    results.values = mStringFilterList;
+                    results.count = mainSB_List.size();
+                    results.values = mainSB_List;
                 }
                 return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                searchNearbyList = (ArrayList<Searchnearby>) results.values;
-                notifyDataSetChanged();
+                filtered_SB_List = (List<Searchnearby>) results.values;
+                mAdapter.notifyDataSetChanged();
             }
         }
     }

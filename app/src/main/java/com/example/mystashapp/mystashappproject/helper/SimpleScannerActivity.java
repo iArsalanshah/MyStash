@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
@@ -16,8 +15,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  */
 public class SimpleScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
 
+    public static final BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
     public static String barcodeText = "";
-    public static BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
     private ZXingScannerView mScannerView;
 
     @Override
@@ -55,7 +54,7 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
             finish();
         }
         barcodeText = result.getText();
-        barcodeFormat = result.getBarcodeFormat();
+//        barcodeFormat = result.getBarcodeFormat();
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
     }

@@ -88,8 +88,7 @@
             android:layout_centerVertical="true"
             android:onClick="searchButton"
             android:padding="3dp"
-            android:src="@android:drawable/ic_menu_search"
-            android:visibility="visible" />
+            android:src="@android:drawable/ic_menu_search" />
 
     </RelativeLayout>
 

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.add_rating_pojo.ADDRating;
 import com.example.mystashapp.mystashappproject.pojo.add_review_pojo.ADDReview;

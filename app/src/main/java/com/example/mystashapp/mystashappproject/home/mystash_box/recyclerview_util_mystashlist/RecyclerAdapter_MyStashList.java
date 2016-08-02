@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.example.mystashapp.mystashappproject.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.home.mystash_box.ListDetails_MyStash;
-import com.example.mystashapp.mystashappproject.home.mystash_box.List_MyStash;
 import com.example.mystashapp.mystashappproject.pojo.get_my_stash_list.Stashlist;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.remove_stash.RemoveStash;
@@ -36,6 +35,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
     private final Users userObject;
     Context context;
     private ArrayList<Stashlist> searchNearbyList;
+
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -62,14 +62,13 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         userObject = CustomSharedPref.getUserObject(context);
     }
 
-
     @Override
     public RecyclerViewHolder_MyStashList onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_mystash_recyclerview_selected_items, parent, false);
         return new RecyclerViewHolder_MyStashList(v);
     }
 
-    public void onBindViewHolder(RecyclerViewHolder_MyStashList holder, final int position) {
+    public void onBindViewHolder(final RecyclerViewHolder_MyStashList holder, int position) {
         Stashlist sbNearBy = searchNearbyList.get(position);
 
         //setting image using picasso library
@@ -86,12 +85,12 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
         holder.deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeItem(searchNearbyList.get(position).getId());
+                removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
             }
         });
     }
 
-    private void removeItem(final String id) {
+    private void removeDialog(final String id, final int adapterPosition) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Confirmation");
         dialog.setMessage("Are you sure you want to remove this business " +
@@ -107,13 +106,13 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                onRemoveStashItem(id);
+                onRemoveStashItem(id, adapterPosition);
             }
         });
         dialog.show();
     }
 
-    private void onRemoveStashItem(String id) {
+    private void onRemoveStashItem(String id, final int adapterPosition) {
         // webservice should be called here.
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Deleting...");
@@ -126,14 +125,12 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
             public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
                 dialog.dismiss();
                 RemoveStash removeStash = response.body();
+                if (removeStash == null) {
 
-                if (removeStash.getHeader().getSuccess().equals("1")) {
+                } else if (removeStash.getHeader().getSuccess().equals("1")) {
                     Toast.makeText(context, "" + removeStash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-//                        runOnUiThread(new Runnable() {
-//                            public void run() {
-                    context.startActivity(new Intent(context, List_MyStash.class));
-//                            }
-//                        });
+                    searchNearbyList.remove(adapterPosition);
+                    notifyDataSetChanged();
                 } else {
                     Toast.makeText(context, "" + removeStash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -142,7 +139,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onFailure(Call<RemoveStash> call, Throwable t) {
                 dialog.dismiss();
-                Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
 

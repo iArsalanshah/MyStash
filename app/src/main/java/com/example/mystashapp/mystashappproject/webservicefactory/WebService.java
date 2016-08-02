@@ -95,7 +95,7 @@ public interface WebService {
 
     @POST("/mobileservice_new.php")
     Call<RegisterUser> getForgotPwd(@Query("action") String action,
-                                    @Query("email") String email); // Need to check how to send id in forgot pwd
+                                    @Query("email") String email);
 
     @POST("/mobileservice_new.php")
     Call<AddStash> getAddStash(@Query("action") String add_my_stash,

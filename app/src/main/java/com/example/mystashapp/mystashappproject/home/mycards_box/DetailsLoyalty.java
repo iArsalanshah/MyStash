@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.Loyaltycard;
@@ -211,7 +211,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                     editor.putString("cardNumber", convertedObjEdit.getCardno());
                     editor.putString("cardUrName", convertedObjEdit.getCardno());
                     editor.putString("cardName", convertedObjEdit.getCardno());
-                    editor.putString("cardNote", convertedObjEdit.getCardno());
+                    editor.putString("cardNote", convertedObjEdit.getCardno()).apply();
 
                     intent.putExtra("comesFromDetail", true);
                     startActivity(intent);

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +16,10 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.Constant_util;
-import com.example.mystashapp.mystashappproject.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.gcm.RegistrationIntentService;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
+import com.example.mystashapp.mystashappproject.home.MainActivity;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.LoginUser;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
@@ -32,6 +31,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -62,14 +62,18 @@ public class Login_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
+        LoginManager.getInstance().logOut();
         callbackManager = CallbackManager.Factory.create();
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            //do something about the Android version being too new
-            isMarshmallow = true;
-        }
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//            //do something about the Android version being too new
+//            isMarshmallow = true;
+//        }
         setContentView(R.layout.activity_login);
         //btnFB = (Button)findViewById(R.id.fbLoginBtn);
-
+        if (!getSharedPreferences(Constant_util.PREFS_NAME, 0).getString(Constant_util.IS_LOGIN, "").equals("")) {
+            startActivity(new Intent(Login_activity.this, MainActivity.class));
+            finish();
+        }
         initNotify();
 
         //initializing Views
@@ -211,24 +215,6 @@ public class Login_activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isMarshmallow) {
-            new AlertDialog.Builder(this).setCancelable(false)
-                    .setTitle("Version Error")
-                    .setMessage("App does not support Marshmallow version")
-                    .setPositiveButton("Exit App", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .show();
-        } else {
-            SharedPreferences sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
-            if (sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
-                startActivity(new Intent(this, MainActivity.class));
-            }
-        }
-        // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
 
@@ -254,9 +240,11 @@ public class Login_activity extends AppCompatActivity {
 //                    users.getBody().getUsers();
                     if (users.getHeader().getSuccess().equals("1")) {
                         prog.dismiss();
-                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        getSharedPreferences(Constant_util.PREFS_NAME, 0).edit().putString(Constant_util.IS_LOGIN, Constant_util.IS_LOGIN).apply();
                         CustomSharedPref.setUserObject(Login_activity.this, users.getBody().getUsers());
                         startActivity(new Intent(Login_activity.this, MainActivity.class));
+                        finish();
                     } else {
                         prog.dismiss();
                         Toast.makeText(Login_activity.this, users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();

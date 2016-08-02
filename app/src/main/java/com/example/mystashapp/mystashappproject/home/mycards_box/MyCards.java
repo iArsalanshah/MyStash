@@ -25,8 +25,8 @@ import android.widget.Toast;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
-import com.example.mystashapp.mystashappproject.Constant_util;
-import com.example.mystashapp.mystashappproject.MainActivity;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
+import com.example.mystashapp.mystashappproject.home.MainActivity;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.example.mystashapp.mystashappproject.pojo.getmycards_pojo.GetMycards;
@@ -70,8 +70,8 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                startActivity(getIntent());
+                hidesoftkeyboard(v);
+                searchView_cards.setQuery("", false);
             }
         });
     }
@@ -180,17 +180,16 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        try {
-            adapterListview.getFilter().filter(query);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        hidesoftkeyboard(getCurrentFocus());
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        try {
+            adapterListview.getFilter().filter(newText);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
@@ -318,7 +317,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                 @Override
                 public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
 

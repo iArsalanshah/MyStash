@@ -1,4 +1,4 @@
-package com.example.mystashapp.mystashappproject;
+package com.example.mystashapp.mystashappproject.helper;
 
 public class Constant_util {
     public static final String BASE_URL = "http://www.mystash.ca";//http://www.mystash.ca/mobileservice_new.php

@@ -1,4 +1,4 @@
-package com.example.mystashapp.mystashappproject;
+package com.example.mystashapp.mystashappproject.home;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mystashapp.mystashappproject.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
