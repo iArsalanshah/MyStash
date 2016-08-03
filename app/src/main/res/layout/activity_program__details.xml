@@ -137,7 +137,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/white"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:numColumns="5" />
+
+                        <ImageView
+                            android:id="@+id/img_gridview_test"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@android:color/transparent" />
                     </FrameLayout>
 
                 </ViewFlipper>

@@ -2,7 +2,7 @@ package com.example.mystashapp.mystashappproject.home.coupons_box;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.pojo.get_all_coupons_pojo.Coupon;
 import com.example.mystashapp.mystashappproject.pojo.pojo_login.Users;
 import com.example.mystashapp.mystashappproject.pojo.redeem_coupon.RedeemCoupon;
@@ -22,6 +22,8 @@ import com.example.mystashapp.mystashappproject.pojo.remindme_coupon.RemindMe;
 import com.example.mystashapp.mystashappproject.pojo.to_save_coupon_pojo.ToSaveCoupon;
 import com.example.mystashapp.mystashappproject.webservicefactory.CustomSharedPref;
 import com.example.mystashapp.mystashappproject.webservicefactory.WebServicesFactory;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -51,6 +53,7 @@ public class CouponsList_Details extends AppCompatActivity {
     private Coupon cObj;
     private Users cid;
     private ProgressDialog progressDialog;
+    private ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class CouponsList_Details extends AppCompatActivity {
         textViewCouponsUSED = (TextView) findViewById(R.id.textView_Coupons_Details_usedDate);
         textViewCouponsDesc = (TextView) findViewById(R.id.textView_Coupons_Details_Desc);
         progressDialog = new ProgressDialog(CouponsList_Details.this);
+        shareDialog = new ShareDialog(this);
     }
 
     private void clickEvents() {
@@ -106,12 +110,13 @@ public class CouponsList_Details extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, Constant_util.SHARE_TEXT);
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                facebookShare();
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, Constant_util.SHARE_TEXT);
+//                sendIntent.setType("text/plain");
+//                startActivity(sendIntent);
             }
         });
 
@@ -311,5 +316,18 @@ public class CouponsList_Details extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 }).show();
+    }
+
+    //Share on Facebook
+    private void facebookShare() {
+        //todo need to update Content
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle(Constant_util.SHARE_SUBJECT)
+                    .setContentDescription(Constant_util.SHARE_TEXT)
+                    .setContentUrl(Uri.parse("http://mystash.ca/openurl.php"))
+                    .build();
+            shareDialog.show(linkContent);
+        }
     }
 }

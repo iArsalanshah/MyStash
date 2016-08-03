@@ -12,17 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.R;
 import com.example.mystashapp.mystashappproject.animation.AnimationFactory;
+import com.example.mystashapp.mystashappproject.helper.Constant_util;
 import com.example.mystashapp.mystashappproject.pojo.pojo_searchbusiness.Searchnearby;
 import com.example.mystashapp.mystashappproject.pojo.program_stamps.Datum;
 import com.example.mystashapp.mystashappproject.pojo.stampCount.StampCountWebService;
@@ -46,7 +46,7 @@ public class Program_Details extends AppCompatActivity {
     private ViewFlipper viewFlipper;
     private ImageView img1;//, img2;
     private BroadcastReceiver mMyBroadcastReceiver;
-    //    private LinearLayout img2_layout;
+    private FrameLayout img2_layout;
     private String pid;
     private Datum stampObject;
     private ImageView img_item;
@@ -87,7 +87,7 @@ public class Program_Details extends AppCompatActivity {
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
         img1 = (ImageView) findViewById(R.id.img1);
 //        img2 = (ImageView) findViewById(R.id.img2);
-//        img2_layout = (LinearLayout) findViewById(R.id.img2_layout);
+        img2_layout = (FrameLayout) findViewById(R.id.img2_layout);
         gridView_img2 = (GridView) findViewById(R.id.gridView_img2);
         img_item = (ImageView) findViewById(R.id.img_programDetails_item);
         tvTitle_item = (TextView) findViewById(R.id.tv_programDetails_item_title);
@@ -249,18 +249,14 @@ public class Program_Details extends AppCompatActivity {
                 AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT); //http://genzeb.github.io/flip/
             }
         });
-//        img2_layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
-//            }
-//        });
-        gridView_img2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        findViewById(R.id.img_gridview_test).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
                 AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
             }
         });
+
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

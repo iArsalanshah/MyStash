@@ -148,4 +148,5 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerVi
     public int getItemCount() {
         return searchNearbyList.size();
     }
+
 }
