@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mystashapp.mystashappproject.home.flyers_box.Flyers_pdfview">
+    tools:context="com.citemenu.mystash.home.flyers_box.Flyers_pdfview">
 
     <RelativeLayout
         android:id="@+id/relativeLayout_toolbar"

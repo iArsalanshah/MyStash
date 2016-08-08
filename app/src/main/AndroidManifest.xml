@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mystashapp.mystashappproject">
+    package="com.citemenu.mystash">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,15 +19,15 @@
     <!-- Google Services requires a Google account -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="com.example.mystashapp.mystashappproject.permission.C2D_MESSAGE" />
-    <!-- <uses-permission android:name="com.example.mystashapp.mystashappproject.gcm.permission.C2D_MESSAGE" /> -->
+    <uses-permission android:name="com.citemenu.mystash.permission.C2D_MESSAGE" />
+    <!-- <uses-permission android:name="com.citemenu.mystash.gcm.permission.C2D_MESSAGE" /> -->
 
     <permission
-        android:name="com.example.mystashapp.mystashappproject.permission.C2D_MESSAGE"
+        android:name="com.citemenu.mystash.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- <permission -->
-    <!-- android:name="com.example.mystashapp.mystashappproject.gcm.permission.C2D_MESSAGE" -->
+    <!-- android:name="com.citemenu.mystash.gcm.permission.C2D_MESSAGE" -->
     <!-- android:protectionLevel="signature" /> -->
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -89,7 +89,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDIctG065Xna_Xc_JkaAW2ppFCFrn6YuYU" />
+            android:value="AIzaSyDhhL-HQY7_FyhJTFKHCzHidYPLm_6RhwM" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -160,7 +160,7 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.mystashapp.mystashappproject" />
+                <category android:name="com.citemenu.mystash" />
             </intent-filter>
         </receiver>
 

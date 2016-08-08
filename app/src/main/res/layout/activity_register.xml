@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_dark"
-    tools:context="com.example.mystashapp.mystashappproject.login_pages.Register">
+    tools:context="com.citemenu.mystash.login_pages.Register">
 
     <RelativeLayout
         android:id="@+id/toolbarRegister"
@@ -156,7 +156,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center_horizontal" />
 
-                <com.example.mystashapp.mystashappproject.login_pages.MultiSpinner
+                <com.citemenu.mystash.login_pages.MultiSpinner
                     android:id="@+id/multi_spinnerCat"
                     android:layout_width="match_parent"
                     android:layout_height="0dp" />
@@ -179,7 +179,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center_horizontal" />
 
-                <com.example.mystashapp.mystashappproject.login_pages.MultiSpinner
+                <com.citemenu.mystash.login_pages.MultiSpinner
                     android:id="@+id/multi_spinnerInterest"
                     android:layout_width="match_parent"
                     android:layout_height="0dp" />

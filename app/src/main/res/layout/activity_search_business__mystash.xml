@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mystashapp.mystashappproject.home.mystash_box.SearchBusiness_MyStash">
+    tools:context="com.citemenu.mystash.home.mystash_box.SearchBusiness_MyStash">
 
         <RelativeLayout
             android:id="@+id/toolbarMyStashSearchBusiness"

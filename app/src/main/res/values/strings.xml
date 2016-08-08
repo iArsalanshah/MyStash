@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyStash</string>
+    <string name="app_name">My Stash</string>
     <string name="facebook_app_id">205984086449628</string>
     <string name="facebook_app_secret">65bc30d150b1523d86cb4c3ca4d68e2f</string>
     <string name="action_settings">Settings</string>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_login"
-    tools:context="com.example.mystashapp.mystashappproject.login_pages.ActivityForgotPwd">
+    tools:context="com.citemenu.mystash.login_pages.ActivityForgotPwd">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/view"
