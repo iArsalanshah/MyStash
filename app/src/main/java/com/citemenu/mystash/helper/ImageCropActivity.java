@@ -14,7 +14,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +21,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.home.mycards_box.CameraActivity;
 
 import java.io.Closeable;
 import java.io.File;
@@ -244,25 +243,25 @@ public class ImageCropActivity extends Activity {
     }
 
     private void takePic() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            Uri mImageCaptureUri = null;
-            String state = Environment.getExternalStorageState();
-            if (Environment.MEDIA_MOUNTED.equals(state)) {
-                mImageCaptureUri = Uri.fromFile(mFileTemp);
-            } else {
-                /*
-                 * The solution is taken from here: http://stackoverflow.com/questions/10042695/how-to-get-camera-result-as-a-uri-in-data-folder
-	        	 */
-                mImageCaptureUri = com.citemenu.mystash.helper.InternalStorageContentProvider.CONTENT_URI;
-            }
-            takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-            takePictureIntent.putExtra("return-data", true);
-            startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
-        } catch (ActivityNotFoundException e) {
-            Log.e(TAG, "Can't take picture", e);
-            Toast.makeText(this, "Can't take picture", Toast.LENGTH_LONG).show();
-        }
+        Intent takePictureIntent = new Intent(this, CameraActivity.class);
+        startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
+//        try {
+//            Uri mImageCaptureUri = null;
+//            String state = Environment.getExternalStorageState();
+//            if (Environment.MEDIA_MOUNTED.equals(state)) {
+//                mImageCaptureUri = Uri.fromFile(mFileTemp);
+//            } else {
+//                /*
+//                 * The solution is taken from here: http://stackoverflow.com/questions/10042695/how-to-get-camera-result-as-a-uri-in-data-folder
+//	        	 */
+//                mImageCaptureUri = InternalStorageContentProvider.CONTENT_URI;
+//            }
+//            takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+//            takePictureIntent.putExtra("return-data", true);
+//        } catch (ActivityNotFoundException e) {
+//            Log.e(TAG, "Can't take picture", e);
+//            Toast.makeText(this, "Can't take picture", Toast.LENGTH_LONG).show();
+//        }
     }
 
     @Override
@@ -286,9 +285,10 @@ public class ImageCropActivity extends Activity {
         createTempFile();
         if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
-                mImagePath = mFileTemp.getPath();
-                mSaveUri = com.citemenu.mystash.helper.Utils.getImageUri(mImagePath);
-                mImageUri = com.citemenu.mystash.helper.Utils.getImageUri(mImagePath);
+                mImagePath = result.getStringExtra(Constant_util.EXTRA_IMAGE_PATH);
+//                mImagePath = mFileTemp.getPath();
+                mSaveUri = Utils.getImageUri(mImagePath);
+                mImageUri = Utils.getImageUri(mImagePath);
                 init();
             } else if (resultCode == RESULT_CANCELED) {
                 userCancelled();
@@ -325,7 +325,6 @@ public class ImageCropActivity extends Activity {
 
         }
     }
-
 
     private Bitmap getBitmap(Uri uri) {
         InputStream in = null;

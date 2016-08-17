@@ -12,7 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerAdapter_MyStashList;
+import com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash;
+import com.citemenu.mystash.pojo.get_my_stash_list.Stashlist;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 
 import java.util.ArrayList;
 
@@ -65,15 +71,15 @@ public class List_MyStash extends AppCompatActivity {
 
     private void getMyStash() {
         prog.show();
-        Users cid = com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(List_MyStash.this);
-        Call<com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash> call = com.citemenu.mystash.webservicefactory.WebServicesFactory.getInstance().getMyStashList(com.citemenu.mystash.helper.Constant_util.ACTION_GET_MYSTASH_LIST, cid.getId());
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash>() {
+        Users cid = CustomSharedPref.getUserObject(List_MyStash.this);
+        Call<GetMyStash> call = WebServicesFactory.getInstance().getMyStashList(Constant_util.ACTION_GET_MYSTASH_LIST, cid.getId());
+        call.enqueue(new Callback<GetMyStash>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash> call, Response<com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash> response) {
+            public void onResponse(Call<GetMyStash> call, Response<GetMyStash> response) {
                 prog.dismiss();
                 swipeContainer.setRefreshing(false);
                 try {
-                    com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash businessResponse = response.body();
+                    GetMyStash businessResponse = response.body();
                     switch (businessResponse.getHeader().getSuccess()) {
                         case "1":
                             if (businessResponse.getBody().getStashlist().isEmpty() && businessResponse.getBody().getStashlist().size() == 0) {
@@ -81,9 +87,9 @@ public class List_MyStash extends AppCompatActivity {
                                 altText.setVisibility(View.VISIBLE);
                                 Toast.makeText(List_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                             } else {
-                                ArrayList<com.citemenu.mystash.pojo.get_my_stash_list.Stashlist> arrSearchBusiness = new
+                                ArrayList<Stashlist> arrSearchBusiness = new
                                         ArrayList<>(businessResponse.getBody().getStashlist());
-                                com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerAdapter_MyStashList mAdapter = new com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
+                                RecyclerAdapter_MyStashList mAdapter = new RecyclerAdapter_MyStashList(List_MyStash.this, arrSearchBusiness);
                                 mRecyclerView.setAdapter(mAdapter);
                             }
                             break;
@@ -103,7 +109,7 @@ public class List_MyStash extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash> call, Throwable t) {
+            public void onFailure(Call<GetMyStash> call, Throwable t) {
                 swipeContainer.setRefreshing(false);
                 prog.dismiss();
                 Toast.makeText(List_MyStash.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
@@ -116,7 +122,7 @@ public class List_MyStash extends AppCompatActivity {
     }
 
     public void PlusMyStashRecyclerImageView(View view) {
-        com.citemenu.mystash.home.mystash_box.SearchBusiness_MyStash.IS_CHECK_IN = false;
-        startActivity(new Intent(this, com.citemenu.mystash.home.mystash_box.SearchBusiness_MyStash.class));
+        SearchBusiness_MyStash.IS_CHECK_IN = false;
+        startActivity(new Intent(this, SearchBusiness_MyStash.class));
     }
 }

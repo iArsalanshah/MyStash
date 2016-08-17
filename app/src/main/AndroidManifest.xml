@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
     <!-- Lets app receive data messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
@@ -150,6 +153,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.Messages"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.mycards_box.CameraActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <!-- START Added for GCM -->
         <receiver

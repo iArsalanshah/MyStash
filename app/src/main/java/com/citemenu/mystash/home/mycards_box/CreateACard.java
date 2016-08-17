@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.helper.FromXML;
 import com.citemenu.mystash.helper.ImageCropActivity;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
@@ -46,6 +47,7 @@ import retrofit2.Response;
 public class CreateACard extends AppCompatActivity implements View.OnClickListener {
     public static final String TEMP_PHOTO_FILE_NAME = "temp_photo.jpg";
     private static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 123;
+    private static final int REQ_CAMERA_IMAGE = 122;
     Button next;
     TextView textview_front_of_card;
     ImageView frontCard, backArrow;
@@ -168,9 +170,10 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
 //                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    Intent intent = new Intent(CreateACard.this, ImageCropActivity.class);
-                    intent.putExtra("ACTION", Constant_util.ACTION_CAMERA);
-                    startActivityForResult(intent, REQUEST_CAMERA);
+//                    Intent intent = new Intent(CreateACard.this, ImageCropActivity.class);
+//                    intent.putExtra("ACTION", Constant_util.ACTION_CAMERA);
+//                    startActivityForResult(intent, REQUEST_CAMERA);
+                    onUseCameraClick();
                 } else if (items[item].equals("Choose from Library")) {
                     Intent intent = new Intent(CreateACard.this, ImageCropActivity.class);
                     intent.putExtra("ACTION", Constant_util.ACTION_GALLERY);
@@ -258,7 +261,8 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             String imagePath = data.getStringExtra(Constant_util.IMAGE_PATH);
             if (requestCode == SELECT_FILE) {
                 onSelectFromGalleryResult(imagePath);
-            } else if (requestCode == REQUEST_CAMERA) {
+            } else if (requestCode == REQ_CAMERA_IMAGE) {
+                imagePath = data.getStringExtra(Constant_util.IMAGE_PATH);
                 onCaptureImageResult(imagePath);
             }
         } else if (resultCode == RESULT_CANCELED) {
@@ -273,7 +277,6 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     public void onBackPressed() {
         startActivity(new Intent(CreateACard.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
-
 
     private void getPermisions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -370,5 +373,12 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @FromXML
+    public void onUseCameraClick() {
+        Intent intent = new Intent(this, ImageCropActivity.class);
+        intent.putExtra("ACTION", Constant_util.ACTION_CAMERA);
+        startActivityForResult(intent, REQ_CAMERA_IMAGE);
     }
 }
