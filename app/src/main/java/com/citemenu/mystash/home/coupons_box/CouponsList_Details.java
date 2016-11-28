@@ -2,7 +2,6 @@ package com.citemenu.mystash.home.coupons_box;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +18,9 @@ import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.redeem_coupon.RedeemCoupon;
 import com.citemenu.mystash.pojo.remindme_coupon.RemindMe;
 import com.citemenu.mystash.pojo.to_save_coupon_pojo.ToSaveCoupon;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.SelectShareIntent;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +50,6 @@ public class CouponsList_Details extends AppCompatActivity {
     private Coupon cObj;
     private Users cid;
     private ProgressDialog progressDialog;
-    private ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +68,7 @@ public class CouponsList_Details extends AppCompatActivity {
         if (cObj.getCouponName() != null)
             textViewCouponsName.setText(cObj.getCouponName());
         if (cObj.getCouponDesc() != null)
-            textViewCouponsDesc.setText(cObj.getCouponDesc());
+            textViewCouponsDesc.append(cObj.getCouponDesc());
         if (cObj.getCouponExpdate() != null)
             textViewCouponsExp.append(cObj.getCouponExpdate());
         if (cObj.getTotalCount() != null && cObj.getRedeemedCount() != null)
@@ -98,7 +95,6 @@ public class CouponsList_Details extends AppCompatActivity {
         textViewCouponsUSED = (TextView) findViewById(R.id.textView_Coupons_Details_usedDate);
         textViewCouponsDesc = (TextView) findViewById(R.id.textView_Coupons_Details_Desc);
         progressDialog = new ProgressDialog(CouponsList_Details.this);
-        shareDialog = new ShareDialog(this);
     }
 
     private void clickEvents() {
@@ -114,7 +110,7 @@ public class CouponsList_Details extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                facebookShare();
+                SelectShareIntent.selectIntent(CouponsList_Details.this, Constant_util.SHARE_COUPON_TEXT);
             }
         });
 
@@ -149,7 +145,7 @@ public class CouponsList_Details extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ToSaveCoupon> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CouponsList_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -182,7 +178,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                         if (redeemCoupon.getHeader().getSuccess().equals("1")) {
                                             new AlertDialog.Builder(CouponsList_Details.this)
                                                     .setTitle("Message")
-                                                    .setMessage("Coupon redeemed successfully")
+                                                    .setMessage("Redemption request has been sent to admin.")
                                                     .setCancelable(false)
                                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                         @Override
@@ -200,7 +196,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                     @Override
                                     public void onFailure(Call<RedeemCoupon> call, Throwable t) {
                                         progressDialog.dismiss();
-                                        Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CouponsList_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -294,7 +290,8 @@ public class CouponsList_Details extends AppCompatActivity {
                                         @Override
                                         public void onFailure(Call<RemindMe> call, Throwable t) {
                                             progressDialog.dismiss();
-                                            Toast.makeText(CouponsList_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(CouponsList_Details.this,
+                                                    "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -316,16 +313,16 @@ public class CouponsList_Details extends AppCompatActivity {
                 }).show();
     }
 
-    //Share on Facebook
-    private void facebookShare() {
-        //todo need to update Content
-        if (ShareDialog.canShow(ShareLinkContent.class)) {
-            ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle(Constant_util.SHARE_SUBJECT)
-                    .setContentDescription(Constant_util.SHARE_TEXT)
-                    .setContentUrl(Uri.parse("http://mystash.ca/openurl.php"))
-                    .build();
-            shareDialog.show(linkContent);
-        }
-    }
+//    //Share on Facebook
+//    private void facebookShare() {
+//        //todo need to update Content
+//        if (ShareDialog.canShow(ShareLinkContent.class)) {
+//            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+//                    .setContentTitle(Constant_util.SHARE_SUBJECT)
+//                    .setContentDescription(Constant_util.SHARE_TEXT)
+//                    .setContentUrl(Uri.parse("http://mystash.ca/openurl.php"))
+//                    .build();
+//            shareDialog.show(linkContent);
+//        }
+//    }
 }

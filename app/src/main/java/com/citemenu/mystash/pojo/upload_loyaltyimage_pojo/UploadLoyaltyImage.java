@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.upload_loyaltyimage_pojo;
 
 import com.google.gson.annotations.Expose;

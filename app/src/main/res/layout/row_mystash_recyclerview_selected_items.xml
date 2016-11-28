@@ -51,7 +51,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginStart="6dp"
                 android:layout_toRightOf="@id/row_recyclerview_avatar_mystash"
-                android:text="Title Recycler View "
+                android:text=""
                 android:textColor="#ffff"
                 android:textSize="16sp" />
 
@@ -65,10 +65,11 @@
                 android:layout_toRightOf="@+id/row_recyclerview_avatar_mystash"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/lorem_ispum"
+                android:text=""
                 android:textColor="#ffff"
                 android:textSize="13sp" />
         </RelativeLayout>
 
     </FrameLayout>
+
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.get_all_coupons_pojo;
 
 import com.google.gson.annotations.Expose;

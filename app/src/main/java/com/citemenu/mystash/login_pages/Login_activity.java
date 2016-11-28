@@ -1,10 +1,8 @@
 package com.citemenu.mystash.login_pages;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.gcm.RegistrationIntentService;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.home.MainActivity;
+import com.citemenu.mystash.pojo.pojo_login.LoginUser;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -31,6 +34,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.splunk.mint.Mint;
 
 import org.json.JSONObject;
 
@@ -59,14 +63,16 @@ public class Login_activity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this);
         LoginManager.getInstance().logOut();
         callbackManager = CallbackManager.Factory.create();
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-//            //do something about the Android version being too new
-//            isMarshmallow = true;
-//        }
+
+        // Set the application environment
+        Mint.setApplicationEnvironment(Mint.appEnvironmentStaging);
+
+        // TODO: Update with your API key
+        Mint.initAndStartSession(Login_activity.this, "7bd743a0");
         setContentView(R.layout.activity_login);
-        //btnFB = (Button)findViewById(R.id.fbLoginBtn);
-        if (!getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString(com.citemenu.mystash.helper.Constant_util.IS_LOGIN, "").equals("")) {
-            startActivity(new Intent(Login_activity.this, com.citemenu.mystash.home.MainActivity.class));
+
+        if (!getSharedPreferences(Constant_util.PREFS_NAME, 0).getString(Constant_util.IS_LOGIN, "").equals("")) {
+            startActivity(new Intent(Login_activity.this, MainActivity.class));
             finish();
         }
         initNotify();
@@ -76,40 +82,36 @@ public class Login_activity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-//                String accessToken = loginResult.getAccessToken().getToken();
-                //Log.i(Constant_util.LOG_TAG, accessToken);
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-//                                Log.i(com.citemenu.mystash.helper.Constant_util.LOG_TAG, response.toString());
-                                // Get facebook data from login
                                 Bundle bFb = getFacebookData(object);
 
-                                //WebService
-                                Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call = WebServicesFactory.getInstance().getFblogin(com.citemenu.mystash.helper.Constant_util.ACTION_FB_LOGIN,
-                                        bFb.getString("email"), bFb.getString("name"),
-                                        bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"), gcmID, "1");
-                                call.enqueue(new Callback<com.citemenu.mystash.pojo.pojo_login.LoginUser>() {
-                                    @Override
-                                    public void onResponse(Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call, Response<com.citemenu.mystash.pojo.pojo_login.LoginUser> response) {
-                                        Users webResponse = response.body().getBody().getUsers();
-//                                        Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "Checks " + webResponse);
-//                                        Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "onResponse: " + webResponse.getId() + " " + webResponse.getImgurl() + " " + webResponse.getCfirstname() + " " + webResponse.getFbid());
-                                        com.citemenu.mystash.webservicefactory.CustomSharedPref.setUserObject(Login_activity.this, webResponse);
-                                        Toast.makeText(Login_activity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(Login_activity.this, com.citemenu.mystash.home.MainActivity.class));
-                                    }
+                                if (bFb.getString("idFacebook") != null) {
+                                    //WebService
+                                    Call<LoginUser> call = WebServicesFactory.getInstance().getFblogin(Constant_util.ACTION_FB_LOGIN,
+                                            bFb.getString("email"), bFb.getString("first_name"), bFb.getString("last_name"),
+                                            bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"), gcmID, "1");
+                                    call.enqueue(new Callback<LoginUser>() {
+                                        @Override
+                                        public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
+                                            Users webResponse = response.body().getBody().getUsers();
+                                            CustomSharedPref.setUserObject(Login_activity.this, webResponse);
+                                            startActivity(new Intent(Login_activity.this, MainActivity.class));
+                                            finish();
+                                        }
 
-                                    @Override
-                                    public void onFailure(Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call, Throwable t) {
-                                        Toast.makeText(Login_activity.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<LoginUser> call, Throwable t) {
+                                            Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, email, gender");
+                parameters.putString("fields", "id, name, email, gender, first_name, last_name");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -139,7 +141,7 @@ public class Login_activity extends AppCompatActivity {
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
-                        .getBoolean(com.citemenu.mystash.helper.Constant_util.SENT_TOKEN_TO_SERVER, false);
+                        .getBoolean(Constant_util.SENT_TOKEN_TO_SERVER, false);
 //                if (sentToken) {
 //                    Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "gcm works");
 //                } else {
@@ -149,7 +151,7 @@ public class Login_activity extends AppCompatActivity {
         };
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, com.citemenu.mystash.gcm.RegistrationIntentService.class);
+            Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
     }
@@ -226,30 +228,31 @@ public class Login_activity extends AppCompatActivity {
         if (!email.equals("") && !pwd.equals("") && email.matches(emailPattern)) {
             prog = new ProgressDialog(this);
             prog.show();
-            Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call = WebServicesFactory.getInstance().getLoginUsers(com.citemenu.mystash.helper.Constant_util.ACTION_LOGIN_CUSTOMER, email, pwd);
-            call.enqueue(new Callback<com.citemenu.mystash.pojo.pojo_login.LoginUser>() {
+            Call<LoginUser> call = WebServicesFactory.getInstance().getLoginUsers(Constant_util.ACTION_LOGIN_CUSTOMER, email, pwd);
+            call.enqueue(new Callback<LoginUser>() {
                 @Override
-                public void onResponse(Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call, Response<com.citemenu.mystash.pojo.pojo_login.LoginUser> response) {
-                    com.citemenu.mystash.pojo.pojo_login.LoginUser users = response.body();
+                public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
+                    prog.dismiss();
+                    LoginUser users = response.body();
 
 //                    users.getBody().getUsers();
-                    if (users.getHeader().getSuccess().equals("1")) {
-                        prog.dismiss();
+                    if (users == null) {
+                        Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    } else if (users.getHeader().getSuccess().equals("1")) {
 //                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit().putString(com.citemenu.mystash.helper.Constant_util.IS_LOGIN, com.citemenu.mystash.helper.Constant_util.IS_LOGIN).apply();
-                        com.citemenu.mystash.webservicefactory.CustomSharedPref.setUserObject(Login_activity.this, users.getBody().getUsers());
-                        startActivity(new Intent(Login_activity.this, com.citemenu.mystash.home.MainActivity.class));
+                        getSharedPreferences(Constant_util.PREFS_NAME, 0).edit().putString(Constant_util.IS_LOGIN, Constant_util.IS_LOGIN).apply();
+                        CustomSharedPref.setUserObject(Login_activity.this, users.getBody().getUsers());
+                        startActivity(new Intent(Login_activity.this, MainActivity.class));
                         finish();
                     } else {
-                        prog.dismiss();
                         Toast.makeText(Login_activity.this, users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<com.citemenu.mystash.pojo.pojo_login.LoginUser> call, Throwable t) {
+                public void onFailure(Call<LoginUser> call, Throwable t) {
                     prog.dismiss();
-                    Toast.makeText(Login_activity.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -265,31 +268,32 @@ public class Login_activity extends AppCompatActivity {
     }
 
     public void btnRegLogin(View view) {
-        com.citemenu.mystash.login_pages.Register.isNavigated = false;
-        startActivity(new Intent(this, com.citemenu.mystash.login_pages.Register.class));
+        Register.isNavigated = false;
+        startActivity(new Intent(this, Register.class));
     }
 
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Exit MyStash")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        moveTaskToBack(true);
-                        finish();
-                    }
-                })
-                .show();
+        super.onBackPressed();
+//        new AlertDialog.Builder(this)
+//                .setTitle("Exit MyStash")
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                })
+//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        moveTaskToBack(true);
+//                        finish();
+//                    }
+//                })
+//                .show();
     }
 
     public void TvForgotPwd(View view) {
-        startActivity(new Intent(this, com.citemenu.mystash.login_pages.ActivityForgotPwd.class));
+        startActivity(new Intent(this, ActivityForgotPwd.class));
     }
 
     @Override

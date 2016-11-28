@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.update_registeration;
 
 import com.google.gson.annotations.Expose;

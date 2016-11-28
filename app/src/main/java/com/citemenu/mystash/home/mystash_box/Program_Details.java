@@ -22,7 +22,10 @@ import android.widget.ViewFlipper;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.animation.AnimationFactory;
+import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.program_stamps.Datum;
+import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.SelectShareIntent;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -76,7 +79,7 @@ public class Program_Details extends AppCompatActivity {
         settingData();
         adapter = new ImageAdapter(this, stampObject, stampObject.getStampcount());
         gridView_img2.setAdapter(adapter);
-        cid = com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(this).getId();
+        cid = CustomSharedPref.getUserObject(this).getId();
     }
 
     private void init() {
@@ -272,12 +275,15 @@ public class Program_Details extends AppCompatActivity {
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, com.citemenu.mystash.helper.Constant_util.SHARE_SUBJECT);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, com.citemenu.mystash.helper.Constant_util.SHARE_TEXT);
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                String fullMsg = Constant_util.SHARE_PROGRAM_STAMP_TEXT_START + pOthersObj.getName() +
+                        "," + stampObject.getProgramname() + Constant_util.SHARE_PROGRAM_STAMP_TEXT_END;
+                SelectShareIntent.selectIntent(Program_Details.this, fullMsg);
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_SUBJECT, com.citemenu.mystash.helper.Constant_util.SHARE_SUBJECT);
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, com.citemenu.mystash.helper.Constant_util.SHARE_TEXT);
+//                sendIntent.setType("text/plain");
+//                startActivity(sendIntent);
             }
         });
     }
@@ -320,7 +326,7 @@ public class Program_Details extends AppCompatActivity {
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.stampCount.StampCountWebService> call, Throwable t) {
                 dialogP.dismiss();
-                Toast.makeText(Program_Details.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Program_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }

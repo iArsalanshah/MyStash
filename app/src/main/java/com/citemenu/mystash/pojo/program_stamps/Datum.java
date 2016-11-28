@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.program_stamps;
 
 import com.google.gson.annotations.Expose;

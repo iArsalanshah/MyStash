@@ -4,8 +4,12 @@
     <color name="colorPrimaryDark">#9b303b</color>
     <color name="colorAccent">#d0e4e2e2</color>
     <color name="colorLoginBtn">#F89526</color>
-    <color name="colorFbLoginBtn">#415D99</color>
-    <color name="colorToolbarLogin">#B42E3C</color>
+    <!--<color name="colorFbLoginBtn">#415D99</color>-->
+    <!--<color name="colorToolbarLogin">#B42E3C</color>-->
     <color name="colorRegisterBtn">#BF1531</color>
+    <color name="colorRegisterBtnAlpha">#3cbf1531</color>
     <color name="colorCitePointsTypeGreen">#59a219</color>
+    <color name="colorStash">#FFCC00</color>
+
+    <color name="backgroung_action">#99000000</color>
 </resources>

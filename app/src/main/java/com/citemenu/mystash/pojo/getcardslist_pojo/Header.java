@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.getcardslist_pojo;
 
 import com.google.gson.annotations.Expose;

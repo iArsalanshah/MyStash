@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.all_flyers_by_categ;
 
 import com.google.gson.annotations.Expose;
@@ -21,6 +20,9 @@ public class Datum {
     @SerializedName("imgpath")
     @Expose
     private String imgpath;
+    @SerializedName("image_path")
+    @Expose
+    private String image_path;
     @SerializedName("expirydate")
     @Expose
     private String expirydate;
@@ -143,4 +145,11 @@ public class Datum {
         this.category = category;
     }
 
+    public String getImg_path() {
+        return image_path;
+    }
+
+    public void setImg_path(String img_path) {
+        this.image_path = img_path;
+    }
 }

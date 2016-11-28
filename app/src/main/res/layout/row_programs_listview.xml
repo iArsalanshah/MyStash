@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageview_row_programslist"
         android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/imageview_row_programslist"
-        android:text="Tariq Testing Programs"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
@@ -34,8 +34,7 @@
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/imageview_row_programslist"
         android:ellipsize="end"
-        android:maxLines="2"
-        android:text="@string/lorem_ispum"
+        android:maxLines="1"
         android:textColor="@android:color/white"
         android:textSize="13sp" />
 </RelativeLayout>

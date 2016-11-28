@@ -274,7 +274,7 @@ public class ResideMenu extends FrameLayout {
 
     /**
      * Add a single item to the left menu;
-     * <p/>
+     * <p>
      * WARNING: It will be removed from v2.0.
      *
      * @param menuItem

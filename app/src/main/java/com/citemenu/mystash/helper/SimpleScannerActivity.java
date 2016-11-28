@@ -30,6 +30,7 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
     public void onResume() {
         super.onResume();
         mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.setAutoFocus(true);
         mScannerView.startCamera();          // Start camera on resume
     }
 

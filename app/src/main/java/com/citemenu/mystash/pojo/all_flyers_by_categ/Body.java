@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.all_flyers_by_categ;
 
 import com.google.gson.annotations.Expose;

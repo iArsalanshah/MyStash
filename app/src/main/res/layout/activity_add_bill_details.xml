@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="com.citemenu.mystash.home.AddBillDetails">
+
+    <!--Top layout-->
+    <RelativeLayout
+        android:id="@+id/add_bill_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:onClick="onBackButtonClicked"
+            android:padding="12dp"
+            android:src="@drawable/img_toolbar_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Add Bill"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/add_bill_top_layout"
+        android:layout_margin="20dp"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!--Restaurant Name-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name of Restaurant"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <EditText
+                    android:id="@+id/et_restaurantName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="2dp"
+                    android:hint="Enter restaurant name"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+            <!--Total amount & Invoice No.-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Amount"
+                        android:textColor="#000000"
+                        android:textSize="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_restaurantAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Amount"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Invoice No."
+                        android:textColor="#000000"
+                        android:textSize="12dp" />
+
+                    <EditText
+                        android:id="@+id/et_restaurantInvoiceNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Bill No."
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--Date -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <EditText
+                    android:id="@+id/add_bill_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="Select a data"
+                    android:inputType="none" />
+
+            </LinearLayout>
+
+            <!--Bill type -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Bill Type"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <Spinner
+                    android:id="@+id/sp_restaurantBillType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/BillTypes"
+                    android:minHeight="40dp" />
+
+            </LinearLayout>
+
+            <!--Upload bill description -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Bill Pictures"
+                    android:textColor="#000000"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="At least 3 picture of the bill will upload (Header,Body,Footer)"
+                    android:textColor="@android:color/holo_red_dark" />
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="8dp"-->
+                <!--android:weightSum="3">-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/img_UploadBill1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@android:color/holo_orange_light"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:src="@drawable/plus_upload_bills" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/img_UploadBill2"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@android:color/holo_orange_light"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:src="@drawable/plus_upload_bills" />-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/img_UploadBill3"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@android:color/holo_orange_light"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:src="@drawable/plus_upload_bills" />-->
+
+                <!--</LinearLayout>-->
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_thumbnails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <Button
+                    android:id="@+id/buttonUploadBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@android:color/holo_red_dark"
+                    android:gravity="center"
+                    android:text="Take Bill Pictures"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

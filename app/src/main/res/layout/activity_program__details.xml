@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/img_programDetails_item"
                     android:layout_toRightOf="@id/img_programDetails_item"
-                    android:text="Chicken Chef"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
@@ -91,7 +91,7 @@
                     android:layout_toRightOf="@id/img_programDetails_item"
                     android:maxLength="40"
                     android:maxLines="1"
-                    android:text="@string/lorem_ispum"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_programDetails_item_address"
                     android:layout_toRightOf="@id/img_programDetails_item"
-                    android:text="+1 204-677-2331"
+                    android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -159,7 +159,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="6dp"
                     android:layout_marginRight="6dp"
-                    android:text="1/10"
+                    android:text=""
                     android:textColor="@android:color/white" />
 
                 <TextView
@@ -209,7 +209,7 @@
                     android:layout_marginBottom="12dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
-                    android:text="@string/lorem_ispum"
+                    android:text=""
                     android:textSize="13sp" />
             </RelativeLayout>
 
@@ -239,7 +239,7 @@
                     android:layout_marginBottom="12dp"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
-                    android:text="@string/lorem_ispum"
+                    android:text=""
                     android:textSize="13sp" />
             </RelativeLayout>
         </RelativeLayout>

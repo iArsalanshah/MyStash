@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty;
 import com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty;
+import com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty;
 import com.citemenu.mystash.pojo.pojo_login.Users;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 
@@ -42,15 +44,15 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_loyalty_name_details);
         card_Number = getIntent().getStringExtra("cardNumber");
-        barcodeImage = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("barcodeImage", "none");
-        isUpdateLoyalty = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
-        loyaltyID = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("loyaltyID", null);
+        barcodeImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("barcodeImage", "none");
+        isUpdateLoyalty = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
+        loyaltyID = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("loyaltyID", null);
         initialization();
-        isComesFromDetail = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
+        isComesFromDetail = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
         if (isComesFromDetail) {
-            ur_name.setText(getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("cardUrName", "null"));
-            card_name.setText(getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("cardName", "null"));
-            card_notes.setText(getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("cardNote", "null"));
+            ur_name.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardUrName", "null"));
+            card_name.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardName", "null"));
+            card_notes.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardNote", "null"));
         }
         clickEvents();
     }
@@ -77,12 +79,12 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         card_notes = (EditText) findViewById(R.id.edittext_loyaltDetails_cardNotes);
         saveButton = (Button) findViewById(R.id.button_loyaltDetails_save);
         cid = CustomSharedPref.getUserObject(takeLoyaltyNameDetails.this);
-        String objectLoyalty = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");//getIntent().getStringExtra("addLoyaltyObject");
-        getloyaltyObj = new Gson().fromJson(objectLoyalty, com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty.class);
+        String objectLoyalty = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");//getIntent().getStringExtra("addLoyaltyObject");
+        getloyaltyObj = new Gson().fromJson(objectLoyalty, Getloyalty.class);
         if (is_Created) {
             isRegistered = "0";
             //overwrite frontImage from takeImage.class
-            frontImage = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).getString("frontImage", "");
+            frontImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("frontImage", "");
             Log.d("LOG_TAG", "initialization: front image is_created part working");
         } else {
             //overwrite frontImage from GsonObject
@@ -100,7 +102,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageview_backTopbar:
-                startActivity(new Intent(takeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(takeLoyaltyNameDetails.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_loyaltDetails_save:
                 if (ur_name.getText().toString().length() > 0 &&
@@ -146,7 +148,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call, Throwable t) {
-                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -180,7 +182,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call, Throwable t) {
-                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }

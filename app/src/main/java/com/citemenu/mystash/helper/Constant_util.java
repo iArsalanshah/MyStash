@@ -57,7 +57,17 @@ public class Constant_util {
     public static final String REGISTRATION_COMPLETE = "registrationComplete"; //asdas
     public static final String ACTION_GET_MESSAGES = "get_customer_notifications";
     public static final String ACTION_GET_STAMPS_COUNT = "get_customer_stampcount";
+
+
     public static final String SHARE_SUBJECT = "MyStash App";
     public static final String SHARE_TEXT = "Who does\'nt like rewards? With the MYSTASH APP, you can get rewards at all of your favorite retailers when you shop. Download it today for So many great deals and offers.\n\nhttp://mystash.ca/openurl.php";
+
+    public static final String SHARE_COUPON_TEXT = "Thanks to My Stash App, I get great coupons and savings like this to all my favorite companies.";
+    public static final String SHARE_PROGRAM_STAMP_TEXT_START = "Check out this great program from ";
+    public static final String SHARE_PROGRAM_STAMP_TEXT_END = "! This and many more great programs on Stash App! Download today!";
+    public static final String SHARE_APP_TEXT = "Who doesn\'t like rewards? With the STASH APP, you can get rewards at all of your favorite retailers when you shop. Download it today for So many great deals and offers.";
+    public static final String SHARE_BUSINESS_START = "Check out this great company i found on MyStash ";
+
+    public static final String SHARE_LINK = "http://mystash.ca/openurl.php";
 
 }

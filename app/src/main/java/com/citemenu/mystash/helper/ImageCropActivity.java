@@ -327,8 +327,8 @@ public class ImageCropActivity extends Activity {
     }
 
     private Bitmap getBitmap(Uri uri) {
-        InputStream in = null;
-        Bitmap returnedBitmap = null;
+        InputStream in;
+        Bitmap returnedBitmap;
         try {
             in = mContentResolver.openInputStream(uri);
             //Decode image size

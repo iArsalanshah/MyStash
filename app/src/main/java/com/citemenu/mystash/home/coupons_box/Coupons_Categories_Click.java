@@ -14,12 +14,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.get_all_coupons_pojo.Coupon;
 import com.citemenu.mystash.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.citemenu.mystash.pojo.pojo_login.Users;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -67,6 +67,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            imgSavedCoupons.setVisibility(View.GONE);
         } else
             getAllCoupons();
     }
@@ -81,13 +82,12 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                     listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, coupons.getBody().getCoupons()));
                 } else {
                     altTextCouponsSavedList.setVisibility(View.VISIBLE);
-                    Toast.makeText(Coupons_Categories_Click.this, "" + coupons.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -111,7 +111,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -124,7 +124,9 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             @Override
             public void onResponse(Call<Get_All_Coupons> call, Response<Get_All_Coupons> response) {
                 Get_All_Coupons allCoupons = response.body();
-                if (allCoupons.getHeader().getSuccess().equals("1")) {
+                if (allCoupons == null) {
+
+                } else if (allCoupons.getHeader().getSuccess().equals("1")) {
                     altTextCouponsSavedList.setVisibility(View.GONE);
                     listView.setVisibility(View.VISIBLE);
                     listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, allCoupons.getBody().getCoupons()));
@@ -136,7 +138,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -212,15 +214,28 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             TextView listLabel = (TextView) convertView.findViewById(R.id.textView_row_list_coupons);
             TextView tv_item_details = (TextView) convertView.findViewById(R.id.tv_item_details);
             ImageView listImage = (ImageView) convertView.findViewById(R.id.imageView_row_list_coupons);
-            if (coupons.get(position).getCouponName() != null)
-                listLabel.setText(coupons.get(position).getCouponName());
-            if (coupons.get(position).getCouponDesc() != null)
-                tv_item_details.setText(coupons.get(position).getCouponDesc());
-            if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
-                Picasso.with(context).load(coupons.get(position).getImgurl())
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(listImage);
+            if (isCouponByAdmin) {
+                if (coupons.get(position).getCouponName() != null)
+                    listLabel.setText(coupons.get(position).getCouponName());
+                if (coupons.get(position).getCouponDesc() != null)
+                    tv_item_details.setText(coupons.get(position).getCouponDesc());
+                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
+                    Picasso.with(context).load(coupons.get(position).getImgurl())
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                            .into(listImage);
+            } else {
+                if (coupons.get(position).getName() != null)
+                    listLabel.setText(coupons.get(position).getName());
+                if (coupons.get(position).getCouponName() != null)
+                    tv_item_details.setText(coupons.get(position).getCouponName());
+                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
+                    Picasso.with(context).load(coupons.get(position).getImgurl())
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                            .into(listImage);
+            }
+
             couponObj = coupons;
             return convertView;
         }

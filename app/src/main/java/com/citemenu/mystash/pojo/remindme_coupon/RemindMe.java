@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.remindme_coupon;
 
 import com.google.gson.annotations.Expose;

@@ -34,7 +34,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@id/imageView_row_list_myCards"
-        android:text="food"
+        android:text=""
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 </RelativeLayout>

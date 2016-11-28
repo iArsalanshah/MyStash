@@ -10,6 +10,7 @@ import com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty;
 import com.citemenu.mystash.pojo.get_all_coupons_pojo.Get_All_Coupons;
+import com.citemenu.mystash.pojo.get_bills.GetBillsWS;
 import com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash;
 import com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList;
 import com.citemenu.mystash.pojo.getmycards_pojo.GetMycards;
@@ -25,15 +26,20 @@ import com.citemenu.mystash.pojo.remove_stash.RemoveStash;
 import com.citemenu.mystash.pojo.stampCount.StampCountWebService;
 import com.citemenu.mystash.pojo.to_save_coupon_pojo.ToSaveCoupon;
 import com.citemenu.mystash.pojo.update_registeration.UpdateRegisteration;
+import com.citemenu.mystash.pojo.upload_bills.UploadBills;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 
+import java.util.Map;
+
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -58,6 +64,7 @@ public interface WebService {
                                         @Query("android_push_id") String android_push_id,
                                         @Query("type") String logintype);
 
+
     @POST("/mobileservice_new.php")
     Call<UpdateRegisteration> postUpdateRegisterUser(@Query("action") String customer_register_edit,
                                                      @Query("cfirstname") String name,
@@ -70,6 +77,21 @@ public interface WebService {
                                                      @Query("categories") String category,
                                                      @Query("areaOfInterest") String areaOfInterest,
                                                      @Query("type") String logintype);
+
+    @POST("/mobileservice_new.php")
+    Call<UpdateRegisteration> postUpdateRegisterFbUser(@Query("action") String customer_register_edit,
+                                                       @Query("fbid") String fbid,
+                                                       @Query("cfirstname") String name,
+                                                       @Query("email") String email,
+                                                       @Query("password") String password,
+                                                       @Query("number") String phone,
+                                                       @Query("imgurl") String imgURL,
+                                                       @Query("birthday") String bday,
+                                                       @Query("sex") String gender,
+                                                       @Query("categories") String category,
+                                                       @Query("areaOfInterest") String areaOfInterest,
+                                                       @Query("type") String logintype);
+
 
     @GET("/mobileservice_new.php")
     Call<GetMyStash> getMyStashList(@Query("action") String action,
@@ -86,6 +108,7 @@ public interface WebService {
     Call<LoginUser> getFblogin(@Query("action") String action,  //fbid,imgurl
                                @Query("email") String email,
                                @Query("firstname") String name,
+                               @Query("lastname") String lname,
                                @Query("fbid") String fbid,
                                @Query("sex") String gender,
                                @Query("imgurl") String imgurl,
@@ -236,4 +259,20 @@ public interface WebService {
     Call<StampCountWebService> getStampCount(@Query("action") String action,
                                              @Query("cid") String cid,
                                              @Query("pid") String pid);
+
+    @GET("/mobileservice_new.php")
+    Call<GetBillsWS> getBills(@Query("action") String get_bills,
+                              @Query("user_id") String cid);
+
+    @Multipart
+    @POST("/mobileservice_new.php")
+    Call<UploadBills> uploadBills(@Query("action") String upload_bills,
+                                  @Query("user_id") String user_id,
+                                  @Query("res_id") String res_id,
+                                  @Query("date") String date,
+                                  @Query("res_name") String res_name,
+                                  @Query("amount") String amount,
+                                  @Query("bill_type") String bill_type,
+                                  @Query("invoice_no") String invoice_no,
+                                  @PartMap Map<String, RequestBody> fileList);
 }

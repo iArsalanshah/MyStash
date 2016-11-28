@@ -128,7 +128,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong please try again later", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
@@ -240,7 +240,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
                         .load();
             } else {
                 Log.d(TAG, "onPostExecute: write to disk error");
-                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong please try again later", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }

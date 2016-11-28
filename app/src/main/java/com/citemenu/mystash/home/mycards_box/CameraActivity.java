@@ -31,11 +31,11 @@ public class CameraActivity extends Activity implements Camera.PictureCallback {
     private Camera camera;
     private CameraPreview cameraPreview;
 
-    private static Bitmap RotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
+//    private static Bitmap RotateBitmap(Bitmap source, float angle) {
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
+//        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+//    }
 
     private static String savePictureToFileSystem(Bitmap data) {
         File file = getOutputMediaFile();
@@ -70,13 +70,18 @@ public class CameraActivity extends Activity implements Camera.PictureCallback {
     public void onCaptureClick(View button) {
         // Take a picture with a callback when the photo has been created
         // Here you can add callbacks if you want to give feedback when the picture is being taken
-        camera.takePicture(null, null, this);
+        try {
+            camera.takePicture(null, null, this);
+        } catch (Exception ex) {
+            Log.d("OnPictureTaken: ", ex.toString());
+        }
     }
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
         Log.d("TAG", "Picture taken");
         if (data != null) {
+            dialog.show();
             int screenWidth = getResources().getDisplayMetrics().widthPixels;
             int screenHeight = getResources().getDisplayMetrics().heightPixels;
             Bitmap bm = BitmapFactory.decodeByteArray(data, 0, (data != null) ? data.length : 0);
@@ -90,6 +95,7 @@ public class CameraActivity extends Activity implements Camera.PictureCallback {
             // Rotating Bitmap
             bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
             String path = savePictureToFileSystem(bm);
+            dialog.dismiss();
             setResult(path);
             finish();
         }

@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.all_flyers_by_categ.Datum;
 import com.citemenu.mystash.pojo.all_flyers_by_categ.GetAllFlyersWebService;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
@@ -95,7 +95,7 @@ public class Flyers_Available extends AppCompatActivity {
             @Override
             public void onFailure(Call<GetAllFlyersWebService> call, Throwable t) {
                 progDialog.dismiss();
-                Toast toast = Toast.makeText(Flyers_Available.this, "Something went wrong please try again later", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_Available.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
@@ -138,11 +138,19 @@ public class Flyers_Available extends AppCompatActivity {
             TextView Label1 = (TextView) convertView.findViewById(R.id.testView_Flyer_row1);
             TextView Label2 = (TextView) convertView.findViewById(R.id.testView_Flyer_row2);
             ImageView listImage = (ImageView) convertView.findViewById(R.id.image1_flyer_row);
-            if (!data.get(position).getExpirydate().isEmpty() && data.get(position).getExpirydate() != null)
-                Label1.setText(data.get(position).getExpirydate());
-            if (!data.get(position).getTitle().isEmpty() && data.get(position).getTitle() != null)
+            if (data.get(position).getExpirydate() != null &&
+                    !data.get(position).getExpirydate().isEmpty()) {
+                if (!data.get(position).getExpirydate().startsWith("00")) {
+                    Label1.setText(data.get(position).getExpirydate());
+                } else {
+                    Label1.setText("No Expiry");
+                }
+            }
+            if (data.get(position).getTitle() != null &&
+                    !data.get(position).getTitle().isEmpty())
                 Label2.setText(data.get(position).getTitle());
-            if (!data.get(position).getImgpath().isEmpty() && data.get(position).getImgpath() != null)
+            if (data.get(position).getImg_path() != null &&
+                    !data.get(position).getImg_path().isEmpty())
                 Picasso.with(context).load(data.get(position).getImgpath())
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)

@@ -25,8 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.pojo.add_stash.AddStash;
+import com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness;
+import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.singleton.MyLocation;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -67,12 +73,13 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private double lat;
     private double lng;
     private GoogleMap mGoogleMap;
-    private List<com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby> mainSB_List;
+    private List<Searchnearby> mainSB_List;
     private Users userObj;
     private TextView tvFilter;
-    private List<com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby> filtered_SB_List;
-    private HashMap<Marker, com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby> infoWindowMarkers;
+    private List<Searchnearby> filtered_SB_List;
+    private HashMap<Marker, Searchnearby> infoWindowMarkers;
     private Map<Marker, Integer> markerPositions;
+    private boolean isPlusClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +89,18 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         init();
 
         search_view.setOnQueryTextListener(this);
-
+        isPlusClicked = getIntent().getBooleanExtra("plusClicked", false);
         //Filter Dialog
+        filterDialog();
+        if (IS_CHECK_IN) {
+            TextView titleSearchBusiness = (TextView) findViewById(R.id.titleSearchBusiness);
+            titleSearchBusiness.setText("Check In");
+        }
+    }
+
+    private void filterDialog() {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-//        alertDialog.setCancelable(false);
         alertDialog.setTitle("Range");
         String[] filterItems = {"5km", "10km", "20km", "50km"};
         alertDialog.setItems(filterItems, new DialogInterface.OnClickListener() {
@@ -106,7 +120,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         getRequest(50000);
                         break;
                     default:
-                        getRequest(com.citemenu.mystash.helper.Constant_util.DEFAULT_RADIUS);
+                        getRequest(Constant_util.DEFAULT_RADIUS);
                         break;
                 }
             }
@@ -117,15 +131,11 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 alertDialog.show();
             }
         });
-        if (IS_CHECK_IN) {
-            TextView titleSearchBusiness = (TextView) findViewById(R.id.titleSearchBusiness);
-            titleSearchBusiness.setText("Check In");
-        }
     }
 
     private void init() {
         //for latlng
-        com.citemenu.mystash.singleton.MyLocation myLocation = MyLocation.getInstance();
+        MyLocation myLocation = MyLocation.getInstance();
         lat = myLocation.getLat();
         lng = myLocation.getLng();
         altText = (TextView) findViewById(R.id.list_searchBusiness_altText);
@@ -159,95 +169,74 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         getSupportFragmentManager()
                                 .findFragmentById(R.id.mapSearchBusiness);
         mapFragment.getMapAsync(this);
-        if (mapFragment.getView() != null)
-            mapFragment.getView().setVisibility(View.GONE);
 
         tvFilter = (TextView) findViewById(R.id.tvFilter);
         oldMarkers = new ArrayList<>();
         markerPositions = new HashMap<>();
         //Retrofit Callback
-        getRequest(com.citemenu.mystash.helper.Constant_util.DEFAULT_RADIUS);
+        getRequest(Constant_util.DEFAULT_RADIUS);
     }
 
     void getRequest(final float defaultRadius) {
         //for cid
-        userObj = com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(SearchBusiness_MyStash.this);
+        userObj = CustomSharedPref.getUserObject(SearchBusiness_MyStash.this);
         progressDialog.show();
-        Call<com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
-                com.citemenu.mystash.helper.Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), String.valueOf(lat), String.valueOf(lng),
+        Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
+                Constant_util.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN, userObj.getId(), String.valueOf(lat), String.valueOf(lng),
                 defaultRadius
         );
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness>() {
+        call.enqueue(new Callback<SearchBusiness>() {
 
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness> call, Response<com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness> response) {
+            public void onResponse(Call<SearchBusiness> call, Response<SearchBusiness> response) {
                 progressDialog.dismiss();
-                com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness webResponse = response.body();
+                SearchBusiness webResponse = response.body();
                 if (webResponse == null) {
                     Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                     search.setClickable(false);
                 } else if (webResponse.getHeader().getSuccess().equals("1")) {
-                    if (altText.getVisibility() == View.VISIBLE) {
-                        altText.setVisibility(View.GONE);
-                    }
                     if (!search.isClickable()) {
                         search.setClickable(true);
                     }
-//                    if (!SearchBusiness_MyStash.IS_CHECK_IN) {
                     mainSB_List.clear();
                     filtered_SB_List.clear();
-                    mainSB_List = webResponse.getBody().getSearchnearby();
-                    filtered_SB_List = webResponse.getBody().getSearchnearby();
-                    mAdapter.notifyDataSetChanged();
-//                    }
-//                    else {
-//                        mainSB_List.clear();
-//                        filtered_SB_List.clear();
-//                        for (int i = 0; i < webResponse.getBody().getSearchnearby().size(); i++) {
-//                            if (webResponse.getBody().getSearchnearby().get(i).getIsstash().equals("0")) {
-//                                mainSB_List.add(webResponse.getBody().getSearchnearby().get(i));
-//                                filtered_SB_List.add(webResponse.getBody().getSearchnearby().get(i));
-//                                mAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-//                    }
+                    List<Searchnearby> mList = webResponse.getBody().getSearchnearby();
+                    if (isPlusClicked) {
+                        List<Searchnearby> updatedList = new ArrayList<>();
+                        for (int i = 0; i < mList.size(); i++) {
+                            if (mList.get(i).getIsstash() != null &&
+                                    !mList.get(i).getIsstash().isEmpty() &&
+                                    mList.get(i).getIsstash().equals("0")) {
+                                updatedList.add(mList.get(i));
+                            }
+                        }
+                        mainSB_List = updatedList;
+                        filtered_SB_List = updatedList;
+                    } else {
+                        mainSB_List = webResponse.getBody().getSearchnearby();
+                        filtered_SB_List = webResponse.getBody().getSearchnearby();
+                    }
 
                     if (filtered_SB_List.size() == 0) {
-                        altText.setVisibility(View.VISIBLE);
-                        search.setClickable(false);
+                        if (isPlusClicked) {
+                            altText.setText("You already have added all available businesses");
+                            altText.setVisibility(View.VISIBLE);
+                            search.setClickable(false);
+                        } else {
+                            altText.setText("There are currently no business nearby. Send us an email from the contact us section with some suggestions of your favorite places and we will try to add them ASAP!");
+                            altText.setVisibility(View.VISIBLE);
+                            search.setClickable(false);
+                        }
                     }
+                    mAdapter.notifyDataSetChanged();
                 } else {
                     search.setClickable(false);
                     Toast.makeText(SearchBusiness_MyStash.this, "" + webResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
-//                try {
-//                    SearchBusiness businessResponse = response.body();
-//                    if (businessResponse.getHeader().getSuccess().equals("1")) {
-//                        if (businessResponse.getBody().getSearchnearby().isEmpty() && businessResponse.getBody().getSearchnearby().size() == 0) {
-////                            btnMapSB.setClickable(false);
-//                            altText.setVisibility(View.VISIBLE);
-////                            tvFilter.setClickable(false);
-//                        } else {
-//                            mainSB_List = new
-//                                    ArrayList<>(businessResponse.getBody().getSearchnearby());
-//                            mAdapter = new RecyclerView_SBAdapter2(SearchBusiness_MyStash.this, mainSB_List);
-//                            mRecyclerView.setAdapter(mAdapter);
-////                            btnMapSB.setClickable(true);
-////                            mAdapter.notifyDataSetChanged();
-////                            tvFilter.setClickable(true);
-//                        }
-//                    } else if (businessResponse.getHeader().getSuccess().equals("0")) {
-//                        btnMapSB.setClickable(false);
-//                        tvFilter.setClickable(false);
-//                        Toast.makeText(SearchBusiness_MyStash.this, "" + businessResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness> call, Throwable t) {
+            public void onFailure(Call<SearchBusiness> call, Throwable t) {
                 progressDialog.dismiss();
                 search.setClickable(false);
                 Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
@@ -256,10 +245,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     public void backMyStashRecyclerViewImageBtn(View view) {
-        finish();
-//        if (!backToHome)
-//            startActivity(new Intent(this, List_MyStash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-//        else finish();
+        onBackPressed();
     }
 
     public void BtnListSearchBusiness(View view) {
@@ -272,19 +258,19 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     public void BtnMapSearchBusiness(View view) {
+//        if (mapFragment.getView() != null) {
+//            tvFilter.setVisibility(View.GONE);
+//            mapFragment.getView().setVisibility(View.VISIBLE);
+//            search.setVisibility(View.GONE);
+//        }
+//        mRecyclerView.setVisibility(View.GONE);
         if (servicesOK()) {
-            ArrayList<LatLng> infoDataSetter = null;
             mRecyclerView.setVisibility(View.GONE);
             if (mapFragment.getView() != null) {
                 mapFragment.getView().setVisibility(View.VISIBLE);
                 search.setVisibility(View.GONE);
                 tvFilter.setVisibility(View.GONE);
                 try {
-//                    for (int i = 0; i < filtered_SB_List.size(); i++) {
-//                        latLngs.add(i, new LatLng(Double.valueOf(filtered_SB_List.get(i).getLat()), Double.valueOf(filtered_SB_List.get(i).getLongt())));
-//                    }
-//                    infoDataSetter = new ArrayList<>();
-                    //for Business Pointers
                     if (oldMarkers != null) {
                         for (Marker marker : oldMarkers) {
                             marker.remove();
@@ -301,14 +287,6 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         infoWindowMarkers.put(oldMarkers.get(i), filtered_SB_List.get(i));
                         markerPositions.put(m, i);
                     }
-//
-//                    if (latLngs.size() > 0)
-//                        for (LatLng point : latLngs) {
-//                            options.position(point)
-//                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
-//                            oldMarkers = mGoogleMap.addMarker(options);
-//                            infoDataSetter.add(options.getPosition());
-//                        }
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
                 }
@@ -323,7 +301,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         if (userMarker.equals(marker)) {
                             return null;
                         } else {
-                            final com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby obj = infoWindowMarkers.get(marker);
+                            final Searchnearby obj = infoWindowMarkers.get(marker);
                             if (obj == null) {
                                 return null;
                             }
@@ -349,7 +327,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                     public void onInfoWindowClick(Marker marker) {
                         for (int i = 0; i < markerPositions.size(); i++) {
                             if (markerPositions.get(marker).equals(i))
-                                startActivity(new Intent(SearchBusiness_MyStash.this, com.citemenu.mystash.home.mystash_box.ListDetails_MyStash.class)
+                                startActivity(new Intent(SearchBusiness_MyStash.this, ListDetails_MyStash.class)
                                         .putExtra("id", new Gson().toJson(filtered_SB_List.get(i))));
                         }
                     }
@@ -391,6 +369,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         googleMap.moveCamera(update);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
+        if (mapFragment.getView() != null) {
+            mapFragment.getView().setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -419,10 +400,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     }
 
     public class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
-        //        private List<Searchnearby> searchNearbyList;
         private Context mContext;
         View.OnClickListener clickListener = new View.OnClickListener() {
-            public int position;
+            int position;
 
             @Override
             public void onClick(View view) {
@@ -430,9 +410,9 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         (RecyclerView_SBCustomViewHolder2) view.getTag();
                 position = holder.getAdapterPosition();
                 if (!SearchBusiness_MyStash.IS_CHECK_IN) {
-                    com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby s = filtered_SB_List.get(position);
+                    Searchnearby s = filtered_SB_List.get(position);
                     String jsonBusiness = (new Gson()).toJson(s);
-                    Intent intent = new Intent(mContext, com.citemenu.mystash.home.mystash_box.ListDetails_MyStash.class);
+                    Intent intent = new Intent(mContext, ListDetails_MyStash.class);
                     intent.putExtra("id", jsonBusiness);
                     mContext.startActivity(intent);
                 } else {
@@ -443,35 +423,71 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
         private ValueFilter valueFilter;
 
-        public RecyclerView_SBAdapter2(Context context) {
-//            searchNearbyList = searchnearbies;
-//            mStringFilterList = searchnearbies;
+        RecyclerView_SBAdapter2(Context context) {
             this.mContext = context;
         }
 
         @Override
         public RecyclerView_SBCustomViewHolder2 onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_recyclerview_sb, viewGroup, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.row_recyclerview_sb, viewGroup, false);
             return new RecyclerView_SBCustomViewHolder2(view);
         }
 
         public void onBindViewHolder(RecyclerView_SBCustomViewHolder2 customViewHolder, int i) {
-            if (filtered_SB_List.get(i).getLogourl() != null
-                    && !filtered_SB_List.get(i).getLogourl().isEmpty())
-                Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
-                        .error(R.drawable.placeholder_shadow) //optional
-                        .placeholder(R.drawable.placeholder_shadow) //optional
-                        .into(customViewHolder.thumbnail);
+            if (isPlusClicked) {
+                if (filtered_SB_List.get(i).getIsstash() != null &&
+                        !filtered_SB_List.get(i).getIsstash().isEmpty() &&
+                        filtered_SB_List.get(i).getIsstash().equals("0")) {
+                    if (filtered_SB_List.get(i).getLogourl() != null
+                            && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
+                        Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
+                                .error(R.drawable.placeholder_img_not_found) //optional
+                                .placeholder(R.drawable.placeholder_img_not_found) //optional
+                                .into(customViewHolder.thumbnail);
+                    } else {
+                        customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
+                    }
 
-            //Setting text view title,address,rating,distance
-            if (filtered_SB_List.get(i).getName() != null)
-                customViewHolder.tvTileAddress.setText(filtered_SB_List.get(i).getName());
-            if (filtered_SB_List.get(i).getAddress() != null)
-                customViewHolder.tvAreaAddress.setText(filtered_SB_List.get(i).getAddress());
-            if (filtered_SB_List.get(i).getDistance() != null)
-                customViewHolder.tvMeterAddress.setText(String.valueOf(filtered_SB_List.get(i).getDistance().intValue()) + "m");
-            if (filtered_SB_List.get(i).getRatingvalue() != null)
-                customViewHolder.rattingBar.setRating(filtered_SB_List.get(i).getRatingvalue());
+                    //Setting text view title,address,rating,distance
+                    if (filtered_SB_List.get(i).getName() != null)
+                        customViewHolder.tvTileAddress.setText(filtered_SB_List.get(i).getName());
+                    if (filtered_SB_List.get(i).getAddress() != null)
+                        customViewHolder.tvAreaAddress.setText(filtered_SB_List.get(i).getAddress());
+                    if (filtered_SB_List.get(i).getDistance() != null) {
+                        double dist = Double.valueOf(filtered_SB_List.get(i).getDistance() / 1000);
+                        customViewHolder.tvMeterAddress.setText(String.format("%.1f", dist) + "km");
+                    }
+                    if (filtered_SB_List.get(i).getRatingvalue() != null) {
+                        int starRating = Math.round(filtered_SB_List.get(i).getRatingvalue());
+                        customViewHolder.rattingBar.setRating(starRating);
+                    }
+                }
+            } else {
+                if (filtered_SB_List.get(i).getLogourl() != null
+                        && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
+                    Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
+                            .error(R.drawable.placeholder_img_not_found) //optional
+                            .placeholder(R.drawable.placeholder_img_not_found) //optional
+                            .into(customViewHolder.thumbnail);
+                } else {
+                    customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
+                }
+
+                //Setting text view title,address,rating,distance
+                if (filtered_SB_List.get(i).getName() != null)
+                    customViewHolder.tvTileAddress.setText(filtered_SB_List.get(i).getName());
+                if (filtered_SB_List.get(i).getAddress() != null)
+                    customViewHolder.tvAreaAddress.setText(filtered_SB_List.get(i).getAddress());
+                if (filtered_SB_List.get(i).getDistance() != null) {
+                    //String dist = String.valueOf(filtered_SB_List.get(i).getDistance().intValue() / 1000);
+                    double dist = Double.valueOf(filtered_SB_List.get(i).getDistance() / 1000);
+                    customViewHolder.tvMeterAddress.setText(String.format("%.1f", dist) + "km");
+                }
+                if (filtered_SB_List.get(i).getRatingvalue() != null) {
+                    int starRating = Math.round(filtered_SB_List.get(i).getRatingvalue());
+                    customViewHolder.rattingBar.setRating(starRating);
+                }
+            }
             customViewHolder.thumbnail.setOnClickListener(clickListener);
             customViewHolder.thumbnail.setTag(customViewHolder);
         }
@@ -481,20 +497,37 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             return filtered_SB_List.size();
         }
 
+        private int filteredSize() {
+            if (isPlusClicked) {
+                int count = 0;
+                for (int i = 0; i < filtered_SB_List.size(); i++) {
+//                    if (filtered_SB_List.get(i).getIsstash().equals("0")) {
+                    count++;
+//                    }
+                }
+                if (count == 0) {
+                    altText.setVisibility(View.VISIBLE);
+                } else {
+                    altText.setVisibility(View.GONE);
+                }
+                return count;
+            } else
+                return filtered_SB_List.size();
+        }
 
         private void getCheckingService(final int position) {
             final ProgressDialog dialog = new ProgressDialog(mContext);
             dialog.setProgressStyle(android.R.style.Widget_ProgressBar_Large);
             dialog.show();
-            Call<com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn> checkInCall = WebServicesFactory.getInstance()
-                    .checkInCustomer(com.citemenu.mystash.helper.Constant_util.ACTION_CUSTOMER_CHECKIN,
+            Call<CustomerCheckIn> checkInCall = WebServicesFactory.getInstance()
+                    .checkInCustomer(Constant_util.ACTION_CUSTOMER_CHECKIN,
                             userObj.getId(), filtered_SB_List.get(position).getId());
 
-            checkInCall.enqueue(new Callback<com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn>() {
+            checkInCall.enqueue(new Callback<CustomerCheckIn>() {
                 @Override
-                public void onResponse(Call<com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn> call, Response<com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn> response) {
+                public void onResponse(Call<CustomerCheckIn> call, Response<CustomerCheckIn> response) {
                     dialog.dismiss();
-                    com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn checkIn = response.body();
+                    CustomerCheckIn checkIn = response.body();
                     if (checkIn == null) {
                         Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                     } else if (checkIn.getHeader().getSuccess().equals("1")) {
@@ -537,19 +570,19 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 }
 
                 @Override
-                public void onFailure(Call<com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn> call, Throwable t) {
+                public void onFailure(Call<CustomerCheckIn> call, Throwable t) {
                     dialog.dismiss();
                     Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        public void addStash(com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby searchnearby, final int position) {
-            Call<com.citemenu.mystash.pojo.add_stash.AddStash> call = WebServicesFactory.getInstance().getAddStash(com.citemenu.mystash.helper.Constant_util.ACTION_ADD_STASH, searchnearby.getId(), userObj.getId());
-            call.enqueue(new Callback<com.citemenu.mystash.pojo.add_stash.AddStash>() {
+        void addStash(Searchnearby searchnearby, final int position) {
+            Call<AddStash> call = WebServicesFactory.getInstance().getAddStash(Constant_util.ACTION_ADD_STASH, searchnearby.getId(), userObj.getId());
+            call.enqueue(new Callback<AddStash>() {
                 @Override
-                public void onResponse(Call<com.citemenu.mystash.pojo.add_stash.AddStash> call, Response<com.citemenu.mystash.pojo.add_stash.AddStash> response) {
-                    com.citemenu.mystash.pojo.add_stash.AddStash stash = response.body();
+                public void onResponse(Call<AddStash> call, Response<AddStash> response) {
+                    AddStash stash = response.body();
                     if (stash == null) {
                         Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                     } else if (stash.getHeader().getSuccess().equals("1")) {
@@ -571,7 +604,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 }
 
                 @Override
-                public void onFailure(Call<com.citemenu.mystash.pojo.add_stash.AddStash> call, Throwable t) {
+                public void onFailure(Call<AddStash> call, Throwable t) {
                     Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -585,14 +618,14 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             return valueFilter;
         }
 
-        public class RecyclerView_SBCustomViewHolder2 extends RecyclerView.ViewHolder {
-            protected ImageView thumbnail;
-            protected TextView tvTileAddress;
-            protected TextView tvAreaAddress;
-            protected TextView tvMeterAddress;
-            protected RatingBar rattingBar;
+        class RecyclerView_SBCustomViewHolder2 extends RecyclerView.ViewHolder {
+            ImageView thumbnail;
+            TextView tvTileAddress;
+            TextView tvAreaAddress;
+            TextView tvMeterAddress;
+            RatingBar rattingBar;
 
-            public RecyclerView_SBCustomViewHolder2(View view) {
+            RecyclerView_SBCustomViewHolder2(View view) {
                 super(view);
                 thumbnail = (ImageView) view.findViewById(R.id.item_location_sb_thumbnail);
                 tvTileAddress = (TextView) view.findViewById(R.id.item_title_sb_location_address);
@@ -608,10 +641,10 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 if (constraint != null && constraint.length() > 0) {
-                    ArrayList<com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby> filterList = new ArrayList<>();
+                    ArrayList<Searchnearby> filterList = new ArrayList<>();
                     for (int i = 0; i < mainSB_List.size(); i++) {
                         if (mainSB_List.get(i).getName().toUpperCase().contains(constraint.toString().toUpperCase())) {
-                            com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby sb = new com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby(mainSB_List.get(i).getSelected(), mainSB_List.get(i).getId(),
+                            Searchnearby sb = new com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby(mainSB_List.get(i).getSelected(), mainSB_List.get(i).getId(),
                                     mainSB_List.get(i).getName(), mainSB_List.get(i).getCompanyname(), mainSB_List.get(i).getAddress(),
                                     mainSB_List.get(i).getContact(), mainSB_List.get(i).getEmail(), mainSB_List.get(i).getLogourl(),
                                     mainSB_List.get(i).getUid(), mainSB_List.get(i).getCity(), mainSB_List.get(i).getPostalcode(),
@@ -635,7 +668,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                filtered_SB_List = (List<com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby>) results.values;
+                filtered_SB_List = (List<Searchnearby>) results.values;
                 mAdapter.notifyDataSetChanged();
             }
         }

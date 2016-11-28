@@ -2,18 +2,20 @@ package com.citemenu.mystash.home;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.pojo.meesages.Datum;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,8 +55,7 @@ public class Messages extends AppCompatActivity {
                     if (!messagesWebService.getBody().getData().isEmpty()
                             && !messagesWebService.getBody().getData().equals("")) {
                         msgsList.setAdapter(new MessagesAdapter(Messages.this, messagesWebService.getBody().getData()));
-                    } else
-                        Toast.makeText(Messages.this, "No Messages Found", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(Messages.this, messagesWebService.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -62,7 +63,7 @@ public class Messages extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.meesages.MessagesWebService> call, Throwable t) {
-                Toast.makeText(Messages.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Messages.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -97,7 +98,7 @@ public class Messages extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (inflater == null) {
                 inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -105,15 +106,29 @@ public class Messages extends AppCompatActivity {
             if (convertView == null)
                 convertView = inflater.inflate(R.layout.row_review_details_listview, parent, false);
 
-            Datum listPosition = listData.get(position);
+            final Datum listPosition = listData.get(position);
 
             TextView tvTitle = (TextView) convertView.findViewById(R.id.textView_Review_Title);
+            RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.layout_itemMessage);
             TextView tvDesc = (TextView) convertView.findViewById(R.id.textView_Review_Desc);
             TextView tvTime = (TextView) convertView.findViewById(R.id.textView_Review_dateTime);
-            tvTitle.setText(listPosition.getBusinessName());
-            tvDesc.setText(listPosition.getMessage().trim());
+            if (listPosition.getBusinessName() != null)
+                tvTitle.setText(listPosition.getBusinessName());
+            if (listPosition.getMessage() != null)
+                tvDesc.setText(listPosition.getMessage().trim());
             tvTime.setText(setTime(listPosition.getSentTime()));
-            setTime(listPosition.getSentTime());
+            if (listPosition.getSentTime() != null)
+                setTime(listPosition.getSentTime());
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listPosition.getMessage() != null && listPosition.getBusinessName() != null)
+                        new AlertDialog.Builder(context)
+                                .setMessage(listPosition.getMessage())
+                                .setTitle(listPosition.getBusinessName())
+                                .show();
+                }
+            });
             return convertView;
         }
 

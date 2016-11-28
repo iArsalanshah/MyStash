@@ -17,7 +17,7 @@ import com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.Recyc
 import com.citemenu.mystash.pojo.get_my_stash_list.GetMyStash;
 import com.citemenu.mystash.pojo.get_my_stash_list.Stashlist;
 import com.citemenu.mystash.pojo.pojo_login.Users;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class List_MyStash extends AppCompatActivity {
             public void onFailure(Call<GetMyStash> call, Throwable t) {
                 swipeContainer.setRefreshing(false);
                 prog.dismiss();
-                Toast.makeText(List_MyStash.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(List_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,6 +123,6 @@ public class List_MyStash extends AppCompatActivity {
 
     public void PlusMyStashRecyclerImageView(View view) {
         SearchBusiness_MyStash.IS_CHECK_IN = false;
-        startActivity(new Intent(this, SearchBusiness_MyStash.class));
+        startActivity(new Intent(this, SearchBusiness_MyStash.class).putExtra("plusClicked", true));
     }
 }

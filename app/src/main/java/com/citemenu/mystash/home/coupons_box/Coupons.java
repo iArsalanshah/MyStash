@@ -19,8 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.home.flyers_box.Flyers_Available;
 import com.citemenu.mystash.pojo.categories_coupons_pojo.CategoriesCoupons;
 import com.citemenu.mystash.pojo.categories_coupons_pojo.Category;
@@ -84,7 +84,7 @@ public class Coupons extends AppCompatActivity {
             @Override
             public void onFailure(Call<CategoriesCoupons> call, Throwable t) {
                 progDialog.dismiss();
-                Toast.makeText(Coupons.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }

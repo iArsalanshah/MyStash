@@ -7,38 +7,38 @@
     tools:context="com.citemenu.mystash.home.mystash_box.List_MyStash">
 
 
-        <RelativeLayout
-            android:id="@+id/toolbarMyStashList"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@color/colorPrimary">
+    <RelativeLayout
+        android:id="@+id/toolbarMyStashList"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:onClick="backMyStashRecyclerViewImageBtn"
-                android:padding="12dp"
-                android:src="@drawable/img_toolbar_back" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:onClick="backMyStashRecyclerViewImageBtn"
+            android:padding="12dp"
+            android:src="@drawable/img_toolbar_back" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="MyStash"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="MyStash"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="4dp"
-                android:onClick="PlusMyStashRecyclerImageView"
-                android:padding="8dp"
-                android:src="@drawable/add_list_icon" />
-        </RelativeLayout>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:onClick="PlusMyStashRecyclerImageView"
+            android:padding="8dp"
+            android:src="@drawable/add_list_icon" />
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh_MyStashList"

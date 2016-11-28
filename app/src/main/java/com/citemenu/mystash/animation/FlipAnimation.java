@@ -8,7 +8,7 @@ import android.view.animation.Transformation;
 /**
  * This class extends Animation to support a 3D flip view transition animation. Two instances of this class is
  * required: one for the "from" view and another for the "to" view.
- * <p/>
+ * <p>
  * NOTE: use {@link AnimationFactory} to use this class.
  *
  * @author Ephraim A. Tekle

@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.customer_check_in;
 
 import com.google.gson.annotations.Expose;

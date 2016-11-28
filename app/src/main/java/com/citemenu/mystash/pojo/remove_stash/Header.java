@@ -1,4 +1,3 @@
-
 package com.citemenu.mystash.pojo.remove_stash;
 
 import com.google.gson.annotations.Expose;

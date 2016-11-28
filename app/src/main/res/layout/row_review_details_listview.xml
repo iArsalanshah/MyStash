@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_itemMessage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -11,19 +12,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="Title of reviews"
+        android:text=""
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView_Review_Desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView_Review_Title"
+        android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-        android:text="details of reviews"
+        android:text=""
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/textView_Review_dateTime"
@@ -31,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="6dp"
-        android:text="date"
+        android:text=""
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 </RelativeLayout>

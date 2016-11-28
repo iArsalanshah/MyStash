@@ -17,7 +17,9 @@ import android.widget.Toast;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.pojo.pojo_cite_points.History;
+import com.citemenu.mystash.singleton.MyCitePoints;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 
 import java.util.List;
@@ -45,7 +47,13 @@ public class Cite_Points extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getCitePoints();
+        List<History> histories = MyCitePoints.getInstance().getCitePointsHistory();
+        String totalPoints = MyCitePoints.getInstance().getTotalPoints();
+        if (histories != null && totalPoints != null) {
+            listView.setAdapter(new CitePointsAdapter(Cite_Points.this, histories));
+            tvCPNumber.setText(totalPoints);
+        } else
+            getCitePoints();
     }
 
     private void getCitePoints() {
@@ -53,12 +61,12 @@ public class Cite_Points extends AppCompatActivity {
         dlg.setMessage("Loading...");
         dlg.show();
         String cid = CustomSharedPref.getUserObject(this).getId();
-        Call<com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions> call = WebServicesFactory.getInstance().getCitePoints(Constant_util.ACTION_GET_CITE_POINTS, cid);
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions>() {
+        Call<CitePointsTransactions> call = WebServicesFactory.getInstance().getCitePoints(Constant_util.ACTION_GET_CITE_POINTS, cid);
+        call.enqueue(new Callback<CitePointsTransactions>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions> call, Response<CitePointsTransactions> response) {
+            public void onResponse(Call<CitePointsTransactions> call, Response<CitePointsTransactions> response) {
                 dlg.dismiss();
-                com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions transactions = response.body();
+                CitePointsTransactions transactions = response.body();
                 if (transactions.getHeader().getSuccess().equals("1")) {
                     try {
                         if (!transactions.getBody().getHistory().isEmpty() && transactions.getBody().getHistory().size() != 0) {
@@ -74,9 +82,9 @@ public class Cite_Points extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions> call, Throwable t) {
+            public void onFailure(Call<CitePointsTransactions> call, Throwable t) {
                 dlg.dismiss();
-                Toast.makeText(Cite_Points.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Cite_Points.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -90,11 +98,11 @@ public class Cite_Points extends AppCompatActivity {
     }
 
     private class CitePointsAdapter extends BaseAdapter {
-        private final List<com.citemenu.mystash.pojo.pojo_cite_points.History> history;
+        private final List<History> history;
         Context context;
         private LayoutInflater inflater;
 
-        public CitePointsAdapter(Context context, List<com.citemenu.mystash.pojo.pojo_cite_points.History> history) {
+        public CitePointsAdapter(Context context, List<History> history) {
             this.context = context;
             this.history = history;
         }

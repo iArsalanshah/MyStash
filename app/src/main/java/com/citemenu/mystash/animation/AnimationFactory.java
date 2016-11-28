@@ -24,7 +24,7 @@ public class AnimationFactory {
 
     /**
      * Create a pair of {@link FlipAnimation} that can be used to flip 3D transition from {@code fromView} to {@code toView}. A typical use case is with {@link ViewAnimator} as an out and in transition.
-     * <p/>
+     * <p>
      * NOTE: Avoid using this method. Instead, use {@link #flipTransition}.
      *
      * @param fromView     the view transition away from

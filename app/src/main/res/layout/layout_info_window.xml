@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/info_img"
         android:layout_toRightOf="@id/info_img"
-        android:text="Location:"
+        android:text=""
         android:textColor="@android:color/black"
         android:textSize="13sp" />
 
@@ -29,7 +29,7 @@
         android:layout_below="@id/info_title"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/info_img"
-        android:text="it is your current location"
+        android:text=""
         android:textColor="@android:color/black"
         android:textSize="11sp" />
 

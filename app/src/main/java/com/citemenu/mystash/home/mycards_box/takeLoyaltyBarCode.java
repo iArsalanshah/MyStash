@@ -19,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.BarcodeGeneratorActivity;
 import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.helper.SimpleScannerActivity;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.zxing.WriterException;
@@ -40,9 +42,12 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     ImageView imageview_backTopbar, imageView_captureBarcode;
     EditText editText_generator_barcode;
     TextView button_generate_barcode;
+    String img = null;
     private Class<?> mClass;
     private Button button_next_barcode;
     private boolean isComesFromDetail;
+    private boolean isBarcodeGenerated = false;
+    private String generatedBarcode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         isComesFromDetail = getSharedPreferences(Constant_util.PREFS_NAME, 0).getBoolean("updateLoyaltyCard", false);
         if (isComesFromDetail) {
             editText_generator_barcode.setText(getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("cardNumber", "null"));
-            String img = getSharedPreferences
+            img = getSharedPreferences
                     (Constant_util.PREFS_NAME, 0).getString("backCard", null);
             if (img != null && !img.isEmpty())
                 Picasso.with(this).load(img)
@@ -75,14 +80,16 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (!com.citemenu.mystash.helper.SimpleScannerActivity.barcodeText.equals("")) {
-            editText_generator_barcode.setText(com.citemenu.mystash.helper.SimpleScannerActivity.barcodeText);
+        if (!SimpleScannerActivity.barcodeText.equals("")) {
+            editText_generator_barcode.setText(SimpleScannerActivity.barcodeText);
             String barcode = editText_generator_barcode.getText().toString();
+            generatedBarcode = barcode;
             generateBarcode(barcode);
             if (bitmap == null) {
                 Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
-            } else
+            } else {
                 imageView_captureBarcode.setImageBitmap(bitmap);
+            }
         } else if (!isComesFromDetail) {
             editText_generator_barcode.setText("");
         }
@@ -101,7 +108,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imagview_backTopbar:
-                startActivity(new Intent(takeLoyaltyBarCode.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(takeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_generate_barcode:
                 if (editText_generator_barcode.getText().toString().length() > 0) {
@@ -114,20 +121,20 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                     Toast.makeText(takeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_next_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 0) {
+                if (editText_generator_barcode.getText().toString().length() > 0 && (bitmap != null || img != null)) {
                     //Convert to byte array
-                    if (bitmap == null) {
+
+                    if (!editText_generator_barcode.getText().toString().equals(generatedBarcode)) {
                         generateBarcode(editText_generator_barcode.getText().toString());
-                    }
-                    if (bitmap == null) {
-                        Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
-                    } else
                         uploadBarcodeImage();
+                    } else {
+                        uploadBarcodeImage();
+                    }
                 } else
                     Toast.makeText(takeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureBarcode:
-                launchActivity(com.citemenu.mystash.helper.SimpleScannerActivity.class);
+                launchActivity(SimpleScannerActivity.class);
                 break;
             default:
                 break;
@@ -150,9 +157,9 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
 
-        Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(com.citemenu.mystash.helper.Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+        Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant_util.ACTION_UPLOAD_LOYALTY_IMAGE, body);
 
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage>() {
+        call.enqueue(new Callback<UploadLoyaltyImage>() {
             @Override
             public void onResponse(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
                 dialog.dismiss();
@@ -194,9 +201,10 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     }
 
     public void generateBarcode(String barcode) {
-        com.citemenu.mystash.helper.BarcodeGeneratorActivity barcodeGeneratorActivity = new com.citemenu.mystash.helper.BarcodeGeneratorActivity();
+        generatedBarcode = barcode;
+        BarcodeGeneratorActivity barcodeGeneratorActivity = new BarcodeGeneratorActivity();
         try {
-            bitmap = barcodeGeneratorActivity.encodeAsBitmap(barcode, com.citemenu.mystash.helper.SimpleScannerActivity.barcodeFormat, 600, 300);
+            bitmap = barcodeGeneratorActivity.encodeAsBitmap(barcode, SimpleScannerActivity.barcodeFormat, 600, 300);
         } catch (WriterException e) {
             e.printStackTrace();
         }

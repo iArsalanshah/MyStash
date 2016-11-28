@@ -14,7 +14,13 @@ import android.widget.Toast;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.home.mystash_box.ListDetails_MyStash;
+import com.citemenu.mystash.pojo.get_my_stash_list.Stashlist;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.pojo.remove_stash.RemoveStash;
+import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -24,46 +30,44 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList> {
+public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerViewHolder_MyStashList> {
     private final ViewBinderHelper binderHelper;
     private final Users userObject;
     Context context;
-    private ArrayList<com.citemenu.mystash.pojo.get_my_stash_list.Stashlist> searchNearbyList;
+    private ArrayList<Stashlist> searchNearbyList;
 
     View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             //context.startActivity(new Intent(context, ListDetails_MyStash.class));
             Log.i("RecyclerTEST", " OnClick Working");
-            com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList vholder =
-                    (com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList) v.getTag();
+            RecyclerViewHolder_MyStashList vholder =
+                    (RecyclerViewHolder_MyStashList) v.getTag();
             int position = vholder.getAdapterPosition();
-            com.citemenu.mystash.pojo.get_my_stash_list.Stashlist s = searchNearbyList.get(position);
+            Stashlist s = searchNearbyList.get(position);
             String jsonlist = (new Gson()).toJson(s);
-            Intent intent = new Intent(context, com.citemenu.mystash.home.mystash_box.ListDetails_MyStash.class);
+            Intent intent = new Intent(context, ListDetails_MyStash.class);
             intent.putExtra("id", jsonlist);
-//            Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, " " + s.getId());
-            //   ListDetails_MyStash.isDirect = true;
             context.startActivity(intent);
         }
     };
 
-    public RecyclerAdapter_MyStashList(Context context, ArrayList<com.citemenu.mystash.pojo.get_my_stash_list.Stashlist> searchnearbies) {
+    public RecyclerAdapter_MyStashList(Context context, ArrayList<Stashlist> searchnearbies) {
         this.context = context;
         this.searchNearbyList = searchnearbies;
         binderHelper = new ViewBinderHelper();
         binderHelper.setOpenOnlyOne(true);
-        userObject = com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(context);
+        userObject = CustomSharedPref.getUserObject(context);
     }
 
     @Override
-    public com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewHolder_MyStashList onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_mystash_recyclerview_selected_items, parent, false);
-        return new com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList(v);
+        return new RecyclerViewHolder_MyStashList(v);
     }
 
-    public void onBindViewHolder(final com.citemenu.mystash.home.mystash_box.recyclerview_util_mystashlist.RecyclerViewHolder_MyStashList holder, int position) {
-        com.citemenu.mystash.pojo.get_my_stash_list.Stashlist sbNearBy = searchNearbyList.get(position);
+    public void onBindViewHolder(final RecyclerViewHolder_MyStashList holder, int position) {
+        Stashlist sbNearBy = searchNearbyList.get(position);
 
         //setting image using picasso library
         if (sbNearBy.getLogourl() != null
@@ -114,14 +118,14 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<com.citeme
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Deleting...");
         dialog.show();
-        Call<com.citemenu.mystash.pojo.remove_stash.RemoveStash> call = com.citemenu.mystash.webservicefactory.WebServicesFactory.getInstance()
-                .getRemoveStash(com.citemenu.mystash.helper.Constant_util.ACTION_REMOVE_STASH, id
+        Call<RemoveStash> call = WebServicesFactory.getInstance()
+                .getRemoveStash(Constant_util.ACTION_REMOVE_STASH, id
                         , userObject.getId());
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.remove_stash.RemoveStash>() {
+        call.enqueue(new Callback<RemoveStash>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.remove_stash.RemoveStash> call, Response<com.citemenu.mystash.pojo.remove_stash.RemoveStash> response) {
+            public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
                 dialog.dismiss();
-                com.citemenu.mystash.pojo.remove_stash.RemoveStash removeStash = response.body();
+                RemoveStash removeStash = response.body();
                 if (removeStash == null) {
 
                 } else if (removeStash.getHeader().getSuccess().equals("1")) {
@@ -134,12 +138,11 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<com.citeme
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.remove_stash.RemoveStash> call, Throwable t) {
+            public void onFailure(Call<RemoveStash> call, Throwable t) {
                 dialog.dismiss();
                 Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     public int getItemCount() {

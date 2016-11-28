@@ -55,7 +55,7 @@ public class ActivityForgotPwd extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<com.citemenu.mystash.pojo.pojo_register.RegisterUser> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(context, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
 

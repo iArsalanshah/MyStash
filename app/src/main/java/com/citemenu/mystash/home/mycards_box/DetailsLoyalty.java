@@ -22,6 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
+import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.squareup.picasso.Picasso;
@@ -116,7 +119,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                 public void onClick(View v) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(DetailsLoyalty.this);
                     dialog.setTitle("Confirmation");
-                    dialog.setMessage("Delete loyalty card?");
+                    dialog.setMessage("Are you sure you want to remove this loyalty card");
                     dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -144,27 +147,27 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Deleting...");
         dialog.show();
-        Call<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard> call = com.citemenu.mystash.webservicefactory.WebServicesFactory.getInstance()
-                .deleteLoyaltyCard(com.citemenu.mystash.helper.Constant_util.ACTION_DELETE_LOYALTY_CARD,
+        Call<DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
+                .deleteLoyaltyCard(Constant_util.ACTION_DELETE_LOYALTY_CARD,
                         position);
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard>() {
+        call.enqueue(new Callback<DeleteLoyaltyCard>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard> call, Response<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard> response) {
+            public void onResponse(Call<DeleteLoyaltyCard> call, Response<DeleteLoyaltyCard> response) {
                 dialog.dismiss();
-                com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard deleteLoyaltyCard = response.body();
+                DeleteLoyaltyCard deleteLoyaltyCard = response.body();
 
                 if (deleteLoyaltyCard.getHeader().getSuccess().equals("1")) {
                     Toast.makeText(DetailsLoyalty.this, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 } else {
                     Toast.makeText(DetailsLoyalty.this, "" + deleteLoyaltyCard.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard> call, Throwable t) {
+            public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
                 dialog.dismiss();
-                Toast.makeText(DetailsLoyalty.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsLoyalty.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -189,19 +192,19 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.button_loyalty_edit:
                 Intent intent;
-                SharedPreferences.Editor editor = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit();
+                SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
 
                 editor.putBoolean("updateLoyaltyCard", true);
 //                if (convertedObjEdit.getImageurl().length() > 0) {
                 if (is_Edit) {
                     editor.putString("loyaltyID", convertedObjEdit.getId());
                     if (convertedObjEdit.getIsRegisterdCompany().equals("0")) {
-                        intent = new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.is_Created = true;
+                        intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = true;
                         intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
                     } else {
-                        intent = new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.is_Created = false;
+                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = false;
                     }
                     editor.putString("backCard", convertedObjEdit.getBackimage());
                     editor.putString("cardNumber", convertedObjEdit.getCardno());
@@ -214,12 +217,12 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                 } else {
                     editor.putString("loyaltyID", loyaltyPosition);
                     if (isRegistered.equals("0")) {
-                        intent = new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.is_Created = true;
+                        intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = true;
                         intent.putExtra("frontCard", frontCard);
                     } else {
-                        intent = new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.is_Created = false;
+                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        takeLoyaltyNameDetails.is_Created = false;
                     }
                     editor.putString("cardNumber", cardNumber);
                     editor.putString("cardUrName", urName);
@@ -251,7 +254,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override

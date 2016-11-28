@@ -14,7 +14,6 @@ import com.citemenu.mystash.helper.Log;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
     private Camera camera;
-    private SurfaceHolder holder;
     private Context context;
 
     public CameraPreview(Context context, AttributeSet attrs, int defStyle) {
@@ -36,14 +35,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @SuppressWarnings("deprecation") // needed for < 3.0
     private void initSurfaceHolder() {
-        holder = getHolder();
+        SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        initCamera(holder);
     }
 
     private void initCamera(SurfaceHolder holder) {
@@ -57,8 +51,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceCreated(SurfaceHolder holder) {
+        initCamera(holder);
+    }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.d("Surface Changed: --> " + width + "," + height);
     }
 
     @Override

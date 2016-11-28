@@ -21,7 +21,7 @@ import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.pojo.program_stamps.Datum;
 import com.citemenu.mystash.pojo.program_stamps.ProgramsStamps;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -105,7 +105,7 @@ public class ProgramsList extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProgramsStamps> call, Throwable t) {
                 progress.dismiss();
-                Toast.makeText(ProgramsList.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProgramsList.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }

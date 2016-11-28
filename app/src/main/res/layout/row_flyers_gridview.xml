@@ -7,14 +7,12 @@
         android:id="@+id/image1_flyer_row"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/placeholder" />
+        android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/image2_flyer_row"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#64282727"
         android:scaleType="fitXY" />
 
     <LinearLayout

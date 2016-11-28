@@ -44,7 +44,7 @@ import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.pojo_register.RegisterUser;
 import com.citemenu.mystash.pojo.update_registeration.UpdateRegisteration;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
-import com.citemenu.mystash.webservicefactory.CustomSharedPref;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.squareup.picasso.Picasso;
 
@@ -192,7 +192,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 String newp = newPwd.getText().toString();
                 String newc = newcPwd.getText().toString();
                 if (!old.equals("") || !newp.equals("") || !newc.equals("")) {
-                    if (old.equals(com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(Register.this).getPassword())) {
+                    if (old.equals(CustomSharedPref.getUserObject(Register.this).getPassword())) {
                         if (newp.equals(newc)) {
                             hidesoftkeyboard(v);
                             newPassword = newp;
@@ -229,46 +229,88 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 }
             }
             final String loginType = CustomSharedPref.getUserObject(this).getLogintype();
-
-            //Registering the user
-            Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
-                    name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest, loginType);
-            Log.d(TAG, "onResponse: " + name + " " + email + " " + pwd + " " + phone + " " + imgURL + " " + bday + " " + gender + " " + category + " " + areaOfInterest);
-            call.enqueue(new Callback<UpdateRegisteration>() {
-                @Override
-                public void onResponse(Call<UpdateRegisteration> call, Response<UpdateRegisteration> response) {
-                    UpdateRegisteration registerResponse = response.body();
-                    if (registerResponse.getHeader().getSuccess().equals("1")) {
-                        progressDialog.dismiss();
-                        String id = CustomSharedPref.getUserObject(Register.this).getId();
-                        Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                        CustomSharedPref.RemoveUserObject(Register.this);
-                        Users obj = new Users();
-                        obj.setId(id);
-                        obj.setCfirstname(name);
-                        obj.setEmail(email);
-                        obj.setPassword(pwd);
-                        obj.setContactnumber(phone);
-                        obj.setImgurl(imgURL);
-                        obj.setBirthday(bday);
-                        obj.setSex(gender);
-                        obj.setCategories(category);
-                        obj.setAreaOfInterest(areaOfInterest);
-                        obj.setLogintype(loginType);
-                        CustomSharedPref.setUserObject(Register.this, obj);
-                        finish();
-                    } else {
-                        progressDialog.dismiss();
-                        Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+            if (loginType.equals("1")) {
+                final String fbid = CustomSharedPref.getUserObject(this).getFbid();
+                //Updating Fb User the user
+                Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterFbUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
+                        fbid, name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest, loginType);
+                Log.d(TAG, "onResponse: " + name + " " + email + " " + pwd + " " + phone + " " + imgURL + " " + bday + " " + gender + " " + category + " " + areaOfInterest);
+                call.enqueue(new Callback<UpdateRegisteration>() {
+                    @Override
+                    public void onResponse(Call<UpdateRegisteration> call, Response<UpdateRegisteration> response) {
+                        UpdateRegisteration registerResponse = response.body();
+                        if (registerResponse.getHeader().getSuccess().equals("1")) {
+                            progressDialog.dismiss();
+                            String id = CustomSharedPref.getUserObject(Register.this).getId();
+                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            CustomSharedPref.RemoveUserObject(Register.this);
+                            Users obj = new Users();
+                            obj.setId(id);
+                            obj.setCfirstname(name);
+                            obj.setEmail(email);
+                            obj.setPassword(pwd);
+                            obj.setContactnumber(phone);
+                            obj.setImgurl(imgURL);
+                            obj.setBirthday(bday);
+                            obj.setSex(gender);
+                            obj.setCategories(category);
+                            obj.setAreaOfInterest(areaOfInterest);
+                            obj.setLogintype(loginType);
+                            CustomSharedPref.setUserObject(Register.this, obj);
+                            finish();
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
-                    progressDialog.dismiss();
-                    Toast.makeText(Register.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                //Updating Normal User user
+                Call<UpdateRegisteration> call = WebServicesFactory.getInstance().postUpdateRegisterUser(Constant_util.ACTION_UPDATE_REGISTER_CUSTOMER,
+                        name, email, pwd, phone, imgURL, bday, gender, category, areaOfInterest, loginType);
+                Log.d(TAG, "onResponse: " + name + " " + email + " " + pwd + " " + phone + " " + imgURL + " " + bday + " " + gender + " " + category + " " + areaOfInterest);
+                call.enqueue(new Callback<UpdateRegisteration>() {
+                    @Override
+                    public void onResponse(Call<UpdateRegisteration> call, Response<UpdateRegisteration> response) {
+                        UpdateRegisteration registerResponse = response.body();
+                        if (registerResponse.getHeader().getSuccess().equals("1")) {
+                            progressDialog.dismiss();
+                            String id = CustomSharedPref.getUserObject(Register.this).getId();
+                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                            CustomSharedPref.RemoveUserObject(Register.this);
+                            Users obj = new Users();
+                            obj.setId(id);
+                            obj.setCfirstname(name);
+                            obj.setEmail(email);
+                            obj.setPassword(pwd);
+                            obj.setContactnumber(phone);
+                            obj.setImgurl(imgURL);
+                            obj.setBirthday(bday);
+                            obj.setSex(gender);
+                            obj.setCategories(category);
+                            obj.setAreaOfInterest(areaOfInterest);
+                            obj.setLogintype(loginType);
+                            CustomSharedPref.setUserObject(Register.this, obj);
+                            finish();
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(Register.this, "" + registerResponse.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         } else {
             Toast.makeText(Register.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
         }
@@ -464,7 +506,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     etCateg.setText(objUser.getCategories().toString());
                     etInterest.setText(objUser.getAreaOfInterest().toString());
                     etPhone.setText(objUser.getContactnumber());
-//                    Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "onResume: " + com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(this).getBirthday());
+//                    Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "onResume: " + com.citemenu.mystash.Utils.CustomSharedPref.getUserObject(this).getBirthday());
                     btnId_updatePwd.setVisibility(View.VISIBLE);
                     if (!imgURL.equals("")) {
                         Picasso.with(this)
@@ -528,7 +570,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     @Override
                     public void onFailure(Call<RegisterUser> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(Register.this, "Something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -641,11 +683,11 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             thumbnail.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
-            // create RequestBody instance from file
+            //Create RequestBody instance from file
             RequestBody requestFile =
                     RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOutputStream.toByteArray());
 
-            // MultipartBody.Part is used to send also the actual file name
+            //MultipartBody.Part is used to send also the actual file name
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("uploaded_file", "upload_image", requestFile);
             Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadProfileImage(Constant_util.ACTION_UPLOAD_PROFILE_IMAGE, body);

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -64,6 +65,12 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
 
     private void bindingData() {
         searchView_Addcards.setOnQueryTextListener(Add_LoyaltyCard.this);
+        searchView_Addcards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView_Addcards.setIconified(false);
+            }
+        });
     }
 
     @Override
@@ -77,7 +84,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
     }
 
     private void getAddLoyaltyList() {
-        Users cid = com.citemenu.mystash.webservicefactory.CustomSharedPref.getUserObject(Add_LoyaltyCard.this);
+        Users cid = CustomSharedPref.getUserObject(Add_LoyaltyCard.this);
 //        Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, cid.getId());
         Call<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList> call = WebServicesFactory.getInstance().getCardsList(com.citemenu.mystash.helper.Constant_util.ACTION_GET_LOYALTY_CARDS_LIST, cid.getId());
         call.enqueue(new Callback<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList>() {
