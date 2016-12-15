@@ -104,6 +104,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                     listView.setVisibility(View.VISIBLE);
                     listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, savedCoupons.getBody().getCoupons()));
                 } else {
+                    altTextCouponsSavedList.setText(getResources().getString(R.string.savedCouponsAltText));
                     altTextCouponsSavedList.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
                 }
@@ -147,7 +148,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

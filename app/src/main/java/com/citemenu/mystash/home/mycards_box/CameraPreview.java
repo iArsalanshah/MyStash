@@ -41,6 +41,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     private void initCamera(SurfaceHolder holder) {
+        Camera.Parameters params = camera.getParameters();
+        if (params.getSupportedFocusModes().contains(
+                Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+        }
+        camera.setParameters(params);
         try {
             camera.setPreviewDisplay(holder);
             camera.setDisplayOrientation(90);

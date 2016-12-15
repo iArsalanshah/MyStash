@@ -70,4 +70,5 @@ public class Constant_util {
 
     public static final String SHARE_LINK = "http://mystash.ca/openurl.php";
 
+    public static final long BACK_BTN_TIME_INTERVAL = 2 * 1000;
 }

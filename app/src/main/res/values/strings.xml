@@ -52,4 +52,5 @@
     <string name="btn_add">Add Section</string>
     <string name="btn_finish">Finish</string>
     <string name="btn_capture">Capture</string>
+    <string name="savedCouponsAltText">You have not saved any coupons yet. Please save them to your wallet when you find one you like and it will appear here</string>
 </resources>

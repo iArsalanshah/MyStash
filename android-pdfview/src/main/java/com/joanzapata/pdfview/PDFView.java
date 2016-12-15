@@ -717,6 +717,14 @@ public class PDFView extends SurfaceView {
             this.decodeService = decodeService;
             this.documentPageCount = decodeService.getPageCount();
 
+            if (this.documentPageCount==0){
+                curruptFile = true;
+                jumpTo(defaultPage);
+                if (onLoadCompleteListener != null) {
+                    onLoadCompleteListener.loadComplete(-1);
+                }
+                return;
+            }
             // We assume all the pages are the same size
             this.pageWidth = decodeService.getPageWidth(0);
             this.pageHeight = decodeService.getPageHeight(0);

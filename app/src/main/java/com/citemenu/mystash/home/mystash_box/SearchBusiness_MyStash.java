@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.helper.Log;
 import com.citemenu.mystash.pojo.add_stash.AddStash;
 import com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn;
 import com.citemenu.mystash.pojo.pojo_login.Users;
@@ -239,6 +240,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             public void onFailure(Call<SearchBusiness> call, Throwable t) {
                 progressDialog.dismiss();
                 search.setClickable(false);
+                Log.d("ERROR ON FAILURE: "+t.toString());
                 Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });

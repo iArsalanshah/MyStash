@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private Tracker tracker;
     private Users user;
     private TextView tvTotalPoints;
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,22 +271,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Exit MyStash")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        moveTaskToBack(true);
-                        finish();
-                    }
-                })
-                .show();
+//        new AlertDialog.Builder(this)
+//                .setTitle("Exit MyStash")
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                })
+//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        moveTaskToBack(true);
+//                        finish();
+//                    }
+//                })
+//                .show();
+        if (mBackPressed + Constant_util.BACK_BTN_TIME_INTERVAL > System.currentTimeMillis()) {
+            moveTaskToBack(true);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Press again to exit",Toast.LENGTH_SHORT).show();
+        }
+        mBackPressed = System.currentTimeMillis();
     }
 
     private void enableTracking() {

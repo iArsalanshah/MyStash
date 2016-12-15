@@ -56,6 +56,7 @@ public class Login_activity extends AppCompatActivity {
     private boolean isMarshmallow;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private String gcmID;
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,8 @@ public class Login_activity extends AppCompatActivity {
         LoginManager.getInstance().logOut();
         callbackManager = CallbackManager.Factory.create();
 
-        // Set the application environment
+        // Set the application environment for MINT
         Mint.setApplicationEnvironment(Mint.appEnvironmentStaging);
-
-        // TODO: Update with your API key
         Mint.initAndStartSession(Login_activity.this, "7bd743a0");
         setContentView(R.layout.activity_login);
 
@@ -90,20 +89,23 @@ public class Login_activity extends AppCompatActivity {
 
                                 if (bFb.getString("idFacebook") != null) {
                                     //WebService
+                                    prog.show();
                                     Call<LoginUser> call = WebServicesFactory.getInstance().getFblogin(Constant_util.ACTION_FB_LOGIN,
                                             bFb.getString("email"), bFb.getString("first_name"), bFb.getString("last_name"),
                                             bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"), gcmID, "1");
                                     call.enqueue(new Callback<LoginUser>() {
                                         @Override
                                         public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
+                                            prog.dismiss();
                                             Users webResponse = response.body().getBody().getUsers();
                                             CustomSharedPref.setUserObject(Login_activity.this, webResponse);
-                                            startActivity(new Intent(Login_activity.this, MainActivity.class));
-                                            finish();
+                                            startActivity(new Intent(Login_activity.this, MainActivity.class)
+                                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                                         }
 
                                         @Override
                                         public void onFailure(Call<LoginUser> call, Throwable t) {
+                                            prog.dismiss();
                                             Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -176,6 +178,9 @@ public class Login_activity extends AppCompatActivity {
         etEmail = (EditText) findViewById(R.id.input_email_login);
         etPwd = (EditText) findViewById(R.id.input_pwd_login);
         loginButton = (LoginButton) findViewById(R.id.login_fb_btn);
+        prog = new ProgressDialog(this);
+        prog.setMessage("Please wait...");
+        prog.setCancelable(false);
     }
 
     private Bundle getFacebookData(JSONObject object) {
@@ -226,7 +231,6 @@ public class Login_activity extends AppCompatActivity {
         getData();
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if (!email.equals("") && !pwd.equals("") && email.matches(emailPattern)) {
-            prog = new ProgressDialog(this);
             prog.show();
             Call<LoginUser> call = WebServicesFactory.getInstance().getLoginUsers(Constant_util.ACTION_LOGIN_CUSTOMER, email, pwd);
             call.enqueue(new Callback<LoginUser>() {
@@ -242,8 +246,8 @@ public class Login_activity extends AppCompatActivity {
 //                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                         getSharedPreferences(Constant_util.PREFS_NAME, 0).edit().putString(Constant_util.IS_LOGIN, Constant_util.IS_LOGIN).apply();
                         CustomSharedPref.setUserObject(Login_activity.this, users.getBody().getUsers());
-                        startActivity(new Intent(Login_activity.this, MainActivity.class));
-                        finish();
+                        startActivity(new Intent(Login_activity.this, MainActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                     } else {
                         Toast.makeText(Login_activity.this, users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -273,23 +277,13 @@ public class Login_activity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        super.onBackPressed();
-//        new AlertDialog.Builder(this)
-//                .setTitle("Exit MyStash")
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                })
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        moveTaskToBack(true);
-//                        finish();
-//                    }
-//                })
-//                .show();
+        if (mBackPressed + Constant_util.BACK_BTN_TIME_INTERVAL > System.currentTimeMillis()) {
+            moveTaskToBack(true);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Press again to exit", Toast.LENGTH_SHORT).show();
+        }
+        mBackPressed = System.currentTimeMillis();
     }
 
     public void TvForgotPwd(View view) {

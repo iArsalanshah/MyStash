@@ -36,6 +36,7 @@ public class Flyers_Available extends AppCompatActivity {
     private ProgressDialog progDialog;
     private String catId;
     private GetAllFlyersWebService flyersWebService;
+    private List<Datum> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class Flyers_Available extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Flyers_Available.this, Flyers_pdfview.class);
+                intent.putExtra("flyerTile", data.get(position).getTitle());
                 intent.putExtra("pdfFile", flyersWebService.getBody().getData().get(position).getFilepath());
                 startActivity(intent);
             }
@@ -56,7 +58,7 @@ public class Flyers_Available extends AppCompatActivity {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
     }
@@ -84,7 +86,8 @@ public class Flyers_Available extends AppCompatActivity {
                 progDialog.dismiss();
                 flyersWebService = response.body();
                 if (flyersWebService.getHeader().getSuccess().equals("1")) {
-                    gridView.setAdapter(new GridCustomAdapter(Flyers_Available.this, flyersWebService.getBody().getData()));
+                    data = flyersWebService.getBody().getData();
+                    gridView.setAdapter(new GridCustomAdapter(Flyers_Available.this));
                 } else {
                     Toast toast = Toast.makeText(Flyers_Available.this, "" + flyersWebService.getHeader().getMessage(), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -105,11 +108,9 @@ public class Flyers_Available extends AppCompatActivity {
     private class GridCustomAdapter extends BaseAdapter {
         Context context;
         LayoutInflater layoutInflater;
-        List<Datum> data;
 
-        public GridCustomAdapter(Context context, List<Datum> data) {
+        GridCustomAdapter(Context context) {
             this.context = context;
-            this.data = data;
         }
 
         @Override

@@ -44,11 +44,14 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
     private ResponseBody respBody;
     private String completePdfPath;
     private String fileExtension;
+    private TextView txtTitle;
+    private String flyerTile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flyers_pdfview);
+        flyerTile = getIntent().getStringExtra("flyerTile");
         init();
         loadPDF();
     }
@@ -87,6 +90,8 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
     }
 
     private void init() {
+        txtTitle = (TextView) findViewById(R.id.tv_flyerName);
+        txtTitle.setText(flyerTile != null ? flyerTile : "No Title Found");
         pdfUrl = getIntent().getStringExtra("pdfFile");
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
@@ -203,7 +208,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            onBackPressed();
                         }
                     })
                     .show();

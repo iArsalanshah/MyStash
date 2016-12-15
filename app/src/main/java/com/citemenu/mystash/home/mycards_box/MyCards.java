@@ -371,7 +371,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                 if (constraint != null && constraint.length() > 0) {
                     ArrayList<Loyaltycard> filterList = new ArrayList<>();
                     for (int i = 0; i < mFilterloyaltycards.size(); i++) {
-                        if (mFilterloyaltycards.get(i).getCardname().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                        if (mFilterloyaltycards.get(i).getCarddetail().toUpperCase().contains(constraint.toString().toUpperCase())) {
                             Loyaltycard lCard = new com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard(mFilterloyaltycards.get(i).getId(), mFilterloyaltycards.get(i).getLoyaltyId(),
                                     mFilterloyaltycards.get(i).getCid(), mFilterloyaltycards.get(i).getCardno(), mFilterloyaltycards.get(i).getNotes(),
                                     mFilterloyaltycards.get(i).getIsRegisterdCompany(), mFilterloyaltycards.get(i).getCardname(), mFilterloyaltycards.get(i).getCarddetail(),
