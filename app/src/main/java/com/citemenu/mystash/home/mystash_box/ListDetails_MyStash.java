@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
-import com.citemenu.mystash.home.businessMapActivity;
+import com.citemenu.mystash.home.BusinessMapActivity;
 import com.citemenu.mystash.home.coupons_box.Coupons_Categories_Click;
 import com.citemenu.mystash.home.mystash_box.viewpager_adapter.ViewPagerAdapter;
 import com.citemenu.mystash.pojo.add_stash.AddStash;
@@ -295,7 +295,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
     }
 
     public void onClickMapIcon(View view) {
-        Intent intent = new Intent(this, businessMapActivity.class);
+        Intent intent = new Intent(this, BusinessMapActivity.class);
         if (gsonBusiness.getLat() != null
                 && !gsonBusiness.getLat().equals("")
                 && gsonBusiness.getLongt() != null

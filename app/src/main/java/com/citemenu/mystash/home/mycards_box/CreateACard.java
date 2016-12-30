@@ -55,6 +55,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     String url = "";
     ProgressDialog progressDialog;
     boolean isCaptured = false;
+    private boolean comesFromDetailActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,10 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         initialization();
         clickListeners();
 
-        boolean comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
+        comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
         if (comesFromDetailActivity) {
             url = getIntent().getStringExtra("frontCard");
-            if (!url.equals("")) {
+            if (url != null && !url.equals("")) {
                 Picasso.with(this).load(url)
                         .placeholder(R.drawable.placeholder_shadow)
                         .error(R.drawable.placeholder_shadow)
@@ -96,10 +97,16 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_loyaltyDetails_next:
-                if (isCaptured || !url.equals("")) {
-                    uploadImageView();
-                } else
-                    Toast.makeText(CreateACard.this, "Please add front card", Toast.LENGTH_SHORT).show();
+                if (comesFromDetailActivity && url != null && !url.isEmpty()) {
+                    updateSharedPref(url);
+                    Intent intent = new Intent(CreateACard.this, TakeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                } else {
+                    if (isCaptured || !url.equals("")) {
+                        uploadImageView();
+                    } else
+                        Toast.makeText(CreateACard.this, "Please add front card", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.imageView_captureFrontCard:
                 getPermisions();
@@ -137,11 +144,12 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     progressDialog.dismiss();
                     com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage uploadLoyaltyImage = response.body();
                     if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
-                        String frontImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
-                        SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-                        editor.putString("frontImage", frontImage);
-                        editor.apply();
-                        Intent intent = new Intent(CreateACard.this, com.citemenu.mystash.home.mycards_box.takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        updateSharedPref("http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath());
+//                        String frontImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
+//                        SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+//                        editor.putString("frontImage", frontImage);
+//                        editor.apply();
+                        Intent intent = new Intent(CreateACard.this, TakeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
                         Toast.makeText(CreateACard.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
@@ -157,6 +165,12 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             });
         } else
             Toast.makeText(CreateACard.this, "Error on Bitmap conversion", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateSharedPref(String imgPath) {
+        SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
+        editor.putString("frontImage", imgPath);
+        editor.apply();
     }
 
     private void selectImage() {
@@ -380,5 +394,14 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         Intent intent = new Intent(this, ImageCropActivity.class);
         intent.putExtra("ACTION", Constant_util.ACTION_CAMERA);
         startActivityForResult(intent, REQ_CAMERA_IMAGE);
+    }
+
+    public List<int[]> getThem() {
+        List<int[]> theList = new ArrayList<int[]>();
+        List<int[]> list1 = new ArrayList<int[]>();
+        for (int[] x : theList)
+            if (x[0] == 4)
+                list1.add(x);
+        return list1;
     }
 }

@@ -4,7 +4,7 @@ package com.citemenu.mystash.helper;
  * Created by dev.arsalan on 8/10/2016.
  */
 public class Log {
-    private static final String TAG = "CameraSpike";
+    private static final String TAG = "MyStash: ";
 
     public static void d(String msg) {
         d(msg, null);

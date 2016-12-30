@@ -36,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClickListener {
+public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClickListener {
     private static final int CAMERA_PERMISSION = 1;
     Bitmap bitmap = null;
     ImageView imageview_backTopbar, imageView_captureBarcode;
@@ -80,13 +80,13 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (!SimpleScannerActivity.barcodeText.equals("")) {
+        if (!SimpleScannerActivity.barcodeText.isEmpty()) {
             editText_generator_barcode.setText(SimpleScannerActivity.barcodeText);
             String barcode = editText_generator_barcode.getText().toString();
             generatedBarcode = barcode;
             generateBarcode(barcode);
             if (bitmap == null) {
-                Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
             } else {
                 imageView_captureBarcode.setImageBitmap(bitmap);
             }
@@ -108,22 +108,34 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imagview_backTopbar:
-                startActivity(new Intent(takeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(TakeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_generate_barcode:
                 if (editText_generator_barcode.getText().toString().length() > 0) {
                     generateBarcode(editText_generator_barcode.getText().toString());
                     if (bitmap == null) {
-                        Toast.makeText(takeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TakeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
                     } else
                         imageView_captureBarcode.setImageBitmap(bitmap);
                 } else
-                    Toast.makeText(takeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_next_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 0 && (bitmap != null || img != null)) {
+                if (isComesFromDetail){
+                    if (editText_generator_barcode.getText().toString().isEmpty()){
+                        generateBarcode(editText_generator_barcode.getText().toString());
+                    }
+                    if (img == null || img.isEmpty()){
+                        uploadBarcodeImage();
+                    }else {
+                        Intent intent = new Intent(TakeLoyaltyBarCode.this, TakeLoyaltyNameDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
+                        SimpleScannerActivity.barcodeText = "";
+                        startActivity(intent);
+                    }
+                }
+                else if (!editText_generator_barcode.getText().toString().isEmpty() && (bitmap != null || img != null)) {
                     //Convert to byte array
-
                     if (!editText_generator_barcode.getText().toString().equals(generatedBarcode)) {
                         generateBarcode(editText_generator_barcode.getText().toString());
                         uploadBarcodeImage();
@@ -131,7 +143,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                         uploadBarcodeImage();
                     }
                 } else
-                    Toast.makeText(takeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureBarcode:
                 launchActivity(SimpleScannerActivity.class);
@@ -165,17 +177,17 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                 dialog.dismiss();
                 com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage uploadLoyaltyImage = response.body();
                 if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
-//                                Toast.makeText(takeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(TakeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
                     String barcodeImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
-                    SharedPreferences.Editor editor = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit();
+                    SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                     editor.putString("barcodeImage", barcodeImage);
                     editor.apply();
-                    Intent intent = new Intent(takeLoyaltyBarCode.this, com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent intent = new Intent(TakeLoyaltyBarCode.this, TakeLoyaltyNameDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
-                    com.citemenu.mystash.helper.SimpleScannerActivity.barcodeText = "";
+                    SimpleScannerActivity.barcodeText = "";
                     startActivity(intent);
                 } else {
-                    Toast.makeText(takeLoyaltyBarCode.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyBarCode.this, "" + uploadLoyaltyImage.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -183,7 +195,7 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             public void onFailure(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Throwable t) {
                 dialog.dismiss();
 //                Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "onFailure: " + t.getMessage());
-                Toast.makeText(takeLoyaltyBarCode.this, "Barcode Image upload failed. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyBarCode.this, "Barcode Image upload failed. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -227,6 +239,6 @@ public class takeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(takeLoyaltyBarCode.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(TakeLoyaltyBarCode.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

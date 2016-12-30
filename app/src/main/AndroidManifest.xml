@@ -137,10 +137,10 @@
             android:name=".home.mystash_box.Program_Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.takeLoyaltyBarCode"
+            android:name=".home.mycards_box.TakeLoyaltyBarCode"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.takeLoyaltyNameDetails"
+            android:name=".home.mycards_box.TakeLoyaltyNameDetails"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.mycards_box.CreateACard"
@@ -149,7 +149,7 @@
             android:name=".helper.ImageCropActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.businessMapActivity"
+            android:name=".home.BusinessMapActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".home.Messages"

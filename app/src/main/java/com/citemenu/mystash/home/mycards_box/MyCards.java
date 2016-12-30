@@ -26,6 +26,7 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.helper.Log;
 import com.citemenu.mystash.home.MainActivity;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.citemenu.mystash.pojo.getmycards_pojo.GetMycards;
@@ -154,6 +155,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private void getCards() {
         Users cid = CustomSharedPref.getUserObject(MyCards.this);
+        Log.d(cid.getId());
         Call<GetMycards> call = WebServicesFactory.getInstance().getMyCards(Constant_util.ACTION_GET_MY_LOYALTY_CARDS, cid.getId());
         call.enqueue(new Callback<GetMycards>() {
             @Override
@@ -280,7 +282,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
             tvTitle.setText(loyaltycards.get(position).getCarddetail());
             tvDetails.setText(loyaltycards.get(position).getCardno());
             if (item != null) {
-                binderHelper.bind(swipeLayout, getItem(position).toString());
+                binderHelper.bind(swipeLayout, item);
             }
             deleteView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -289,7 +291,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                     deleteItem(loyaltycards.get(position).getId());
                 }
             });
-
+            Log.d(new Gson().toJson(loyaltycards.get(position)));
             return convertView;
         }
 
@@ -332,7 +334,6 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                     Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
 
         private void deleteItem(final String position) {

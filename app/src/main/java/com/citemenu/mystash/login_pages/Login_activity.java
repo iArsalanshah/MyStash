@@ -125,8 +125,8 @@ public class Login_activity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(Login_activity.this, error.toString(), Toast.LENGTH_SHORT).show(); //todo Facebook login Error issue need to solve
-//                Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "on Error" + error.toString());
+                Log.d("FB ISSUE: ", error.toString());
+                Toast.makeText(Login_activity.this, "Hash Key Issue. Please contact developer to resolve this issue", Toast.LENGTH_SHORT).show();
             }
         });
 

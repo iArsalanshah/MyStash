@@ -57,7 +57,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
                 SharedPreferences.Editor editor = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit();
                 editor.putBoolean("updateLoyaltyCard", false).apply();
                 Intent createIntent = new Intent(Add_LoyaltyCard.this, com.citemenu.mystash.home.mycards_box.CreateACard.class);
-                com.citemenu.mystash.home.mycards_box.takeLoyaltyNameDetails.is_Created = true;
+                TakeLoyaltyNameDetails.is_Created = true;
                 startActivity(createIntent);
             }
         });
@@ -212,7 +212,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Add_LoyaltyCard.this, com.citemenu.mystash.home.mycards_box.takeLoyaltyBarCode.class);
+                    Intent intent = new Intent(Add_LoyaltyCard.this, TakeLoyaltyBarCode.class);
 //                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
                     SharedPreferences.Editor editor = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit();
@@ -220,7 +220,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
                     editor.putString("loyaltyPosition", getloyalties.get(position).getId());
                     editor.putBoolean("updateLoyaltyCard", false).apply();
                     intent.putExtra("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
-                    takeLoyaltyNameDetails.is_Created = false;
+                    TakeLoyaltyNameDetails.is_Created = false;
                     DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 }

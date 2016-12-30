@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class businessMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class BusinessMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private SupportMapFragment mapFragment;
@@ -56,7 +56,7 @@ public class businessMapActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.valueOf(lat), Double.valueOf(lng)))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon)));//fromResource(R.drawable.home_location)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon)));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(lat), Double.valueOf(lng)), 12);
         googleMap.moveCamera(update);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -76,7 +76,7 @@ public class businessMapActivity extends AppCompatActivity implements OnMapReady
                         getErrorDialog(this, ERROR_DIALOG_REQUEST, isAvailable);
                 dialog.show();
             } else {
-                Toast.makeText(businessMapActivity.this,
+                Toast.makeText(BusinessMapActivity.this,
                         "Can't connect to mapping service",
                         Toast.LENGTH_SHORT).show();
             }

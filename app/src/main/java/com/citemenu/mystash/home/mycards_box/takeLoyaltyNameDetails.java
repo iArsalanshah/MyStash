@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class takeLoyaltyNameDetails extends AppCompatActivity implements View.OnClickListener {
+public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.OnClickListener {
     public static boolean is_Created = false;
     ImageView backArrow;
     EditText ur_name, card_name, card_notes;
@@ -78,7 +78,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
         card_name = (EditText) findViewById(R.id.edittext_loyaltDetails_cardName);
         card_notes = (EditText) findViewById(R.id.edittext_loyaltDetails_cardNotes);
         saveButton = (Button) findViewById(R.id.button_loyaltDetails_save);
-        cid = CustomSharedPref.getUserObject(takeLoyaltyNameDetails.this);
+        cid = CustomSharedPref.getUserObject(TakeLoyaltyNameDetails.this);
         String objectLoyalty = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("addLoyaltyObject", "");//getIntent().getStringExtra("addLoyaltyObject");
         getloyaltyObj = new Gson().fromJson(objectLoyalty, Getloyalty.class);
         if (is_Created) {
@@ -102,7 +102,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageview_backTopbar:
-                startActivity(new Intent(takeLoyaltyNameDetails.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(TakeLoyaltyNameDetails.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_loyaltDetails_save:
                 if (ur_name.getText().toString().length() > 0 &&
@@ -112,7 +112,7 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     } else
                         addLoyaltyCard();
                 } else
-                    Toast.makeText(takeLoyaltyNameDetails.this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyNameDetails.this, "Please complete all fields", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -128,8 +128,8 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
             public void onResponse(Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call, Response<EditLoyalty> response) {
                 com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty editLoyalty = response.body();
                 if (editLoyalty.getHeader().getSuccess().equals("1")) {
-                    Toast.makeText(takeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(takeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Toast.makeText(TakeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("cardNumber", card_Number);
                     intent.putExtra("urName", ur_name.getText().toString());
                     intent.putExtra("cardName", card_name.getText().toString());
@@ -141,14 +141,14 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     com.citemenu.mystash.home.mycards_box.DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
-                    Toast.makeText(takeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(),
+                    Toast.makeText(TakeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call, Throwable t) {
-                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -162,8 +162,8 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
             public void onResponse(Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call, Response<AddLoyalty> response) {
                 com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty addLoyalty = response.body();
                 if (addLoyalty.getHeader().getSuccess().equals("1")) {
-                    Toast.makeText(takeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(takeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Toast.makeText(TakeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("cardNumber", card_Number);
                     intent.putExtra("urName", ur_name.getText().toString());
                     intent.putExtra("cardName", card_name.getText().toString());
@@ -175,20 +175,20 @@ public class takeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     com.citemenu.mystash.home.mycards_box.DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
-                    Toast.makeText(takeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(),
+                    Toast.makeText(TakeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call, Throwable t) {
-                Toast.makeText(takeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(takeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

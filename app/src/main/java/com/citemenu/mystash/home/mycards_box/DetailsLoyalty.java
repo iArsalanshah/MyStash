@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
+import com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
@@ -39,9 +40,9 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     TextView etCard, etName, etBusiness, etDetails;
     InkPageIndicator inkPageIndicator;
     Button edit;
-    private com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard convertedObjEdit;
+    private Loyaltycard convertedObjEdit;
     private String cardNumber, urName, cardName, cardNote, frontCard, backCard;
-    private int[] image_resources = {R.drawable.placeholder_shadow, R.drawable.placeholder_shadow};
+    private int[] image_resources = {R.drawable.placeholder_img_not_found, R.drawable.placeholder_img_not_found};
     //    private Getloyalty getloyalty;
     private ImageView imgChangeConfiguration;
     private ImageView deleteLoyaltyImg;
@@ -71,7 +72,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
         //Extra Intent from Edit
         //
         String objectEdit = getIntent().getStringExtra("editLoyaltyObject");
-        convertedObjEdit = new Gson().fromJson(objectEdit, com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard.class);
+        convertedObjEdit = new Gson().fromJson(objectEdit, Loyaltycard.class);
 
 //        String addLoyaltyObj = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("", "addLoyaltyObject"); //todo id delete issue
 //        getloyalty = new Gson().fromJson(addLoyaltyObj, Getloyalty.class);
@@ -174,7 +175,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
     }
 
     public void imgBack_LoyaltyDetails(View view) {
-        startActivity(new Intent(DetailsLoyalty.this, com.citemenu.mystash.home.mycards_box.MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(DetailsLoyalty.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     public void loyalty_details_img(View view) {
@@ -200,17 +201,17 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                     editor.putString("loyaltyID", convertedObjEdit.getId());
                     if (convertedObjEdit.getIsRegisterdCompany().equals("0")) {
                         intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        takeLoyaltyNameDetails.is_Created = true;
+                        TakeLoyaltyNameDetails.is_Created = true;
                         intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
                     } else {
-                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        takeLoyaltyNameDetails.is_Created = false;
+                        intent = new Intent(DetailsLoyalty.this, TakeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        TakeLoyaltyNameDetails.is_Created = false;
                     }
                     editor.putString("backCard", convertedObjEdit.getBackimage());
                     editor.putString("cardNumber", convertedObjEdit.getCardno());
-                    editor.putString("cardUrName", convertedObjEdit.getCardno());
-                    editor.putString("cardName", convertedObjEdit.getCardno());
-                    editor.putString("cardNote", convertedObjEdit.getCardno()).apply();
+                    editor.putString("cardUrName", convertedObjEdit.getCardname());
+                    editor.putString("cardName", convertedObjEdit.getCarddetail());
+                    editor.putString("cardNote", convertedObjEdit.getNotes()).apply();
 
                     intent.putExtra("comesFromDetail", true);
                     startActivity(intent);
@@ -218,11 +219,11 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                     editor.putString("loyaltyID", loyaltyPosition);
                     if (isRegistered.equals("0")) {
                         intent = new Intent(DetailsLoyalty.this, CreateACard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        takeLoyaltyNameDetails.is_Created = true;
+                        TakeLoyaltyNameDetails.is_Created = true;
                         intent.putExtra("frontCard", frontCard);
                     } else {
-                        intent = new Intent(DetailsLoyalty.this, takeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        takeLoyaltyNameDetails.is_Created = false;
+                        intent = new Intent(DetailsLoyalty.this, TakeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        TakeLoyaltyNameDetails.is_Created = false;
                     }
                     editor.putString("cardNumber", cardNumber);
                     editor.putString("cardUrName", urName);
@@ -320,7 +321,10 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                         .placeholder(R.drawable.placeholder_shadow)
                         .into(imageView);
             } else {
-                if (convertedObjEdit.getFrontimage().length() > 0 && convertedObjEdit.getBackimage().length() > 0) {
+                if (convertedObjEdit.getFrontimage() != null &&
+                        convertedObjEdit.getBackimage() != null &&
+                        !convertedObjEdit.getFrontimage().isEmpty() &&
+                        !convertedObjEdit.getBackimage().isEmpty()) {
                     imgs[0] = convertedObjEdit.getFrontimage();
                     imgs[1] = convertedObjEdit.getBackimage();
                     Picasso.with(context)
