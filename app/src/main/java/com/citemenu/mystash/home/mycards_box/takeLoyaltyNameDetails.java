@@ -30,7 +30,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
     EditText ur_name, card_name, card_notes;
     Button saveButton;
     String barcodeImage;
-    com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty getloyaltyObj;
+    Getloyalty getloyaltyObj;
     String frontImage;
     String loyaltyID;
     private Users cid;
@@ -89,7 +89,10 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
         } else {
             //overwrite frontImage from GsonObject
             isRegistered = "1";
-            frontImage = getloyaltyObj.getImageurl();
+            if (isComesFromDetail) { //todo BUG Need to solve
+                frontImage = getSharedPreferences(Constant_util.PREFS_NAME, 0).getString("frontImage", "");
+            } else
+                frontImage = getloyaltyObj.getImageurl();
         }
     }
 
@@ -120,16 +123,16 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
     }
 
     private void updateLoyaltyCard(final String loyaltyID) {
-        Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call = WebServicesFactory.getInstance().getEditLoyalty(com.citemenu.mystash.helper.Constant_util.ACTION_EDIT_LOYALTY_CARD,
+        Call<EditLoyalty> call = WebServicesFactory.getInstance().getEditLoyalty(Constant_util.ACTION_EDIT_LOYALTY_CARD,
                 cid.getId(), ur_name.getText().toString(), card_name.getText().toString(), "", "",
                 card_Number, card_notes.getText().toString(), frontImage, barcodeImage, isRegistered, loyaltyID);
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty>() {
+        call.enqueue(new Callback<EditLoyalty>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call, Response<EditLoyalty> response) {
+            public void onResponse(Call<EditLoyalty> call, Response<EditLoyalty> response) {
                 com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty editLoyalty = response.body();
                 if (editLoyalty.getHeader().getSuccess().equals("1")) {
                     Toast.makeText(TakeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("cardNumber", card_Number);
                     intent.putExtra("urName", ur_name.getText().toString());
                     intent.putExtra("cardName", card_name.getText().toString());
@@ -138,7 +141,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     intent.putExtra("backCard", barcodeImage);
                     intent.putExtra("isRegistered", isRegistered);
                     intent.putExtra("loyaltyPosition", loyaltyID);
-                    com.citemenu.mystash.home.mycards_box.DetailsLoyalty.is_Edit = false;
+                    DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
                     Toast.makeText(TakeLoyaltyNameDetails.this, "" + editLoyalty.getHeader().getMessage(),
@@ -147,23 +150,23 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty> call, Throwable t) {
+            public void onFailure(Call<EditLoyalty> call, Throwable t) {
                 Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void addLoyaltyCard() {
-        Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call = WebServicesFactory.getInstance().getAddLoyalty(com.citemenu.mystash.helper.Constant_util.ACTION_ADD_LOYALTY_CARD,
+        Call<AddLoyalty> call = WebServicesFactory.getInstance().getAddLoyalty(Constant_util.ACTION_ADD_LOYALTY_CARD,
                 cid.getId(), ur_name.getText().toString(), card_name.getText().toString(),
                 card_Number, card_notes.getText().toString(), frontImage, barcodeImage, isRegistered);
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty>() {
+        call.enqueue(new Callback<AddLoyalty>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call, Response<AddLoyalty> response) {
-                com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty addLoyalty = response.body();
+            public void onResponse(Call<AddLoyalty> call, Response<AddLoyalty> response) {
+                AddLoyalty addLoyalty = response.body();
                 if (addLoyalty.getHeader().getSuccess().equals("1")) {
                     Toast.makeText(TakeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent intent = new Intent(TakeLoyaltyNameDetails.this, DetailsLoyalty.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("cardNumber", card_Number);
                     intent.putExtra("urName", ur_name.getText().toString());
                     intent.putExtra("cardName", card_name.getText().toString());
@@ -172,7 +175,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     intent.putExtra("backCard", barcodeImage);
                     intent.putExtra("isRegistered", isRegistered);
                     intent.putExtra("loyaltyPosition", addLoyalty.getBody().getAddloyaltycards().getId());
-                    com.citemenu.mystash.home.mycards_box.DetailsLoyalty.is_Edit = false;
+                    DetailsLoyalty.is_Edit = false;
                     startActivity(intent);
                 } else {
                     Toast.makeText(TakeLoyaltyNameDetails.this, "" + addLoyalty.getHeader().getMessage(),
@@ -181,7 +184,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.addloyalty_pojo.AddLoyalty> call, Throwable t) {
+            public void onFailure(Call<AddLoyalty> call, Throwable t) {
                 Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
@@ -189,6 +192,6 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(TakeLoyaltyNameDetails.this, com.citemenu.mystash.home.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(TakeLoyaltyNameDetails.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

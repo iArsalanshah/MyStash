@@ -194,7 +194,6 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             case R.id.button_loyalty_edit:
                 Intent intent;
                 SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
-
                 editor.putBoolean("updateLoyaltyCard", true);
 //                if (convertedObjEdit.getImageurl().length() > 0) {
                 if (is_Edit) {
@@ -204,6 +203,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                         TakeLoyaltyNameDetails.is_Created = true;
                         intent.putExtra("frontCard", convertedObjEdit.getFrontimage());
                     } else {
+                        editor.putString("frontImage", convertedObjEdit.getFrontimage());
                         intent = new Intent(DetailsLoyalty.this, TakeLoyaltyBarCode.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         TakeLoyaltyNameDetails.is_Created = false;
                     }

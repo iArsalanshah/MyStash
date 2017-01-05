@@ -22,6 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.helper.Constant_util;
+import com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList;
+import com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
@@ -86,12 +89,12 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
     private void getAddLoyaltyList() {
         Users cid = CustomSharedPref.getUserObject(Add_LoyaltyCard.this);
 //        Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, cid.getId());
-        Call<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList> call = WebServicesFactory.getInstance().getCardsList(com.citemenu.mystash.helper.Constant_util.ACTION_GET_LOYALTY_CARDS_LIST, cid.getId());
-        call.enqueue(new Callback<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList>() {
+        Call<GetCardsList> call = WebServicesFactory.getInstance().getCardsList(Constant_util.ACTION_GET_LOYALTY_CARDS_LIST, cid.getId());
+        call.enqueue(new Callback<GetCardsList>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList> call, Response<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList> response) {
+            public void onResponse(Call<GetCardsList> call, Response<GetCardsList> response) {
                 progress.dismiss();
-                com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList getCardsList = response.body();
+                GetCardsList getCardsList = response.body();
                 if (getCardsList.getHeader().getSuccess().equals("1")) {
                     adapter = new AddLoyaltyAdapter(Add_LoyaltyCard.this, getCardsList.getBody().getGetloyalty());
                     listview.setAdapter(adapter);
@@ -131,7 +134,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
     }
 
     public void imgBack_MyCards(View view) {
-        startActivity(new Intent(Add_LoyaltyCard.this, com.citemenu.mystash.home.mycards_box.MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(Add_LoyaltyCard.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override
@@ -157,17 +160,17 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(Add_LoyaltyCard.this, com.citemenu.mystash.home.mycards_box.MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(Add_LoyaltyCard.this, MyCards.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     private class AddLoyaltyAdapter extends BaseAdapter implements Filterable {
-        List<com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty> getloyalties;
-        List<com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty> getFilteredloyalties;
+        List<Getloyalty> getloyalties;
+        List<Getloyalty> getFilteredloyalties;
         private LayoutInflater layoutInflater;
         private Activity context;
         private ValueFilter valueFilter;
 
-        public AddLoyaltyAdapter(Add_LoyaltyCard add_loyaltyCard, List<com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty> getloyalty) {
+        public AddLoyaltyAdapter(Add_LoyaltyCard add_loyaltyCard, List<Getloyalty> getloyalty) {
             context = add_loyaltyCard;
             getloyalties = getloyalty;
             getFilteredloyalties = getloyalty;
@@ -215,7 +218,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
                     Intent intent = new Intent(Add_LoyaltyCard.this, TakeLoyaltyBarCode.class);
 //                    Toast.makeText(context, "" + position, Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(Add_LoyaltyCard.this, DetailsLoyalty.class);
-                    SharedPreferences.Editor editor = getSharedPreferences(com.citemenu.mystash.helper.Constant_util.PREFS_NAME, 0).edit();
+                    SharedPreferences.Editor editor = getSharedPreferences(Constant_util.PREFS_NAME, 0).edit();
                     editor.putString("addLoyaltyObject", new Gson().toJson(getloyalties.get(position)));
                     editor.putString("loyaltyPosition", getloyalties.get(position).getId());
                     editor.putBoolean("updateLoyaltyCard", false).apply();

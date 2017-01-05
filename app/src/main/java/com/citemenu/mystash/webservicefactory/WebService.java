@@ -8,6 +8,7 @@ import com.citemenu.mystash.pojo.all_flyers_by_categ.GetAllFlyersWebService;
 import com.citemenu.mystash.pojo.categories_coupons_pojo.CategoriesCoupons;
 import com.citemenu.mystash.pojo.customer_check_in.CustomerCheckIn;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
+import com.citemenu.mystash.pojo.delete_notification.DeleteNotificationWS;
 import com.citemenu.mystash.pojo.editloyalty_pojo.EditLoyalty;
 import com.citemenu.mystash.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.citemenu.mystash.pojo.get_bills.GetBillsWS;
@@ -263,6 +264,10 @@ public interface WebService {
     @GET("/mobileservice_new.php")
     Call<GetBillsWS> getBills(@Query("action") String get_bills,
                               @Query("user_id") String cid);
+
+    @GET("/mobileservice_new.php")
+    Call<DeleteNotificationWS> deleteNotification(@Query("action") String delete_notification,
+                                                  @Query("messageid") String messageid);
 
     @Multipart
     @POST("/mobileservice_new.php")
