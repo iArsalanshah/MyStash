@@ -173,9 +173,9 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
         call.enqueue(new Callback<UploadLoyaltyImage>() {
             @Override
-            public void onResponse(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
+            public void onResponse(Call<UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
                 dialog.dismiss();
-                com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage uploadLoyaltyImage = response.body();
+                UploadLoyaltyImage uploadLoyaltyImage = response.body();
                 if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
 //                                Toast.makeText(TakeLoyaltyBarCode.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
                     String barcodeImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
@@ -192,7 +192,7 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             }
 
             @Override
-            public void onFailure(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Throwable t) {
+            public void onFailure(Call<UploadLoyaltyImage> call, Throwable t) {
                 dialog.dismiss();
 //                Log.d(com.citemenu.mystash.helper.Constant_util.LOG_TAG, "onFailure: " + t.getMessage());
                 Toast.makeText(TakeLoyaltyBarCode.this, "Barcode Image upload failed. Please try again", Toast.LENGTH_SHORT).show();

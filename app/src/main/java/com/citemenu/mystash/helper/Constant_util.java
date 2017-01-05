@@ -50,6 +50,7 @@ public class Constant_util {
     public static final String IMAGE_PATH = "image-path";
     public static final String EXTRA_IMAGE_PATH = "CameraActivity.EXTRA_IMAGE_PATH";
     public static final String ACTION_GET_PROFILE_FLYERS = "get_profile_flyers";
+    public static final String ACTION_DELETE_NOTIFICATION = "delete_notification";
 
     // broadcast receiver intent filters
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer"; //asdsad

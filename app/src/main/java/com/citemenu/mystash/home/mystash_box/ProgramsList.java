@@ -23,8 +23,6 @@ import com.citemenu.mystash.pojo.program_stamps.Datum;
 import com.citemenu.mystash.pojo.program_stamps.ProgramsStamps;
 import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -44,11 +42,11 @@ public class ProgramsList extends AppCompatActivity {
     private ImageView imgBack;
     private Searchnearby sbID;
     private String isStampReward;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+//    /**
+//     * ATTENTION: This was auto-generated to implement the App Indexing API.
+//     * See https://g.co/AppIndexing/AndroidStudio for more information.
+//     */
+//    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +64,7 @@ public class ProgramsList extends AppCompatActivity {
         clickEvents();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+//        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -153,7 +151,7 @@ public class ProgramsList extends AppCompatActivity {
         LayoutInflater layoutInflater;
         List<Datum> data;
 
-        public CustomAdapterPrograms(Context context, List<Datum> data) {
+        CustomAdapterPrograms(Context context, List<Datum> data) {
             this.context = context;
             this.data = data;
         }

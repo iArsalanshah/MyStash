@@ -20,6 +20,8 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.helper.Constant_util;
 import com.citemenu.mystash.helper.FromXML;
+import com.citemenu.mystash.helper.Log;
+import com.citemenu.mystash.pojo.delete_notification.DeleteNotificationWS;
 import com.citemenu.mystash.pojo.meesages.Datum;
 import com.citemenu.mystash.pojo.meesages.MessagesWebService;
 import com.citemenu.mystash.utils.CustomSharedPref;
@@ -164,13 +166,13 @@ public class Messages extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 //                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                    deleteItem(position);
+                    deleteItem(position, listPosition.getMessageid());
                 }
             });
             return convertView;
         }
 
-        private void deleteItem(final int positionId) {
+        private void deleteItem(final int positionId, final String messageid) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setTitle("Confirmation");
             dialog.setMessage("Are you sure you want to remove this Message");
@@ -184,8 +186,7 @@ public class Messages extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    listData.remove(positionId);
-                    adapter.notifyDataSetChanged();
+                    deleteNotificationService(Constant_util.ACTION_DELETE_NOTIFICATION, messageid, positionId);
                 }
             });
             dialog.show();
@@ -202,5 +203,31 @@ public class Messages extends AppCompatActivity {
             default_.applyPattern("MMM dd");
             return default_.format(t1);
         }
+    }
+
+    private void deleteNotificationService(String action, String messageid, final int positionId) {
+        Call<DeleteNotificationWS> call = WebServicesFactory.getInstance().deleteNotification(action, messageid);
+        call.enqueue(new Callback<DeleteNotificationWS>() {
+            @Override
+            public void onResponse(Call<DeleteNotificationWS> call, Response<DeleteNotificationWS> response) {
+                if (response.body() == null || response.body().getHeader() == null
+                        || response.body().getHeader().getSuccess() == null) {
+                    Toast.makeText(Messages.this, "Found null in web response", Toast.LENGTH_SHORT).show();
+                } else if (response.body().getHeader().getSuccess().equals("1")) {
+                    listData.remove(positionId);
+                    adapter.notifyDataSetChanged();
+                } else if (response.body().getHeader().getMessage() != null) {
+                    Toast.makeText(Messages.this, response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Messages.this, "Found null in API response", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeleteNotificationWS> call, Throwable t) {
+                Log.e(t.toString());
+                Toast.makeText(Messages.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
