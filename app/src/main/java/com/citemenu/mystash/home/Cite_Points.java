@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,17 +32,26 @@ import retrofit2.Response;
 public class Cite_Points extends AppCompatActivity {
     ListView listView;
     TextView tvCPNumber;
+    private ImageView img_AddIcon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cite_point);
         init();
+        img_AddIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Upload bill section*/
+                startActivity(new Intent(Cite_Points.this, AddBillDetails.class));
+            }
+        });
     }
 
     private void init() {
         listView = (ListView) findViewById(R.id.listView_citePointsHistory);
         tvCPNumber = (TextView) findViewById(R.id.textView_CitePointsNumber);
+        img_AddIcon = (ImageView) findViewById(R.id.img_add_icon);
     }
 
     @Override

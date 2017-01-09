@@ -111,39 +111,43 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                 startActivity(new Intent(TakeLoyaltyBarCode.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.button_generate_barcode:
-                if (editText_generator_barcode.getText().toString().length() > 0) {
-                    generateBarcode(editText_generator_barcode.getText().toString());
-                    if (bitmap == null) {
-                        Toast.makeText(TakeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
-                    } else
-                        imageView_captureBarcode.setImageBitmap(bitmap);
-                } else
-                    Toast.makeText(TakeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
+//                if (editText_generator_barcode.getText().toString().length() > 0) {
+//                    generateBarcode(editText_generator_barcode.getText().toString());
+//                    if (bitmap == null) {
+//                        Toast.makeText(TakeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+//                    } else
+//                        imageView_captureBarcode.setImageBitmap(bitmap);
+//                } else
+//                    Toast.makeText(TakeLoyaltyBarCode.this, "Please enter appropriate barcode number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_next_barcode:
-                if (isComesFromDetail){
-                    if (editText_generator_barcode.getText().toString().isEmpty()){
+                if (isComesFromDetail) {
+                    if (editText_generator_barcode.getText().toString().isEmpty()) {
                         generateBarcode(editText_generator_barcode.getText().toString());
                     }
-                    if (img == null || img.isEmpty()){
+                    if (img == null || img.isEmpty()) {
                         uploadBarcodeImage();
-                    }else {
+                    } else {
                         Intent intent = new Intent(TakeLoyaltyBarCode.this, TakeLoyaltyNameDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("cardNumber", editText_generator_barcode.getText().toString());
                         SimpleScannerActivity.barcodeText = "";
                         startActivity(intent);
                     }
-                }
-                else if (!editText_generator_barcode.getText().toString().isEmpty() && (bitmap != null || img != null)) {
+                } else if (
+                        !editText_generator_barcode.getText().toString().isEmpty()
+//                        &&
+//                        (bitmap != null || img != null)
+                        ) {
                     //Convert to byte array
-                    if (!editText_generator_barcode.getText().toString().equals(generatedBarcode)) {
-                        generateBarcode(editText_generator_barcode.getText().toString());
-                        uploadBarcodeImage();
-                    } else {
-                        uploadBarcodeImage();
-                    }
+//                    if (!editText_generator_barcode.getText().toString().equals(generatedBarcode)) {
+                    generateBarcode(editText_generator_barcode.getText().toString());
+                    uploadBarcodeImage();
+//                    }
+//                    else {
+//                        uploadBarcodeImage();
+//                    }
                 } else
-                    Toast.makeText(TakeLoyaltyBarCode.this, "Please generate barcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyBarCode.this, "Please enter barcode", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureBarcode:
                 launchActivity(SimpleScannerActivity.class);

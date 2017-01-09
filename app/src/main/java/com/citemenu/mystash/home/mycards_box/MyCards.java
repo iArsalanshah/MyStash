@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private SearchView searchView_cards;
     private List<Loyaltycard> loyaltycards;
     private List<Loyaltycard> mFilterloyaltycards;
+    private Users cid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
         mFilterloyaltycards = new ArrayList<>();
         adapterListview = new ListViewMyCards(MyCards.this);
         listView.setAdapter(adapterListview);
+        cid = CustomSharedPref.getUserObject(MyCards.this);
     }
 
     @Override
@@ -154,7 +157,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
     }
 
     private void getCards() {
-        Users cid = CustomSharedPref.getUserObject(MyCards.this);
+//        Users cid = CustomSharedPref.getUserObject(MyCards.this);
         Log.d(cid.getId());
         Call<GetMycards> call = WebServicesFactory.getInstance().getMyCards(Constant_util.ACTION_GET_MY_LOYALTY_CARDS, cid.getId());
         call.enqueue(new Callback<GetMycards>() {
@@ -262,7 +265,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
             SwipeRevealLayout swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_addLoyalty);
 
-            if (loyaltycards.get(position).getFrontimage() != null && !loyaltycards.get(position).getFrontimage().isEmpty()) {
+            if (!TextUtils.isEmpty(loyaltycards.get(position).getFrontimage())) {
                 Picasso.with(context)
                         .load(loyaltycards.get(position).getFrontimage())
                         .placeholder(R.drawable.placeholder)
@@ -279,8 +282,10 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                 }
             });
             final String item = getItem(position).toString();
-            tvTitle.setText(loyaltycards.get(position).getCarddetail());
-            tvDetails.setText(loyaltycards.get(position).getCardno());
+            if (!TextUtils.isEmpty(loyaltycards.get(position).getCarddetail()))
+                tvTitle.setText(loyaltycards.get(position).getCarddetail());
+            if (!TextUtils.isEmpty(cid.getUsername()))
+                tvDetails.setText(cid.getUsername());
             if (item != null) {
                 binderHelper.bind(swipeLayout, item);
             }

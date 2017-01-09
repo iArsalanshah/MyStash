@@ -25,6 +25,15 @@
             android:text="Cite Points"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/img_add_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:src="@drawable/add_icon" />
     </RelativeLayout>
 
     <RelativeLayout
