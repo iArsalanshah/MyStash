@@ -275,8 +275,12 @@ public class Program_Details extends AppCompatActivity {
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullMsg = Constant_util.SHARE_PROGRAM_STAMP_TEXT_START + pOthersObj.getName() +
-                        "," + stampObject.getProgramname() + Constant_util.SHARE_PROGRAM_STAMP_TEXT_END;
+                String fullMsg = Constant_util.SHARE_PROGRAM_STAMP_TEXT_START
+                        + pOthersObj.getName()
+                        + ", "
+                        + stampObject.getProgramname()
+                        + "\n" + pOthersObj.getAddress()
+                        + "\n" + pOthersObj.getPostalcode();
                 SelectShareIntent.selectIntent(Program_Details.this, fullMsg);
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);

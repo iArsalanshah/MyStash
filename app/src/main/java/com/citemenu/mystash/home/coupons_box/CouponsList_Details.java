@@ -110,7 +110,9 @@ public class CouponsList_Details extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectShareIntent.selectIntent(CouponsList_Details.this, Constant_util.SHARE_COUPON_TEXT);
+                SelectShareIntent.selectIntent(CouponsList_Details.this,
+                        Constant_util.SHARE_PROGRAM_STAMP_TEXT_START
+                + cObj.getName());
             }
         });
 
