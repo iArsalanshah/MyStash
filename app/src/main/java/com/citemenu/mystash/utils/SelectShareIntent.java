@@ -99,12 +99,12 @@ public class SelectShareIntent {
 
     //Email Share
     private static void emailShare(Context context, String msg) {
-        String msgWithLink = msg + "\n\n" + Constant_util.SHARE_LINK;
+//        String msgWithLink = msg + "\n\n" + Constant_util.SHARE_LINK;
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", "", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, Constant_util.SHARE_SUBJECT);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, msgWithLink);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
         context.startActivity(Intent.createChooser(emailIntent, Constant_util.SHARE_SUBJECT));
     }
 
