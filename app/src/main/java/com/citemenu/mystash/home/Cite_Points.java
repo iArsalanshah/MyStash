@@ -112,7 +112,7 @@ public class Cite_Points extends AppCompatActivity {
         Context context;
         private LayoutInflater inflater;
 
-        public CitePointsAdapter(Context context, List<History> history) {
+        CitePointsAdapter(Context context, List<History> history) {
             this.context = context;
             this.history = history;
         }

@@ -281,11 +281,16 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                     startActivity(intent);
                 }
             });
-            final String item = getItem(position).toString();
-            if (!TextUtils.isEmpty(loyaltycards.get(position).getCarddetail()))
+            /*Card Name*/
+            if (!TextUtils.isEmpty(loyaltycards.get(position).getCarddetail())) {
                 tvTitle.setText(loyaltycards.get(position).getCarddetail());
-            if (!TextUtils.isEmpty(cid.getUsername()))
-                tvDetails.setText(cid.getUsername());
+            }
+            /*Your Name*/
+            if (!TextUtils.isEmpty(loyaltycards.get(position).getCardname())) {
+                tvDetails.setText(loyaltycards.get(position).getCardname());
+            }
+
+            final String item = getItem(position).toString();
             if (item != null) {
                 binderHelper.bind(swipeLayout, item);
             }
