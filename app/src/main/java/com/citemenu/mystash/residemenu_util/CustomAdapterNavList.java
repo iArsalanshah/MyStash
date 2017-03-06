@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.activity.MainActivity;
 
 
 public class CustomAdapterNavList extends ArrayAdapter<String> {
@@ -16,7 +17,7 @@ public class CustomAdapterNavList extends ArrayAdapter<String> {
     String[] names;
     int[] imgs;
 
-    public CustomAdapterNavList(com.citemenu.mystash.home.MainActivity mainActivity, String[] listName, int[] listImages) {
+    public CustomAdapterNavList(MainActivity mainActivity, String[] listName, int[] listImages) {
         super(mainActivity, R.layout.row_navitems_listview, listName);
         context = mainActivity;
         names = listName;

@@ -22,7 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
-import com.citemenu.mystash.home.mycards_box.CameraActivity;
+import com.citemenu.mystash.activity.mycards_box.CameraActivity;
+import com.citemenu.mystash.constant.Constant;
 
 import java.io.Closeable;
 import java.io.File;
@@ -145,11 +146,11 @@ public class ImageCropActivity extends Activity {
             String action = getIntent().getStringExtra("ACTION");
             if (null != action) {
                 switch (action) {
-                    case Constant_util.ACTION_CAMERA:
+                    case Constant.ACTION_CAMERA:
                         getIntent().removeExtra("ACTION");
                         takePic();
                         return;
-                    case Constant_util.ACTION_GALLERY:
+                    case Constant.ACTION_GALLERY:
                         getIntent().removeExtra("ACTION");
                         pickImage();
                         return;
@@ -225,7 +226,7 @@ public class ImageCropActivity extends Activity {
         if (saved) {
             //USUALLY Upload image to server here
             Intent intent = new Intent();
-            intent.putExtra(Constant_util.IMAGE_PATH, mImagePath);
+            intent.putExtra(Constant.IMAGE_PATH, mImagePath);
             setResult(RESULT_OK, intent);
             finish();
         } else {
@@ -285,7 +286,7 @@ public class ImageCropActivity extends Activity {
         createTempFile();
         if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
-                mImagePath = result.getStringExtra(Constant_util.EXTRA_IMAGE_PATH);
+                mImagePath = result.getStringExtra(Constant.EXTRA_IMAGE_PATH);
 //                mImagePath = mFileTemp.getPath();
                 mSaveUri = Utils.getImageUri(mImagePath);
                 mImageUri = Utils.getImageUri(mImagePath);

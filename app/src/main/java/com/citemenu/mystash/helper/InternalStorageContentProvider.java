@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
-import com.citemenu.mystash.home.mycards_box.CreateACard;
+import com.citemenu.mystash.activity.mycards_box.CreateACard;
 
 import java.io.File;
 import java.io.FileNotFoundException;

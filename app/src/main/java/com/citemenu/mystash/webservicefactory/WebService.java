@@ -253,8 +253,8 @@ public interface WebService {
     Call<ResponseBody> downloadFileWithDynamicUrlAsync(@Url String fileUrl);
 
     @GET("/mobileservice_new.php")
-    Call<MessagesWebService> getMessages(@Query("action") String action,
-                                         @Query("cid") String cid);
+    Call<MessagesWebService> getMessagesAPI(@Query("action") String action,
+                                            @Query("cid") String cid);
 
     @GET("/mobileservice_new.php")
     Call<StampCountWebService> getStampCount(@Query("action") String action,

@@ -14,8 +14,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.citemenu.mystash.R;
-import com.citemenu.mystash.helper.Constant_util;
-import com.citemenu.mystash.login_pages.Login_activity;
+import com.citemenu.mystash.activity.MainActivity;
+import com.citemenu.mystash.activity.Messages;
+import com.citemenu.mystash.activity.login_pages.Login_activity;
+import com.citemenu.mystash.activity.mystash_box.Program_Details;
+import com.citemenu.mystash.constant.Constant;
 import com.google.android.gms.gcm.GcmListenerService;
 
 public class MyGCMListenerService extends GcmListenerService {
@@ -33,7 +36,7 @@ public class MyGCMListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        sharedPreferences = getSharedPreferences(Constant_util.PREFS_NAME, 0);
+        sharedPreferences = getSharedPreferences(Constant.PREFS_NAME, 0);
         String message = data.getString("message");
         String msgType = data.getString("type");
         Log.d(TAG, "From: " + from);
@@ -95,18 +98,18 @@ public class MyGCMListenerService extends GcmListenerService {
         Intent intent = null;
         try {
 
-            if (!sharedPreferences.getString(Constant_util.IS_LOGIN, "").equals(Constant_util.IS_LOGIN)) {
+            if (!sharedPreferences.getString(Constant.IS_LOGIN, "").equals(Constant.IS_LOGIN)) {
                 intent = new Intent(this, Login_activity.class);
                 Log.d(TAG, "Login");
             } else {
                 if (msgType.equals("message"))
-                    intent = new Intent(this, com.citemenu.mystash.home.Messages.class);
+                    intent = new Intent(this, Messages.class);
                 else {
-                    if (com.citemenu.mystash.home.mystash_box.Program_Details.activity) {
+                    if (Program_Details.activity) {
                         intent = new Intent("your_action");
                         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     } else {
-                        intent = new Intent(this, com.citemenu.mystash.home.MainActivity.class);
+                        intent = new Intent(this, MainActivity.class);
                     }
                 }
                 Log.d(TAG, "Home");

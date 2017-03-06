@@ -3,7 +3,7 @@ package com.citemenu.mystash.pojo.meesages;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Datum {
+public class Datum{
 
     @SerializedName("cid")
     @Expose

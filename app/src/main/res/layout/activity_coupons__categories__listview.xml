@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gray"
-    tools:context="com.citemenu.mystash.home.coupons_box.Coupons_Categories_Click">
+    tools:context="com.citemenu.mystash.activity.Coupons_Categories_Click">
 
     <RelativeLayout
         android:id="@+id/relativeLayout_toolbar"

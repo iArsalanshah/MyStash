@@ -42,7 +42,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".home.MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login_pages.Login_activity"
+            android:name=".activity.login_pages.Login_activity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,20 +71,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login_pages.Register"
+            android:name=".activity.login_pages.Register"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".login_pages.ActivityForgotPwd"
+            android:name=".activity.login_pages.ActivityForgotPwd"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.List_MyStash"
+            android:name=".activity.mystash_box.List_MyStash"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.SearchBusiness_MyStash"
+            android:name=".activity.mystash_box.SearchBusiness_MyStash"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.ListDetails_MyStash"
+            android:name=".activity.mystash_box.ListDetails_MyStash"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -101,76 +101,78 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".home.mystash_box.ReviewDetailsList"
+            android:name=".activity.mystash_box.ReviewDetailsList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.Cite_Points"
+            android:name=".activity.Cite_Points"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.MyCards"
+            android:name=".activity.mycards_box.MyCards"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.Add_LoyaltyCard"
+            android:name=".activity.mycards_box.Add_LoyaltyCard"
             android:screenOrientation="portrait" />
-        <activity android:name=".home.mycards_box.DetailsLoyalty" />
+        <activity android:name=".activity.mycards_box.DetailsLoyalty" />
         <activity
-            android:name=".home.coupons_box.Coupons"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".home.coupons_box.Coupons_Categories_Click"
+            android:name=".activity.Coupons"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.coupons_box.CouponsList_Details"
+            android:name=".activity.Coupons_Categories_Click"
             android:screenOrientation="portrait" />
-        <activity android:name=".home.flyers_box.Flyers_Available" />
-        <activity android:name=".home.flyers_box.Flyers_pdfview" />
+        <activity
+            android:name=".activity.CouponsList_Details"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Flyers_Available"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Flyers_pdfview"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".helper.SimpleScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.RateAndReview"
+            android:name=".activity.mystash_box.RateAndReview"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.ProgramsList"
+            android:name=".activity.mystash_box.ProgramsList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mystash_box.Program_Details"
+            android:name=".activity.mystash_box.Program_Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.TakeLoyaltyBarCode"
+            android:name=".activity.mycards_box.TakeLoyaltyBarCode"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.TakeLoyaltyNameDetails"
+            android:name=".activity.mycards_box.TakeLoyaltyNameDetails"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.CreateACard"
+            android:name=".activity.mycards_box.CreateACard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".helper.ImageCropActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.BusinessMapActivity"
+            android:name=".activity.BusinessMapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.Messages"
+            android:name=".activity.Messages"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.mycards_box.CameraActivity"
+            android:name=".activity.mycards_box.CameraActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.AddBillDetails"
+            android:name=".activity.AddBillDetails"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".home.UploadedBillsHistory"
+            android:name=".activity.UploadedBillsHistory"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".home.upload_bill_camera.AddBillsCamera"
+            android:name=".activity.upload_bill_camera.AddBillsCamera"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".home.upload_bill_camera.TakePhoto"
+            android:name=".activity.upload_bill_camera.TakePhoto"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />

@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.citemenu.mystash"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 6
-        versionName "1.5.6"
+        versionName "1.5.8"
         multiDexEnabled true
     }
     buildTypes {

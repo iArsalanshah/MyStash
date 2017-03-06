@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_gray"
-    tools:context="com.citemenu.mystash.home.mycards_box.MyCards">
+    tools:context=".activity.mycards_box.MyCards">
 
     <RelativeLayout
         android:id="@+id/container_MycardsList"

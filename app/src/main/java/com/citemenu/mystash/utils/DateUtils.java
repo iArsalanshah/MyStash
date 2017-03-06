@@ -4,11 +4,13 @@ package com.citemenu.mystash.utils;
  * Created by dev.akber on 7/21/2016.
  */
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtils {
-
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     /**
      * The maximum date possible.
      */
@@ -48,6 +50,19 @@ public class DateUtils {
         return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+    }
+
+    public static boolean isToday(String date) {
+        SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
+        //Convert from String to Date
+        Date date1;
+        try {
+            date1 = format.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return isToday(date1);
     }
 
     /**

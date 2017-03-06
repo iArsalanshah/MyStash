@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.citemenu.mystash.home.upload_bill_camera.BillCameraPreview
+    <com.citemenu.mystash.activity.upload_bill_camera.BillCameraPreview
         android:id="@+id/surfaceView_addBills"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -39,7 +39,7 @@
         <item>Dinner</item>
     </string-array>
 
-
+    <string name="message">Message</string>
     <string name="msg_top">Store Name / Logo</string>
     <string name="msg_retake">Can you read the text? if not, retake</string>
     <string name="msg_long">Long receipt? Add the rest on the next screen</string>

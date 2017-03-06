@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -144,5 +145,21 @@ public class Utils {
         }
 
         return null;
+    }
+
+    /**
+     * @param string value to check
+     * @return true if not null or empty param string
+     */
+    public static boolean isNotNullEmpty(@Nullable String string) {
+        return !(string == null || string.trim().length() == 0);
+    }
+
+    /**
+     * @param string value to check
+     * @return true if null or empty param string
+     */
+    public static boolean isNullEmpty(@Nullable String string) {
+        return (string == null || string.trim().length() == 0);
     }
 }

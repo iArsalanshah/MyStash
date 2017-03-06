@@ -43,9 +43,9 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
     @Override
     public void handleResult(Result result) {
         // do something with result here
-//        Log.d(Constant_util.LOG_TAG, "" + result.getBarcodeFormat().toString());
-//        Log.d(Constant_util.LOG_TAG, "" + result.getText() + "" + result.getBarcodeFormat());
-//        Log.d(Constant_util.LOG_TAG, "" + result.getResultMetadata());
+//        Log.d(Constant.LOG_TAG, "" + result.getBarcodeFormat().toString());
+//        Log.d(Constant.LOG_TAG, "" + result.getText() + "" + result.getBarcodeFormat());
+//        Log.d(Constant.LOG_TAG, "" + result.getResultMetadata());
         if (result.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
             mScannerView.resumeCameraPreview(this);
             Toast.makeText(SimpleScannerActivity.this, "QR code does not support", Toast.LENGTH_SHORT).show();

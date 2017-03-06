@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <com.citemenu.mystash.home.mycards_box.CameraPreview
+    <com.citemenu.mystash.activity.mycards_box.CameraPreview
         android:id="@+id/camera_preview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
