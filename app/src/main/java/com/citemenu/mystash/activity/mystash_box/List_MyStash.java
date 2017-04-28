@@ -9,18 +9,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
-import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.activity.BaseActivity;
 import com.citemenu.mystash.constant.Constant;
@@ -94,10 +90,14 @@ public class List_MyStash extends BaseActivity {
                     ToastUtil.showShortMessage(context, Constant.RESPONSE_NULL);
                 } else if (response.body().getHeader().getSuccess().equals("1")) {
                     if (response.body().getBody().getStashlist().size() > 0) {
+                        if (altText.getVisibility() == View.VISIBLE)
+                            altText.setVisibility(View.GONE);
                         searchNearbyList = response.body().getBody().getStashlist();
                         adapter.notifyDataSetChanged();
                     } else altText.setVisibility(View.VISIBLE);
                 } else {
+                    searchNearbyList = new ArrayList<>();
+                    adapter.notifyDataSetChanged();
                     altText.setVisibility(View.VISIBLE);
                     ToastUtil.showShortMessage(context, response.body().getHeader().getMessage());
                 }
@@ -151,16 +151,14 @@ public class List_MyStash extends BaseActivity {
     }
 
     class AdapterStashList extends RecyclerView.Adapter<AdapterStashList.VH> {
-        private final ViewBinderHelper binderHelper;
+        //        private final ViewBinderHelper binderHelper;
         Context context;
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //context.startActivity(new Intent(context, ListDetails_MyStash.class));
-                Log.i("RecyclerTEST", " OnClick Working");
-                VH vholder =
-                        (VH) v.getTag();
+                VH vholder = (VH) v.getTag();
                 int position = vholder.getAdapterPosition();
                 Stashlist s = searchNearbyList.get(position);
                 String jsonlist = (new Gson()).toJson(s);
@@ -172,8 +170,8 @@ public class List_MyStash extends BaseActivity {
 
         AdapterStashList(Context context) {
             this.context = context;
-            binderHelper = new ViewBinderHelper();
-            binderHelper.setOpenOnlyOne(true);
+//            binderHelper = new ViewBinderHelper();
+//            binderHelper.setOpenOnlyOne(true);
         }
 
         @Override
@@ -193,13 +191,20 @@ public class List_MyStash extends BaseActivity {
 
             holder.layout.setOnClickListener(clickListener);
             holder.layout.setTag(holder);
-            binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
-            holder.deleteView.setOnClickListener(new View.OnClickListener() {
+            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View view) {
                     removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+                    return false;
                 }
             });
+//            binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
+//            holder.deleteView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+//                }
+//            });
         }
 
         private void removeDialog(final String id, final int adapterPosition) {
@@ -261,17 +266,16 @@ public class List_MyStash extends BaseActivity {
         }
 
         class VH extends RecyclerView.ViewHolder {
-
-            final FrameLayout deleteView;
-            final SwipeRevealLayout swipeLayout;
+            //            final FrameLayout deleteView;
+//            final SwipeRevealLayout swipeLayout;
             TextView tvRecyclerTitle, tvRecyclerDesc;
             ImageView imageView;
             RelativeLayout layout;
 
             VH(View itemView) {
                 super(itemView);
-                deleteView = (FrameLayout) itemView.findViewById(R.id.delete_layoutStash);
-                swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layoutStash);
+//                deleteView = (FrameLayout) itemView.findViewById(R.id.delete_layoutStash);
+//                swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layoutStash);
 
                 tvRecyclerTitle = (TextView) itemView.findViewById(R.id.row_recyclerview_title_mystash);
                 tvRecyclerDesc = (TextView) itemView.findViewById(R.id.row_recyclerview_desc_mystash);

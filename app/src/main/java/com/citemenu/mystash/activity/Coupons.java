@@ -179,7 +179,7 @@ public class Coupons extends AppCompatActivity {
             if (categories.get(position).getImgurl() != null && !categories.get(position).getImgurl().isEmpty())
                 Picasso.with(context).load(categories.get(position).getImgurl())
                         .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
+                        .error(R.drawable.placeholder_img_not_found)
                         .into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

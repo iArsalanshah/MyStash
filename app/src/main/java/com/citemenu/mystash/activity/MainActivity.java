@@ -29,12 +29,12 @@ import com.citemenu.mystash.residemenu_util.ResideMenu;
 import com.citemenu.mystash.singleton.MyCitePoints;
 import com.citemenu.mystash.singleton.MyLocation;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.utils.SelectShareIntent;
 import com.citemenu.mystash.utils.Tracker;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.squareup.picasso.Picasso;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
@@ -118,13 +118,14 @@ public class MainActivity extends AppCompatActivity {
                     Name.append(" " + user.getClastname());
                 }
             }
-            if (user.getImgurl() != null && !user.getImgurl().isEmpty()) {
-                Picasso.with(this)
-                        .load(user.getImgurl())
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(imgProfile);
-            }
+            ImageUtil.setImageWithResource(this,imgProfile,user.getImgurl());
+//            if (user.getImgurl() != null && !user.getImgurl().isEmpty()) {
+//                Picasso.with(this)
+//                        .load(user.getImgurl())
+//                        .placeholder(R.drawable.placeholder)
+//                        .error(R.drawable.placeholder)
+//                        .into(imgProfile);
+//            }
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }

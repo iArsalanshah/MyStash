@@ -27,9 +27,9 @@ import com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList;
 import com.citemenu.mystash.pojo.getcardslist_pojo.Getloyalty;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,11 +207,8 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
 //            title.setText(getloyalties.get(position).getCardname());
             if (getloyalties.get(position).getCardname() != null)
                 details.setText(getloyalties.get(position).getCardname());
-            if (getloyalties.get(position).getImageurl() != null && !getloyalties.get(position).getImageurl().isEmpty())
-                Picasso.with(context).load(getloyalties.get(position).getImageurl())
-                        .error(R.drawable.placeholder)
-                        .placeholder(R.drawable.placeholder)
-                        .into(img);
+            ImageUtil.setImageWithResource(context,img,getloyalties.get(position).getImageurl());
+
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

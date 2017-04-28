@@ -19,10 +19,10 @@ import com.citemenu.mystash.pojo.redeem_coupon.RedeemCoupon;
 import com.citemenu.mystash.pojo.remindme_coupon.RemindMe;
 import com.citemenu.mystash.pojo.to_save_coupon_pojo.ToSaveCoupon;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.utils.SelectShareIntent;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -73,12 +73,7 @@ public class CouponsList_Details extends AppCompatActivity {
             textViewCouponsExp.append(cObj.getCouponExpdate());
         if (cObj.getTotalCount() != null && cObj.getRedeemedCount() != null)
             textViewCouponsUSED.append(cObj.getRedeemedCount() + "/" + cObj.getTotalCount());
-        if (cObj.getImgurl() != null && !cObj.getImgurl().isEmpty())
-            Picasso.with(this)
-                    .load(cObj.getImgurl())
-                    .error(R.drawable.placeholder_img_not_found)
-                    .placeholder(R.drawable.placeholder_shadow)
-                    .into(imgView);
+        ImageUtil.setImageWithResource(this, imgView, cObj.getImgurl());
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
     }
@@ -112,7 +107,7 @@ public class CouponsList_Details extends AppCompatActivity {
             public void onClick(View v) {
                 SelectShareIntent.selectIntent(CouponsList_Details.this,
                         Constant.SHARE_PROGRAM_STAMP_TEXT_START
-                + cObj.getName());
+                                + cObj.getName());
             }
         });
 

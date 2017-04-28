@@ -28,8 +28,8 @@ import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.helper.FromXML;
 import com.citemenu.mystash.helper.ImageCropActivity;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -67,12 +67,13 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         comesFromDetailActivity = getIntent().getBooleanExtra("comesFromDetail", false);
         if (comesFromDetailActivity) {
             url = getIntent().getStringExtra("frontCard");
-            if (url != null && !url.equals("")) {
-                Picasso.with(this).load(url)
-                        .placeholder(R.drawable.placeholder_shadow)
-                        .error(R.drawable.placeholder_shadow)
-                        .into(frontCard);
-            }
+            ImageUtil.setImageWithResource(this, frontCard, url);
+//            if (url != null && !url.equals("")) {
+//                Picasso.with(this).load(url)
+//                        .placeholder(R.drawable.placeholder_shadow)
+//                        .error(R.drawable.placeholder_shadow)
+//                        .into(frontCard);
+//            }
         }
     }
 

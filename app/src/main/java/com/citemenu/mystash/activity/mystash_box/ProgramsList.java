@@ -22,9 +22,9 @@ import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.pojo.program_stamps.Datum;
 import com.citemenu.mystash.pojo.program_stamps.ProgramsStamps;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -88,12 +88,15 @@ public class ProgramsList extends AppCompatActivity {
                 progress.dismiss();
                 if (stampsObj.getHeader().getSuccess().equals("1")) {
                     if (stampsObj.getBody().getData().size() == 0) {
+                        listview.setVisibility(View.GONE);
                         altText.setVisibility(View.VISIBLE);
                     } else {
+                        listview.setVisibility(View.VISIBLE);
                         altText.setVisibility(View.GONE);
                         listview.setAdapter(new CustomAdapterPrograms(ProgramsList.this, stampsObj.getBody().getData()));
                     }
                 } else {
+                    listview.setVisibility(View.GONE);
                     altText.setVisibility(View.VISIBLE);
 //                    Log.d(Constant.LOG_TAG, stampsObj.getHeader().getMessage());
                     Toast.makeText(ProgramsList.this, "" + stampsObj.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
@@ -190,11 +193,13 @@ public class ProgramsList extends AppCompatActivity {
             //setting Program Title
             if (data.get(position).getProgramname() != null)
                 listTitle.setText(data.get(position).getProgramname());
-            if (sbID.getLogourl() != null && !sbID.getLogourl().isEmpty())
-                Picasso.with(context).load(sbID.getLogourl())
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(listImage);
+
+            ImageUtil.setImageWithResource(context, listImage, sbID.getLogourl());
+//            if (sbID.getLogourl() != null && !sbID.getLogourl().isEmpty())
+//                Picasso.with(context).load(sbID.getLogourl())
+//                        .placeholder(R.drawable.placeholder)
+//                        .error(R.drawable.placeholder)
+//                        .into(listImage);
             if (data.get(position).getDesc() != null && !data.get(position).getDesc().equals("")) {
                 listDesc.setText(data.get(position).getDesc());
             }

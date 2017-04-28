@@ -23,9 +23,9 @@ import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.helper.BarcodeGeneratorActivity;
 import com.citemenu.mystash.helper.SimpleScannerActivity;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.zxing.WriterException;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -60,11 +60,12 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             editText_generator_barcode.setText(getSharedPreferences(Constant.PREFS_NAME, 0).getString("cardNumber", "null"));
             img = getSharedPreferences
                     (Constant.PREFS_NAME, 0).getString("backCard", null);
-            if (img != null && !img.isEmpty())
-                Picasso.with(this).load(img)
-                        .placeholder(R.drawable.placeholder_shadow)
-                        .error(R.drawable.placeholder_shadow)
-                        .into(imageView_captureBarcode);
+            ImageUtil.setImageWithResource(this, imageView_captureBarcode, img);
+//            if (img != null && !img.isEmpty())
+//                Picasso.with(this).load(img)
+//                        .placeholder(R.drawable.placeholder_shadow)
+//                        .error(R.drawable.placeholder_shadow)
+//                        .into(imageView_captureBarcode);
         }
         clickListenerBind();
     }

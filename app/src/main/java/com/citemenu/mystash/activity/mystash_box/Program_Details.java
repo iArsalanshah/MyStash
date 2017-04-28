@@ -25,10 +25,10 @@ import com.citemenu.mystash.animation.AnimationFactory;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.pojo.program_stamps.Datum;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.utils.SelectShareIntent;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -108,12 +108,13 @@ public class Program_Details extends AppCompatActivity {
     private void settingData() {
 
         //item objects
-        if (pOthersObj.getLogourl() != null && !pOthersObj.getLogourl().isEmpty())
-            Picasso.with(this)
-                    .load(pOthersObj.getLogourl())
-                    .error(R.drawable.placeholder)
-                    .placeholder(R.drawable.placeholder)
-                    .into(img_item);
+        ImageUtil.setImageWithResource(this, img_item, pOthersObj.getLogourl());
+//        if (pOthersObj.getLogourl() != null && !pOthersObj.getLogourl().isEmpty())
+//            Picasso.with(this)
+//                    .load(pOthersObj.getLogourl())
+//                    .error(R.drawable.placeholder)
+//                    .placeholder(R.drawable.placeholder)
+//                    .into(img_item);
         if (pOthersObj.getName() != null)
             tvTitle_item.setText(pOthersObj.getName());
         if (pOthersObj.getAddress() != null)
@@ -122,12 +123,13 @@ public class Program_Details extends AppCompatActivity {
             tvPhone_item.setText(pOthersObj.getContact());
 
         //image items
-        if (pOthersObj.getLogourl() != null && !pOthersObj.getLogourl().isEmpty())
-            Picasso.with(this)
-                    .load(pOthersObj.getLogourl())
-                    .error(R.drawable.placeholder_shadow)
-                    .placeholder(R.drawable.placeholder_shadow)
-                    .into(img1);
+        ImageUtil.setImageWithResource(this, img1, pOthersObj.getLogourl());
+//        if (pOthersObj.getLogourl() != null && !pOthersObj.getLogourl().isEmpty())
+//            Picasso.with(this)
+//                    .load(pOthersObj.getLogourl())
+//                    .error(R.drawable.placeholder_shadow)
+//                    .placeholder(R.drawable.placeholder_shadow)
+//                    .into(img1);
 
         if (stampObject.getProgramname() != null)
             tvTitle.setText(stampObject.getProgramname());

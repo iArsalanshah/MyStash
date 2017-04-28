@@ -20,9 +20,9 @@ import com.citemenu.mystash.pojo.get_all_coupons_pojo.Coupon;
 import com.citemenu.mystash.pojo.get_all_coupons_pojo.Get_All_Coupons;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -132,8 +132,8 @@ public class Coupons_Categories_Click extends AppCompatActivity {
                     listView.setVisibility(View.VISIBLE);
                     listView.setAdapter(new ListAdapter_Categorries(Coupons_Categories_Click.this, allCoupons.getBody().getCoupons()));
                 } else {
-                    altTextCouponsSavedList.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
+                    altTextCouponsSavedList.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -215,26 +215,27 @@ public class Coupons_Categories_Click extends AppCompatActivity {
             TextView listLabel = (TextView) convertView.findViewById(R.id.textView_row_list_coupons);
             TextView tv_item_details = (TextView) convertView.findViewById(R.id.tv_item_details);
             ImageView listImage = (ImageView) convertView.findViewById(R.id.imageView_row_list_coupons);
+            ImageUtil.setImageWithResource(context, listImage, coupons.get(position).getImgurl());
             if (isCouponByAdmin) {
                 if (coupons.get(position).getCouponName() != null)
                     listLabel.setText(coupons.get(position).getCouponName());
                 if (coupons.get(position).getCouponDesc() != null)
                     tv_item_details.setText(coupons.get(position).getCouponDesc());
-                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
-                    Picasso.with(context).load(coupons.get(position).getImgurl())
-                            .placeholder(R.drawable.placeholder)
-                            .error(R.drawable.placeholder)
-                            .into(listImage);
+//                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
+//                    Picasso.with(context).load(coupons.get(position).getImgurl())
+//                            .placeholder(R.drawable.placeholder)
+//                            .error(R.drawable.placeholder)
+//                            .into(listImage);
             } else {
                 if (coupons.get(position).getName() != null)
                     listLabel.setText(coupons.get(position).getName());
                 if (coupons.get(position).getCouponName() != null)
                     tv_item_details.setText(coupons.get(position).getCouponName());
-                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
-                    Picasso.with(context).load(coupons.get(position).getImgurl())
-                            .placeholder(R.drawable.placeholder)
-                            .error(R.drawable.placeholder)
-                            .into(listImage);
+//                if (coupons.get(position).getImgurl() != null && !coupons.get(position).getImgurl().isEmpty())
+//                    Picasso.with(context).load(coupons.get(position).getImgurl())
+//                            .placeholder(R.drawable.placeholder)
+//                            .error(R.drawable.placeholder)
+//                            .into(listImage);
             }
 
             couponObj = coupons;

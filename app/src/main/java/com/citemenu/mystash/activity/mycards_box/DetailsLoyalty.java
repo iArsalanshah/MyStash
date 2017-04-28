@@ -25,10 +25,10 @@ import com.citemenu.mystash.R;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
-import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -316,10 +316,11 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             if (!is_Edit) {
                 imgs[0] = frontCard;
                 imgs[1] = backCard;
-                Picasso.with(context)
-                        .load(imgs[position])
-                        .placeholder(R.drawable.placeholder_shadow)
-                        .into(imageView);
+                ImageUtil.setImageWithResource(context, imageView, imgs[position]);
+//                Picasso.with(context)
+//                        .load(imgs[position])
+//                        .placeholder(R.drawable.placeholder_shadow)
+//                        .into(imageView);
             } else {
                 if (convertedObjEdit.getFrontimage() != null &&
                         convertedObjEdit.getBackimage() != null &&
@@ -327,10 +328,11 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                         !convertedObjEdit.getBackimage().isEmpty()) {
                     imgs[0] = convertedObjEdit.getFrontimage();
                     imgs[1] = convertedObjEdit.getBackimage();
-                    Picasso.with(context)
-                            .load(imgs[position])
-                            .placeholder(R.drawable.placeholder_shadow)
-                            .into(imageView);
+                    ImageUtil.setImageWithResource(context, imageView, imgs[position]);
+//                    Picasso.with(context)
+//                            .load(imgs[position])
+//                            .placeholder(R.drawable.placeholder_shadow)
+//                            .into(imageView);
                 } else imageView.setImageResource(image_resources[position]);
 
             }

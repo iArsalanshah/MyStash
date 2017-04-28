@@ -38,15 +38,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
-import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.activity.MainActivity;
+import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.pojo_register.RegisterUser;
 import com.citemenu.mystash.pojo.update_registeration.UpdateRegisteration;
 import com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -470,13 +470,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             btnId_updateRegister.setVisibility(View.VISIBLE);
             if (objUser.getPassword().equals("")
                     && objUser.getLogintype().equals("1")) {
-                if (imgURL != null && !imgURL.isEmpty()) {
-                    Picasso.with(this)
-                            .load(imgURL)
-                            .error(R.drawable.profile_image)
-                            .placeholder(R.drawable.profile_image)
-                            .into(imageProfileRegister);
-                }
+                ImageUtil.setImageWithResource(this, imageProfileRegister, imgURL);
+//                if (imgURL != null && !imgURL.isEmpty()) {
+//                    Picasso.with(this)
+//                            .load(imgURL)
+//                            .error(R.drawable.profile_image)
+//                            .placeholder(R.drawable.profile_image)
+//                            .into(imageProfileRegister);
+//                }
                 etName.setText(objUser.getCfirstname());
                 etEmail.setText(objUser.getEmail());
                 etSex.setText(objUser.getSex());
@@ -508,13 +509,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     etPhone.setText(objUser.getContactnumber());
 //                    Log.d(com.citemenu.mystash.constant.Constant.LOG_TAG, "onResume: " + com.citemenu.mystash.Utils.CustomSharedPref.getUserObject(this).getBirthday());
                     btnId_updatePwd.setVisibility(View.VISIBLE);
-                    if (!imgURL.equals("")) {
-                        Picasso.with(this)
-                                .load(imgURL)
-                                .error(R.drawable.profile_image)
-                                .placeholder(R.drawable.profile_image)
-                                .into(imageProfileRegister);
-                    }
+                    ImageUtil.setImageWithResource(this, imageProfileRegister, imgURL);
+//                    if (!imgURL.equals("")) {
+//                        Picasso.with(this)
+//                                .load(imgURL)
+//                                .error(R.drawable.profile_image)
+//                                .placeholder(R.drawable.profile_image)
+//                                .into(imageProfileRegister);
+//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -23,20 +22,18 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
-import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.activity.MainActivity;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.helper.Log;
-import com.citemenu.mystash.activity.MainActivity;
 import com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard;
 import com.citemenu.mystash.pojo.getmycards_pojo.GetMycards;
 import com.citemenu.mystash.pojo.getmycards_pojo.Loyaltycard;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,6 +167,9 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                     mFilterloyaltycards = getloyalty.getBody().getLoyaltycards();
                     adapterListview.notifyDataSetChanged();
                 } else {
+                    loyaltycards = new ArrayList<>();
+                    mFilterloyaltycards = new ArrayList<>();
+                    adapterListview.notifyDataSetChanged();
                     alternateText.setVisibility(View.VISIBLE);
                     searchView_cards.setVisibility(View.GONE);
 //                    Toast.makeText(MyCards.this, "" + getloyalty.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
@@ -224,15 +224,15 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
         *
         * */
     private class ListViewMyCards extends BaseAdapter implements Filterable {
-        private final ViewBinderHelper binderHelper;
+//        private final ViewBinderHelper binderHelper;
         Context context;
         private LayoutInflater layoutInflater;
         private ValueFilter valueFilter;
 
         ListViewMyCards(Context context) {
             this.context = context;
-            binderHelper = new ViewBinderHelper();
-            binderHelper.setOpenOnlyOne(true);
+//            binderHelper = new ViewBinderHelper();
+//            binderHelper.setOpenOnlyOne(true);
         }
 
         @Override
@@ -261,17 +261,18 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
             ImageView img = (ImageView) convertView.findViewById(R.id.imageView_row_list_myCards);
             TextView tvTitle = (TextView) convertView.findViewById(R.id.textViewTitle_row_list_myCards);
             TextView tvDetails = (TextView) convertView.findViewById(R.id.textViewDetails_row_list_myCards);
-            final FrameLayout deleteView = (FrameLayout) convertView.findViewById(R.id.delete_layout);
-            SwipeRevealLayout swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
+//            final FrameLayout deleteView = (FrameLayout) convertView.findViewById(R.id.delete_layout);
+//            SwipeRevealLayout swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_addLoyalty);
 
-            if (!TextUtils.isEmpty(loyaltycards.get(position).getFrontimage())) {
-                Picasso.with(context)
-                        .load(loyaltycards.get(position).getFrontimage())
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(img);
-            }
+            ImageUtil.setImageWithResource(context, img, loyaltycards.get(position).getFrontimage());
+//            if (!TextUtils.isEmpty(loyaltycards.get(position).getFrontimage())) {
+//                Picasso.with(context)
+//                        .load(loyaltycards.get(position).getFrontimage())
+//                        .placeholder(R.drawable.placeholder)
+//                        .error(R.drawable.placeholder)
+//                        .into(img);
+//            }
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -279,6 +280,14 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                     intent.putExtra("editLoyaltyObject", new Gson().toJson(loyaltycards.get(position)));
                     DetailsLoyalty.is_Edit = true;
                     startActivity(intent);
+                }
+            });
+
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    deleteItem(loyaltycards.get(position).getId());
+                    return false;
                 }
             });
             /*Card Name*/
@@ -290,17 +299,17 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                 tvDetails.setText(loyaltycards.get(position).getCardname());
             }
 
-            final String item = getItem(position).toString();
-            if (item != null) {
-                binderHelper.bind(swipeLayout, item);
-            }
-            deleteView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                    deleteItem(loyaltycards.get(position).getId());
-                }
-            });
+//            final String item = getItem(position).toString();
+//            if (item != null) {
+//                binderHelper.bind(swipeLayout, item);
+//            }
+//            deleteView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+////                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+//                    deleteItem(loyaltycards.get(position).getId());
+//                }
+//            });
             Log.d(new Gson().toJson(loyaltycards.get(position)));
             return convertView;
         }

@@ -20,8 +20,8 @@ import com.citemenu.mystash.R;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.pojo.all_flyers_by_categ.Datum;
 import com.citemenu.mystash.pojo.all_flyers_by_categ.GetAllFlyersWebService;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -150,12 +150,13 @@ public class Flyers_Available extends AppCompatActivity {
             if (data.get(position).getTitle() != null &&
                     !data.get(position).getTitle().isEmpty())
                 Label2.setText(data.get(position).getTitle());
-            if (data.get(position).getImg_path() != null &&
-                    !data.get(position).getImg_path().isEmpty())
-                Picasso.with(context).load(data.get(position).getImgpath())
-                        .placeholder(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                        .into(listImage);
+            ImageUtil.setImageWithResource(context,listImage,data.get(position).getImgpath());
+//            if (data.get(position).getImg_path() != null &&
+//                    !data.get(position).getImg_path().isEmpty())
+//                Picasso.with(context).load(data.get(position).getImgpath())
+//                        .placeholder(R.drawable.placeholder)
+//                        .error(R.drawable.placeholder)
+//                        .into(listImage);
             return convertView;
         }
     }

@@ -34,6 +34,7 @@ import com.citemenu.mystash.pojo.pojo_searchbusiness.SearchBusiness;
 import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.singleton.MyLocation;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -47,7 +48,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -228,7 +228,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                             altText.setVisibility(View.VISIBLE);
                             search.setClickable(false);
                         }
-                    }
+                    }else altText.setVisibility(View.GONE);
                     mAdapter.notifyDataSetChanged();
                 } else {
                     search.setClickable(false);
@@ -240,7 +240,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
             public void onFailure(Call<SearchBusiness> call, Throwable t) {
                 progressDialog.dismiss();
                 search.setClickable(false);
-                Log.d("ERROR ON FAILURE: "+t.toString());
+                Log.d("ERROR ON FAILURE: " + t.toString());
                 Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
@@ -315,11 +315,13 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                                 title.setText(obj.getName());
                             if (obj.getAddress() != null)
                                 address.setText(obj.getAddress());
-                            if (obj.getLogourl() != null && !obj.getLogourl().isEmpty())
-                                Picasso.with(SearchBusiness_MyStash.this)
-                                        .load(obj.getLogourl())
-                                        .placeholder(R.drawable.placeholder)
-                                        .into(img);
+
+                            ImageUtil.setImageWithResource(SearchBusiness_MyStash.this, img, obj.getLogourl());
+//                            if (obj.getLogourl() != null && !obj.getLogourl().isEmpty())
+//                                Picasso.with(SearchBusiness_MyStash.this)
+//                                        .load(obj.getLogourl())
+//                                        .placeholder(R.drawable.placeholder)
+//                                        .into(img);
                             return v;
                         }
                     }
@@ -440,15 +442,16 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 if (filtered_SB_List.get(i).getIsstash() != null &&
                         !filtered_SB_List.get(i).getIsstash().isEmpty() &&
                         filtered_SB_List.get(i).getIsstash().equals("0")) {
-                    if (filtered_SB_List.get(i).getLogourl() != null
-                            && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
-                        Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
-                                .error(R.drawable.placeholder_img_not_found) //optional
-                                .placeholder(R.drawable.placeholder_img_not_found) //optional
-                                .into(customViewHolder.thumbnail);
-                    } else {
-                        customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
-                    }
+                    ImageUtil.setImageWithResource(mContext, customViewHolder.thumbnail, filtered_SB_List.get(i).getLogourl());
+//                    if (filtered_SB_List.get(i).getLogourl() != null
+//                            && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
+//                        Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
+//                                .error(R.drawable.placeholder_img_not_found) //optional
+//                                .placeholder(R.drawable.placeholder_img_not_found) //optional
+//                                .into(customViewHolder.thumbnail);
+//                    } else {
+//                        customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
+//                    }
 
                     //Setting text view title,address,rating,distance
                     if (filtered_SB_List.get(i).getName() != null)
@@ -465,15 +468,16 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                     }
                 }
             } else {
-                if (filtered_SB_List.get(i).getLogourl() != null
-                        && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
-                    Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
-                            .error(R.drawable.placeholder_img_not_found) //optional
-                            .placeholder(R.drawable.placeholder_img_not_found) //optional
-                            .into(customViewHolder.thumbnail);
-                } else {
-                    customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
-                }
+                ImageUtil.setImageWithResource(mContext, customViewHolder.thumbnail, filtered_SB_List.get(i).getLogourl());
+//                if (filtered_SB_List.get(i).getLogourl() != null
+//                        && !filtered_SB_List.get(i).getLogourl().isEmpty()) {
+//                    Picasso.with(mContext).load(filtered_SB_List.get(i).getLogourl())
+//                            .error(R.drawable.placeholder_img_not_found) //optional
+//                            .placeholder(R.drawable.placeholder_img_not_found) //optional
+//                            .into(customViewHolder.thumbnail);
+//                } else {
+//                    customViewHolder.thumbnail.setImageResource(R.drawable.placeholder_img_not_found);
+//                }
 
                 //Setting text view title,address,rating,distance
                 if (filtered_SB_List.get(i).getName() != null)

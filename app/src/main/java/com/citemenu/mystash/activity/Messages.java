@@ -14,8 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
-import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.helper.FromXML;
@@ -82,11 +80,14 @@ public class Messages extends BaseActivity {
                     if (listData.size() > 0) {
                         altText.setVisibility(View.GONE);
                     } else {
+                        listData = new ArrayList<>();
                         altText.setVisibility(View.VISIBLE);
                     }
                     adapter.notifyDataSetChanged();
                 } else {
                     ToastUtil.showShortMessage(context, messagesWebService.getHeader().getMessage());
+                    listData = new ArrayList<>();
+                    adapter.notifyDataSetChanged();
                     altText.setVisibility(View.VISIBLE);
                 }
             }
@@ -106,14 +107,14 @@ public class Messages extends BaseActivity {
     }
 
     private class MessagesAdapter extends BaseAdapter {
-        private final ViewBinderHelper binderHelper;
+        //        private final ViewBinderHelper binderHelper;
         private Context context;
         private LayoutInflater inflater;
 
         MessagesAdapter(Context context) {
             this.context = context;
-            binderHelper = new ViewBinderHelper();
-            binderHelper.setOpenOnlyOne(true);
+//            binderHelper = new ViewBinderHelper();
+//            binderHelper.setOpenOnlyOne(true);
         }
 
         @Override
@@ -141,8 +142,8 @@ public class Messages extends BaseActivity {
                 convertView = inflater.inflate(R.layout.row_review_details_listview, parent, false);
 
             final Datum listPosition = listData.get(position);
-            SwipeRevealLayout swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
-            FrameLayout deleteView = (FrameLayout) convertView.findViewById(R.id.delete_layout);
+//            SwipeRevealLayout swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
+//            FrameLayout deleteView = (FrameLayout) convertView.findViewById(R.id.delete_layout);
 
             TextView tvTitle = (TextView) convertView.findViewById(R.id.textView_Review_Title);
             FrameLayout parentContainer = (FrameLayout) convertView.findViewById(R.id.layout_itemMessage);
@@ -164,7 +165,7 @@ public class Messages extends BaseActivity {
                     if (listPosition.getMessage() != null && listPosition.getBusinessName() != null)
                         new AlertDialog.Builder(context)
                                 .setTitle(R.string.message)
-                                .setMessage(listPosition.getBusinessName())
+                                .setMessage(listPosition.getMessage())
                                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -175,17 +176,25 @@ public class Messages extends BaseActivity {
                 }
             });
 
-            String item = getItem(position).toString();
-            if (item != null) {
-                binderHelper.bind(swipeLayout, item);
-            }
-            deleteView.setOnClickListener(new View.OnClickListener() {
+            parentContainer.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-//                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                public boolean onLongClick(View view) {
                     deleteItem(position, listPosition.getMessageid());
+                    return false;
                 }
             });
+
+            String item = getItem(position).toString();
+
+//            if (item != null) {
+//                binderHelper.bind(swipeLayout, item);
+//            }
+//            deleteView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    deleteItem(position, listPosition.getMessageid());
+//                }
+//            });
             return convertView;
         }
 

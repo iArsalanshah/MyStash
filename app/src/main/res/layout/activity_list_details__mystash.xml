@@ -5,8 +5,7 @@
     android:id="@+id/rootContainerStashDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_red"
-    tools:context="com.citemenu.mystash.home.mystash_box.ListDetails_MyStash">
+    android:background="@drawable/bg_red">
 
     <RelativeLayout
         android:id="@+id/container_toolbar_aboveViewpager"

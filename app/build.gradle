@@ -57,7 +57,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services-gcm:10.0.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.2.1'
+//    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.2.1'
     compile project(path: ':android-pdfview')
     compile project(path: ':android-image-zoom-crop')
 //    compile 'com.google.android.gms:play-services-appindexing:9.8.0'

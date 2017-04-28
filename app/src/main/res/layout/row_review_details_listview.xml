@@ -1,69 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/swipe_layout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_itemMessage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="0dp"
-    app:dragEdge="right"
-    app:mode="same_level">
+    android:padding="6dp">
 
-    <FrameLayout
-        android:id="@+id/delete_layout"
-        android:layout_width="60dp"
-        android:layout_height="65dp"
-        android:background="@android:color/black">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Delete"
-            android:textColor="@android:color/white" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/layout_itemMessage"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="6dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView_Review_Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView_Review_Desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="6dp"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView_Review_dateTime"
+            android:id="@+id/textView_Review_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="6dp"
+            android:layout_marginLeft="6dp"
             android:text=""
             android:textColor="@android:color/white"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
-    </FrameLayout>
-</com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+        <TextView
+            android:id="@+id/textView_Review_Desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_Review_dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="6dp"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</FrameLayout><!--<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--android:id="@+id/swipe_layout"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:padding="0dp"--><!--app:dragEdge="right"--><!--app:mode="same_level">-->
+
+    <!--<FrameLayout--><!--android:id="@+id/delete_layout"--><!--android:layout_width="60dp"--><!--android:layout_height="65dp"--><!--android:background="@android:color/black">-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_gravity="center"--><!--android:text="Delete"--><!--android:textColor="@android:color/white" />--><!--</FrameLayout>-->
+
+    <!--<FrameLayout--><!--android:id="@+id/layout_itemMessage"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:padding="6dp">-->
+
+    <!--<LinearLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:orientation="vertical">-->
+
+    <!--<TextView--><!--android:id="@+id/textView_Review_Title"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_marginLeft="6dp"--><!--android:text=""--><!--android:textColor="@android:color/white"--><!--android:textSize="16sp"--><!--android:textStyle="bold" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView_Review_Desc"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_marginLeft="6dp"--><!--android:layout_marginRight="6dp"--><!--android:layout_marginTop="6dp"--><!--android:text=""--><!--android:textColor="@android:color/white"--><!--android:textSize="14sp" />--><!--</LinearLayout>-->
+
+    <!--<TextView--><!--android:id="@+id/textView_Review_dateTime"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_gravity="right"--><!--android:layout_marginRight="6dp"--><!--android:text=""--><!--android:textColor="@android:color/white"--><!--android:textSize="12sp"--><!--android:textStyle="bold" />--><!--</FrameLayout>--><!--</com.chauthai.swipereveallayout.SwipeRevealLayout>-->

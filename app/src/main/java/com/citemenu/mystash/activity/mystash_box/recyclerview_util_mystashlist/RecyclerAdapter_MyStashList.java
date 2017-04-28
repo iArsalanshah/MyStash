@@ -10,14 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
-import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.activity.mystash_box.ListDetails_MyStash;
 import com.citemenu.mystash.constant.Constant;
@@ -25,9 +22,10 @@ import com.citemenu.mystash.pojo.get_my_stash_list.Stashlist;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.remove_stash.RemoveStash;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.ImageUtil;
+import com.citemenu.mystash.utils.ToastUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,7 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAdapter_MyStashList.RecyclerViewHolder_MyStashList> {
-    private final ViewBinderHelper binderHelper;
+    //    private final ViewBinderHelper binderHelper;
     private final Users userObject;
     Context context;
     private ArrayList<Stashlist> searchNearbyList;
@@ -60,8 +58,8 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
     public RecyclerAdapter_MyStashList(Context context, ArrayList<Stashlist> searchnearbies) {
         this.context = context;
         this.searchNearbyList = searchnearbies;
-        binderHelper = new ViewBinderHelper();
-        binderHelper.setOpenOnlyOne(true);
+//        binderHelper = new ViewBinderHelper();
+//        binderHelper.setOpenOnlyOne(true);
         userObject = CustomSharedPref.getUserObject(context);
     }
 
@@ -75,25 +73,40 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
         Stashlist sbNearBy = searchNearbyList.get(position);
 
         //setting image using picasso library
-        if (sbNearBy.getLogourl() != null
-                && !sbNearBy.getLogourl().isEmpty())
-            Picasso.with(context).load(sbNearBy.getLogourl())
-                    .error(R.drawable.placeholder) //optional
-                    .placeholder(R.drawable.placeholder) //optional
-                    .into(holder.imageViewAvatar);
+        ImageUtil.setImageWithResource(context, holder.imageViewAvatar, sbNearBy.getLogourl());
+//        if (sbNearBy.getLogourl() != null
+//                && !sbNearBy.getLogourl().isEmpty())
+//            Picasso.with(context).load(sbNearBy.getLogourl())
+//                    .error(R.drawable.placeholder) //optional
+//                    .placeholder(R.drawable.placeholder) //optional
+//                    .into(holder.imageViewAvatar);
         if (sbNearBy.getName() != null)
             holder.tvRecyclerTitle.setText(sbNearBy.getName());
         if (sbNearBy.getAddress() != null)
             holder.tvRecyclerDesc.setText(sbNearBy.getAddress());
         holder.layout.setOnClickListener(clickListener);
         holder.layout.setTag(holder);
-        binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
-        holder.deleteView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+            public boolean onLongClick(View view) {
+                ToastUtil.showShortMessage(context, "delete");
+                return false;
             }
         });
+        holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+                return false;
+            }
+        });
+//        binderHelper.bind(holder.swipeLayout, String.valueOf(getItemId(position)));
+//        holder.deleteView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+//            }
+//        });
     }
 
     private void removeDialog(final String id, final int adapterPosition) {
@@ -156,16 +169,16 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
 
     public class RecyclerViewHolder_MyStashList extends RecyclerView.ViewHolder {
 
-        final FrameLayout deleteView;
-        final SwipeRevealLayout swipeLayout;
+        //        final FrameLayout deleteView;
+//        final SwipeRevealLayout swipeLayout;
         TextView tvRecyclerTitle, tvRecyclerDesc;
         ImageView imageViewAvatar;
         RelativeLayout layout;
 
         public RecyclerViewHolder_MyStashList(View itemView) {
             super(itemView);
-            deleteView = (FrameLayout) itemView.findViewById(R.id.delete_layoutStash);
-            swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layoutStash);
+//            deleteView = (FrameLayout) itemView.findViewById(R.id.delete_layoutStash);
+//            swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layoutStash);
 
             tvRecyclerTitle = (TextView) itemView.findViewById(R.id.row_recyclerview_title_mystash);
             tvRecyclerDesc = (TextView) itemView.findViewById(R.id.row_recyclerview_desc_mystash);
