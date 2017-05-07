@@ -286,7 +286,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
             layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    deleteItem(loyaltycards.get(position).getId());
+//                    deleteItem(loyaltycards.get(position).getId());
                     return false;
                 }
             });

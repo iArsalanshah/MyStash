@@ -194,7 +194,7 @@ public class List_MyStash extends BaseActivity {
             holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
+//                    removeDialog(searchNearbyList.get(holder.getAdapterPosition()).getId(), holder.getAdapterPosition());
                     return false;
                 }
             });
