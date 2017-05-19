@@ -534,8 +534,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         gettingEdittextData();
         if (!name.equals("") && !email.equals("") && !pwd.equals("") &&
-                !cpwd.equals("") && !phone.equals("") && !bday.equals("") &&
-                !gender.equals("") && !category.equals("") && !areaOfInterest.equals("") && email.matches(emailPattern)) {
+                !cpwd.equals("") && !phone.equals("") && email.matches(emailPattern)) {
             if (etPwd.getText().toString().equals(etCPwd.getText().toString())) {
                 progressDialog.show();
 //                uploadImage(); //first webservice for uploading image
@@ -816,8 +815,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 
-    private class mDateSetListener
-            implements DatePickerDialog.OnDateSetListener {
+    private class mDateSetListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,

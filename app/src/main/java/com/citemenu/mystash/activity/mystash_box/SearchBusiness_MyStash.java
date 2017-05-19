@@ -35,6 +35,7 @@ import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.singleton.MyLocation;
 import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.utils.ImageUtil;
+import com.citemenu.mystash.utils.LogUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -78,6 +79,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
     private Users userObj;
     private TextView tvFilter;
     private List<Searchnearby> filtered_SB_List;
+    private List<Searchnearby> map_SB_List;
     private HashMap<Marker, Searchnearby> infoWindowMarkers;
     private Map<Marker, Integer> markerPositions;
     private boolean isPlusClicked;
@@ -153,6 +155,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         }
         mainSB_List = new ArrayList<>();
         filtered_SB_List = new ArrayList<>();
+        map_SB_List = new ArrayList<>();
         mAdapter = new RecyclerView_SBAdapter2(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -176,6 +179,35 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         markerPositions = new HashMap<>();
         //Retrofit Callback
         getRequest(Constant.DEFAULT_RADIUS);
+        getMapData();
+    }
+
+    private void getMapData() {
+        Call<SearchBusiness> call = WebServicesFactory.getInstance().getSearchBusinessCall(
+                Constant.ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN_MAP, userObj.getId(),
+                String.valueOf(lat), String.valueOf(lng), 0
+        );
+        call.enqueue(new Callback<SearchBusiness>() {
+            @Override
+            public void onResponse(Call<SearchBusiness> call, Response<SearchBusiness> response) {
+                if (response == null || response.body() == null || response.body().getHeader() == null) {
+                    LogUtil.d("ON_RESPONSE:", "**** EMPTY OR NULL IN ON RESPONSE ****");
+                } else if (response.body().getHeader().getSuccess() != null
+                        && response.body().getHeader().getSuccess().equals("1")) {
+                    LogUtil.d("onResponse : ", response.body().getHeader().getMessage());
+                    if (response.body().getBody().getSearchnearby() != null) {
+                        map_SB_List = response.body().getBody().getSearchnearby();
+                    }
+                } else {
+                    LogUtil.d("onResponse : ", response.body().getHeader().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchBusiness> call, Throwable t) {
+                LogUtil.d("ERROR ON FAILURE: ", t.toString());
+            }
+        });
     }
 
     void getRequest(final float defaultRadius) {
@@ -228,7 +260,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                             altText.setVisibility(View.VISIBLE);
                             search.setClickable(false);
                         }
-                    }else altText.setVisibility(View.GONE);
+                    } else altText.setVisibility(View.GONE);
                     mAdapter.notifyDataSetChanged();
                 } else {
                     search.setClickable(false);
@@ -280,16 +312,16 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                     }
                     MarkerOptions options = new MarkerOptions();
                     infoWindowMarkers = new HashMap<>();
-                    for (int i = 0; i < filtered_SB_List.size(); i++) {
-                        LatLng latLng = new LatLng(Double.valueOf(filtered_SB_List.get(i).getLat()),
-                                Double.valueOf(filtered_SB_List.get(i).getLongt()));
+                    for (int i = 0; i < map_SB_List.size(); i++) {
+                        LatLng latLng = new LatLng(Double.valueOf(map_SB_List.get(i).getLat()),
+                                Double.valueOf(map_SB_List.get(i).getLongt()));
                         options.position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_icon));
                         Marker m = mGoogleMap.addMarker(options);
                         oldMarkers.add(i, m);
-                        infoWindowMarkers.put(oldMarkers.get(i), filtered_SB_List.get(i));
+                        infoWindowMarkers.put(oldMarkers.get(i), map_SB_List.get(i));
                         markerPositions.put(m, i);
                     }
-                } catch (NullPointerException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -332,7 +364,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         for (int i = 0; i < markerPositions.size(); i++) {
                             if (markerPositions.get(marker).equals(i))
                                 startActivity(new Intent(SearchBusiness_MyStash.this, com.citemenu.mystash.activity.mystash_box.ListDetails_MyStash.class)
-                                        .putExtra("id", new Gson().toJson(filtered_SB_List.get(i))));
+                                        .putExtra("id", new Gson().toJson(map_SB_List.get(i))));
                         }
                     }
                 });
@@ -403,7 +435,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         }
     }
 
-    public class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
+    class RecyclerView_SBAdapter2 extends RecyclerView.Adapter<RecyclerView_SBAdapter2.RecyclerView_SBCustomViewHolder2> implements Filterable {
         private Context mContext;
         View.OnClickListener clickListener = new View.OnClickListener() {
             int position;

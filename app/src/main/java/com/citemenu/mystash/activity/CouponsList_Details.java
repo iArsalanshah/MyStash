@@ -105,9 +105,8 @@ public class CouponsList_Details extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectShareIntent.selectIntent(CouponsList_Details.this,
-                        Constant.SHARE_PROGRAM_STAMP_TEXT_START
-                                + cObj.getName());
+                String fullMsg = "Check out this great company "+cObj.getName()+" that i found on www.mystashapp.ca";
+                SelectShareIntent.selectIntent(CouponsList_Details.this,fullMsg);
             }
         });
 

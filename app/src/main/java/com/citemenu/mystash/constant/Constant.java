@@ -8,6 +8,7 @@ public class Constant {
     public static final String ACTION_LOGIN_CUSTOMER = "customer_login";
     public static final String ACTION_GET_MYSTASH_LIST = "get_my_stash_list";
     public static final String ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN = "get_restaurant_list_for_checkin";
+    public static final String ACTION_GET_RESTAURANT_LIST_FOR_CHECKIN_MAP = "get_restaurant_list_for_checkin_map";
     public static final String ACTION_FB_LOGIN = "customer_fblogin";
     public static final String ACTION_FORGOT_PWD = "forgot_password";
     public static final String ACTION_ADD_STASH = "add_my_stash";
