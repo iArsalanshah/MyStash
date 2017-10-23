@@ -8,11 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,15 +28,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
-import com.citemenu.mystash.dialog_fragments.DatePickerFragment;
-import com.citemenu.mystash.helper.GridSpacingItemDecoration;
 import com.citemenu.mystash.activity.upload_bill_camera.TakePhoto;
+import com.citemenu.mystash.dialog_fragments.DatePickerFragment;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.pojo.upload_bills.UploadBills;
 import com.citemenu.mystash.utils.CustomSharedPref;
 import com.citemenu.mystash.utils.DateUtils;
+import com.citemenu.mystash.utils.ToastUtil;
+import com.citemenu.mystash.utils.Tracker;
 import com.citemenu.mystash.utils.Utils;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,35 +63,31 @@ import retrofit2.Response;
 
 @RuntimePermissions
 public class AddBillDetails extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
-
-    //    private static final int REQ_PIC_TOP = 123;
-//    private static final int REQ_PIC_MIDDLE = 321;
-//    private static final int REQ_PIC_BOTTOM = 122;
     private static final int REQ_MULTIPLE_PICS = 112;
     private static String dateFormat = "dd/MMM/yyyy";
     private static String textBtn;
     private EditText etDate, etName, etInvoiceNo, etAmount;
     private Spinner spinnerBillType;
     private Button btnUploadBill;
-    //    private ImageView img1, img2, img3;
-//    private Bitmap bmBill1, bmBill3;
-//    private Bitmap[] bmLongBill = new Bitmap[100];
     private List<Bitmap> bmLongBill;
-    //    private GridView gridThumbnail;
     private RecyclerView rvThumbnails;
     private ThumbnailsAdapter adapter;
     private Users userObj;
     private int billType;
     private ProgressDialog dialog;
     private Map<String, RequestBody> map = new HashMap<>();
+    private ImageView imgAddImages;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bill_details);
         init();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         etDate.setOnClickListener(this);
         btnUploadBill.setOnClickListener(this);
+        imgAddImages.setOnClickListener(this);
         userObj = CustomSharedPref.getUserObject(this);
 //        img1.setOnClickListener(this);
 //        img2.setOnClickListener(this);
@@ -105,14 +106,15 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
         adapter = new ThumbnailsAdapter(this);
         bmLongBill = new ArrayList<>();
         btnUploadBill = (Button) findViewById(R.id.buttonUploadBill);
+        imgAddImages = (ImageView) findViewById(R.id.img_addBills);
 //        img1 = (ImageView) findViewById(R.id.img_UploadBill1);
 //        img2 = (ImageView) findViewById(R.id.img_UploadBill2);
 //        img3 = (ImageView) findViewById(R.id.img_UploadBill3);
 
         etDate.setText(Utils.dateToString(new Date(), dateFormat));
-        rvThumbnails.addItemDecoration(new GridSpacingItemDecoration(3, 50, false));
+//        rvThumbnails.addItemDecoration(new GridSpacingItemDecoration(3, 50, false));
         rvThumbnails.setLayoutFrozen(true);
-        rvThumbnails.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
+        rvThumbnails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvThumbnails.setAdapter(adapter);
 
         spinnerBillType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -141,37 +143,45 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
                 showDatePickerDialog(v);
                 break;
             case R.id.buttonUploadBill:
-                if (btnUploadBill.getText().toString().equals("Upload Bill")) {
-                    dialog.show();
-                    map = getCompressedBitmaps(bmLongBill);
-                    uploadBills();
-                } else {
-                    AddBillDetailsPermissionsDispatcher.showCameraWithCheck(this);
-                }
+                //check images array size
+//                if (bmLongBill != null && bmLongBill.size() > 0) {
+                map = getCompressedBitmaps(bmLongBill);
+                UploadBillWithLocation();
+//                } else ToastUtil.showLongMessage(this, getString(R.string.take_atleast_1_pic));
+                break;
+            case R.id.img_addBills:
+                AddBillDetailsPermissionsDispatcher.showCameraWithCheck(this);
                 break;
             default:
                 break;
         }
     }
 
-    private void uploadBills() {
+    private void uploadBills(String latitude, String longitude) {
         if (!etName.getText().toString().isEmpty() &&
                 !etAmount.getText().toString().isEmpty() &&
                 !etDate.getText().toString().isEmpty() &&
                 !etInvoiceNo.getText().toString().isEmpty()) {
-
+            if (dialog != null)
+                dialog.show();
             Call<UploadBills> call = WebServicesFactory.getInstance().uploadBills("upload_bills", userObj.getId(), etName.getText().toString(),
                     etDate.getText().toString(), etName.getText().toString(),
-                    etAmount.getText().toString(), String.valueOf(billType), etInvoiceNo.getText().toString(), map);
+                    etAmount.getText().toString(), String.valueOf(billType), etInvoiceNo.getText().toString(),
+                    latitude, longitude, map);
             call.enqueue(new Callback<UploadBills>() {
                 @Override
                 public void onResponse(Call<UploadBills> call, Response<UploadBills> response) {
-                    dialog.dismiss();
+                    if (dialog != null)
+                        dialog.dismiss();
                     UploadBills object = response.body();
                     if (object == null) {
                         Toast.makeText(AddBillDetails.this, "Found Null", Toast.LENGTH_SHORT).show();
                     } else if (object.getHeader().getSuccess().equals("1")) {
                         Toast.makeText(AddBillDetails.this, "Bill Uploaded", Toast.LENGTH_SHORT).show();
+                        if (!AddBillDetails.this.isFinishing()) {
+                            finish();
+                            startActivity(new Intent(AddBillDetails.this, UploadedBillsHistory.class));
+                        }
                     } else {
                         Toast.makeText(AddBillDetails.this, object.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -179,25 +189,24 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
 
                 @Override
                 public void onFailure(Call<UploadBills> call, Throwable t) {
-                    dialog.dismiss();
+                    if (dialog != null)
+                        dialog.dismiss();
                     Log.d("TAG MULTIPLE IMAGES", " onFailure: " + t);
                     Toast.makeText(AddBillDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            dialog.dismiss();
             Toast.makeText(AddBillDetails.this, "Please complete all required fields", Toast.LENGTH_SHORT).show();
         }
     }
 
     private Map<String, RequestBody> getCompressedBitmaps(List<Bitmap> bmLongBill) {
         Map<String, RequestBody> map = new HashMap<>();
-
         for (int i = 0; i < bmLongBill.size(); i++) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bmLongBill.get(i).compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
             // create RequestBody instance from file
-            long time= System.currentTimeMillis();
+            long time = System.currentTimeMillis();
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArrayOutputStream.toByteArray());
             // MultipartBody.Part is used to send also the actual file name
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file[]", "upload_image", requestFile);
@@ -232,7 +241,7 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
         if (!DateUtils.isAfterDay(pickerDate, new Date())) {
             etDate.setText(Utils.dateToString(pickerDate, dateFormat));
         } else {
-            Utils.showShortToastInCenter(this, "Selected date is not valid");
+            Utils.showShortToastInCenter(this, getResources().getString(R.string.selected_date_invalid));
         }
     }
 
@@ -256,7 +265,6 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
 //                } else {
                 bmLongBill = getBitmapsFromGallery(TakePhoto.arrFile);
                 adapter.notifyDataSetChanged();
-                btnUploadBill.setText("Upload Bill");
 //                finalImages = getCompressedBitmaps(bmLongBill);
 //                    img2.setImageResource(R.drawable.tick_green_upload_bills);
 //                }
@@ -320,22 +328,24 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
         }
     }
 
-    @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION})
     void showCamera() {
         startCameraActivity(REQ_MULTIPLE_PICS, "middle");
     }
 
-    @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION})
     void showRationaleForCamera(final PermissionRequest request) {
         new AlertDialog.Builder(this)
-                .setMessage("Upload bill feature required Camera and Storage Permission")
-                .setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                .setMessage(getResources().getString(R.string.upload_bill_permission_rationale))
+                .setPositiveButton(getResources().getString(R.string.allow), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.proceed();
                     }
                 })
-                .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.deny), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.cancel();
@@ -344,10 +354,11 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
                 .show();
     }
 
-
-    @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION})
     void showDeniedForCamera() {
-        Toast.makeText(this, "Upload bill feature can not completed without Camera and Storage Access", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, (getResources().getString(R.string.upload_bill_permission_error)),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -355,5 +366,23 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // NOTE: delegate the permission handling to generated method
         AddBillDetailsPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    private void UploadBillWithLocation() {
+        Tracker tracker = new Tracker();
+        if (tracker.checkGPS(this)) {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                uploadBills(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                            } else {
+                                ToastUtil.showShortMessage(AddBillDetails.this, getString(R.string.unable_to_get_location));
+                            }
+                        }
+                    });
+        }
     }
 }

@@ -324,7 +324,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     //Spinner Adapter
     private void settingAdapter() {
         adapterSex = ArrayAdapter.createFromResource(this,
-                R.array.sexRegisterArray, android.R.layout.select_dialog_item);
+                R.array.genderRegisterArray, android.R.layout.select_dialog_item);
         spinnerGender.setAdapter(adapterSex);
 
         // MultiSpinners
@@ -342,7 +342,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         listInterest.add("South Shore/Rive Sud");
         listInterest.add("Other/Autre");
 
-        multiSpinnerCat.setItems(listCat, getString(R.string.btn_reg_login), this);
+        multiSpinnerCat.setItems(listCat, getString(R.string.reg_login), this);
 
         com.citemenu.mystash.activity.login_pages.MultiSpinner.MultiSpinnerListener listener = new com.citemenu.mystash.activity.login_pages.MultiSpinner.MultiSpinnerListener() {
             @Override
@@ -357,7 +357,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 etInterest.setText(interest);
             }
         };
-        multiSpinnerInterest.setItems(listInterest, getString(R.string.btn_reg_login), listener);
+        multiSpinnerInterest.setItems(listInterest, getString(R.string.reg_login), listener);
     }
 
     public void backRegisterImageBtn(View view) {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@drawable/bg_login"
     tools:context="com.citemenu.mystash.activity.UploadedBillsHistory">
 
     <!--Top layout-->
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Bills History"
+            android:text="@string/bills_history"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -36,15 +36,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/bill_history_top_layout"
-        android:layout_margin="16dp"
-        android:background="@android:color/white" />
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp" />
 
     <TextView
         android:id="@+id/tv_billsHistory_altText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="No Bills Found"
+        android:text="@string/no_bills_found"
         android:textColor="@android:color/white"
         android:textSize="18dp"
         android:visibility="gone" />

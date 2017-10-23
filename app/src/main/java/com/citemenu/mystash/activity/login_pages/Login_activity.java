@@ -15,9 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.activity.MainActivity;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.gcm.RegistrationIntentService;
-import com.citemenu.mystash.activity.MainActivity;
 import com.citemenu.mystash.pojo.pojo_login.LoginUser;
 import com.citemenu.mystash.pojo.pojo_login.Users;
 import com.citemenu.mystash.utils.CustomSharedPref;
@@ -34,7 +34,6 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.splunk.mint.Mint;
 
 import org.json.JSONObject;
 
@@ -65,9 +64,6 @@ public class Login_activity extends AppCompatActivity {
         LoginManager.getInstance().logOut();
         callbackManager = CallbackManager.Factory.create();
 
-        // Set the application environment for MINT
-        Mint.setApplicationEnvironment(Mint.appEnvironmentStaging);
-        Mint.initAndStartSession(Login_activity.this, "7bd743a0");
         setContentView(R.layout.activity_login);
 
         if (!getSharedPreferences(Constant.PREFS_NAME, 0).getString(Constant.IS_LOGIN, "").equals("")) {
@@ -89,14 +85,16 @@ public class Login_activity extends AppCompatActivity {
 
                                 if (bFb.getString("idFacebook") != null) {
                                     //WebService
-                                    prog.show();
+                                    if (prog != null)
+                                        prog.show();
                                     Call<LoginUser> call = WebServicesFactory.getInstance().getFblogin(Constant.ACTION_FB_LOGIN,
                                             bFb.getString("email"), bFb.getString("first_name"), bFb.getString("last_name"),
                                             bFb.getString("idFacebook"), bFb.getString("gender"), bFb.getString("profile_pic"), gcmID, "1");
                                     call.enqueue(new Callback<LoginUser>() {
                                         @Override
                                         public void onResponse(Call<LoginUser> call, Response<LoginUser> response) {
-                                            prog.dismiss();
+                                            if (prog != null)
+                                                prog.dismiss();
                                             Users webResponse = response.body().getBody().getUsers();
                                             CustomSharedPref.setUserObject(Login_activity.this, webResponse);
                                             startActivity(new Intent(Login_activity.this, MainActivity.class)
@@ -105,7 +103,8 @@ public class Login_activity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(Call<LoginUser> call, Throwable t) {
-                                            prog.dismiss();
+                                            if (prog != null)
+                                                prog.dismiss();
                                             Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
                                         }
                                     });

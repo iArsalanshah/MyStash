@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">My Stash</string>
     <string name="facebook_app_id">619355934907424</string>
-    <!--<string name="facebook_app_secret">65bc30d150b1523d86cb4c3ca4d68e2f</string>-->
-    <!--<string name="action_settings">Settings</string>-->
-    <!--<string name="hint_name">Name</string>-->
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <!--<string name="hint_phone">Phone no.</string>-->
     <!--<string name="hint_bday">Birthday</string>-->
     <!--<string name="hint_sex">Sex</string>-->
@@ -16,9 +13,9 @@
     <!--<string name="err_msg_name">Enter your full name</string>-->
     <!--<string name="err_msg_email">Enter valid email address</string>-->
     <!--<string name="err_msg_password">Enter the password</string>-->
-    <string name="btn_login">Login</string>
+    <string name="login">Login</string>
     <!--<string name="btn_fb_login">Connect with facebook</string>-->
-    <string name="btn_reg_login">Register</string>
+    <string name="reg_login">Register</string>
     <!--<string name="lorem_ispum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>-->
     <string name="rate_review"><![CDATA[Rate & Review]]></string>
     <string name="list_alt">There are currently no programs active for this business yet, check back later for changes</string>
@@ -26,31 +23,70 @@
 
     <!--<string name="gcm_sender_ID">456789105121</string>-->
 
-    <string-array name="sexRegisterArray">
+    <string-array name="genderRegisterArray">
         <item></item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
 
-    <string-array name="BillTypes">
+    <string-array name="bill_types">
         <item>Breakfast</item>
         <item>Lunch</item>
-        <item>Hi Tea</item>
         <item>Dinner</item>
+        <item>Other</item>
     </string-array>
 
     <string name="message">Message</string>
-    <string name="msg_top">Store Name / Logo</string>
-    <string name="msg_retake">Can you read the text? if not, retake</string>
-    <string name="msg_long">Long receipt? Add the rest on the next screen</string>
     <string name="msg_select_image">Please capture image(s) to upload</string>
     <string name="msg_no_internet">Internet Unavailable. Try again later</string>
     <string name="msg_upload_success">Image(s) Uploaded successfully</string>
 
-    <string name="btn_cancel">Cancel</string>
-    <string name="btn_retake">Retake</string>
-    <string name="btn_add">Add Section</string>
-    <string name="btn_finish">Finish</string>
-    <string name="btn_capture">Capture</string>
     <string name="savedCouponsAltText">You have not saved any coupons yet. Please save them to your wallet when you find one you like and it will appear here</string>
+
+    <!--Add Bill Screen-->
+    <string name="add_bill">Add Bill</string>
+    <string name="upload_your_recent_bills_to_receive_citypoints">Upload your recent bills to receive CityPoints</string>
+    <string name="name_of_restaurant">Name of Restaurant</string>
+    <string name="enter_restaurant_name">Enter restaurant name</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="amount">Amount</string>
+    <string name="invoice_no">Invoice No.</string>
+    <string name="bill_no">Bill No.</string>
+    <string name="date">Date</string>
+    <string name="select_a_date">Select a date</string>
+    <string name="select_bill_type">Select Bill Type</string>
+    <string name="upload_bill_pictures">Upload Bill Pictures</string>
+    <string name="at_least_3_picture_of_the_bill_will_upload_header_body_footer">At least 3 picture of the bill will upload (Header,Body,Footer)</string>
+    <string name="take_bill_pictures">Take Bill Pictures</string>
+    <string name="upload_bill_permission_error">Upload bill feature can not completed without Camera, Location and Storage Access</string>
+    <string name="allow">Allow</string>
+    <string name="upload_bill_permission_rationale">Upload bill feature required Camera, Location and Storage Permission</string>
+    <string name="deny">Deny</string>
+    <string name="selected_date_invalid">Selected date is not valid</string>
+
+    <!--Add BILL-> Take Photo Screen-->
+    <string name="msg_top">Store Name / Logo</string>
+    <string name="msg_long_receipt">Long receipt? Add the rest on the next screen</string>
+    <string name="cancel">Cancel</string>
+    <string name="retake">Retake</string>
+    <string name="msg_retake">Can you read the text? if not, retake</string>
+    <string name="finish">Finish</string>
+    <string name="capture">Capture</string>
+    <string name="add_section">Add Section</string>
+    <string name="upload_bill">Upload Bill</string>
+
+    <!--Bill History Screen-->
+    <string name="restaurant_name">Restaurant Name: </string>
+    <string name="restaurant_location">Restaurant Location: </string>
+    <string name="no_bills_found">No Bills Found</string>
+    <string name="bills_history">Bills History</string>
+    <string name="status">Status</string>
+    <string name="invoice">Invoice</string>
+    <string name="enter_business_name">Enter business name</string>
+    <string name="submit">Submit</string>
+    <string name="take_atleast_1_pic">Please take atleast 1 picture</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="unable_to_get_location">Unable to get location please try again</string>
+    <string name="bill">Bill</string>
+
 </resources>

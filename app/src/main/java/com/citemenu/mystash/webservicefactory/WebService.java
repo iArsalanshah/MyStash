@@ -279,5 +279,7 @@ public interface WebService {
                                   @Query("amount") String amount,
                                   @Query("bill_type") String bill_type,
                                   @Query("invoice_no") String invoice_no,
+                                  @Query("latitude") String latitude,
+                                  @Query("longitude") String longitude,
                                   @PartMap Map<String, RequestBody> fileList);
 }

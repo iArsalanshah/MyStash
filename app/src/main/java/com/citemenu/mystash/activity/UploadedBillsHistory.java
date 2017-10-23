@@ -18,6 +18,7 @@ import com.citemenu.mystash.helper.Log;
 import com.citemenu.mystash.pojo.get_bills.Bill;
 import com.citemenu.mystash.pojo.get_bills.GetBillsWS;
 import com.citemenu.mystash.utils.CustomSharedPref;
+import com.citemenu.mystash.utils.TextUtil;
 import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class UploadedBillsHistory extends AppCompatActivity {
 
@@ -96,7 +98,7 @@ public class UploadedBillsHistory extends AppCompatActivity {
         });
     }
 
-    public class BillHistoryAdapter extends RecyclerView.Adapter<BillHistoryAdapter.MyViewHolder> {
+    class BillHistoryAdapter extends RecyclerView.Adapter<BillHistoryAdapter.MyViewHolder> {
 
         BillHistoryAdapter() {
 
@@ -111,16 +113,11 @@ public class UploadedBillsHistory extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            if (billList.get(position).getAmount() != null)
-                holder.amount.setText(billList.get(position).getAmount());
-            if (billList.get(position).getStatus() != null)
-                holder.status.setText(billList.get(position).getStatus());
-            if (billList.get(position).getInvoiceNo() != null)
-                holder.invoice.setText(billList.get(position).getInvoiceNo());
-            if (billList.get(position).getComment() != null)
-                holder.details.setText(billList.get(position).getComment().toString());
-            if (billList.get(position).getResName() != null)
-                holder.name.setText(billList.get(position).getResName());
+            TextUtil.setText(holder.name,billList.get(position).getResName());
+            TextUtil.setText(holder.location,billList.get(position).getLocation());//key missing
+            TextUtil.setText(holder.invoice,billList.get(position).getInvoiceNo());
+            TextUtil.setText(holder.amount,billList.get(position).getAmount());
+            TextUtil.setText(holder.status,billList.get(position).getStatus());
         }
 
         @Override
@@ -129,15 +126,15 @@ public class UploadedBillsHistory extends AppCompatActivity {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView name, invoice, amount, status, details;
+            TextView name, invoice, amount, status, location;
 
             MyViewHolder(View view) {
                 super(view);
                 name = (TextView) view.findViewById(R.id.bill_history_item_name);
                 invoice = (TextView) view.findViewById(R.id.bill_history_item_invoice);
                 amount = (TextView) view.findViewById(R.id.bill_history_item_amount);
-                status = (TextView) view.findViewById(R.id.bill_history_status);
-                details = (TextView) view.findViewById(R.id.bill_history_item_description);
+                status = (TextView) view.findViewById(R.id.bill_history_item_status);
+                location = (TextView) view.findViewById(R.id.bill_history_item_location);
             }
         }
     }

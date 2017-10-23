@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@android:drawable/sym_action_email"
-                android:hint="@string/hint_email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:textColor="#d0e4e2e2" />
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@android:drawable/ic_lock_idle_lock"
-                android:hint="@string/hint_password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:shadowColor="@color/colorAccent"
                 android:singleLine="true"
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorLoginBtn"
             android:onClick="btnMainLogin"
-            android:text="@string/btn_login"
+            android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
@@ -98,7 +98,7 @@
             android:layout_marginTop="11dp"
             android:background="@color/colorRegisterBtn"
             android:onClick="btnRegLogin"
-            android:text="@string/btn_reg_login"
+            android:text="@string/reg_login"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp" />

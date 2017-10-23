@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
+import permissions.dispatcher.RuntimePermissions;
+
 /**
  * Created by Arsalan on 1/21/2016.
  */
@@ -29,6 +31,9 @@ public class Tracker implements LocationListener {
     public Tracker(Context context) {
         this.mContext = context;
         accessLocation();
+    }
+
+    public Tracker(){
     }
 
     private Location accessLocation() {
@@ -119,6 +124,27 @@ public class Tracker implements LocationListener {
         builder.show();
     }
 
+    private void settingGPS(final Context context) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Setting GPS");
+        builder.setMessage("GPS is not Enabled");
+        builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                context.startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
@@ -143,5 +169,18 @@ public class Tracker implements LocationListener {
     @Nullable
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public boolean isGpsEnabled(Context context){
+        return ((LocationManager) context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public boolean checkGPS(Context context){
+        if (isGpsEnabled(context)){
+            return true;
+        }else {
+            settingGPS(context);
+            return false;
+        }
     }
 }

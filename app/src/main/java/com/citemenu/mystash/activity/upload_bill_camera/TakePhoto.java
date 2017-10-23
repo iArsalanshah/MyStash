@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.utils.ToastUtil;
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.CameraHostProvider;
 import com.commonsware.cwac.camera.CameraView;
@@ -90,7 +91,7 @@ public class TakePhoto extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnCancel:
-                if (((Button) v).getText().equals(getString(R.string.btn_cancel))) {
+                if (((Button) v).getText().equals(getResources().getString(R.string.cancel))) {
                     arrFile.clear();
                     onBackPressed();
                 } else {
@@ -99,9 +100,14 @@ public class TakePhoto extends AppCompatActivity implements View.OnClickListener
                 }
                 break;
             case R.id.btnCapture:
-                if (((Button) v).getText().equals("Capture")) {
-                    txtMsgTop.setText(getString(R.string.msg_retake));
-                    cameraView.takePicture(true, true);
+                if (((Button) v).getText().equals(getResources().getString(R.string.capture))) {
+                    try {
+                        cameraView.takePicture(true, true);
+                        txtMsgTop.setText(getString(R.string.msg_retake));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        ToastUtil.showShortMessage(this,getString(R.string.please_wait));
+                    }
                 } else {
                     selectImage();
                 }
@@ -158,14 +164,14 @@ public class TakePhoto extends AppCompatActivity implements View.OnClickListener
 
     private void updateActions(boolean isCaptured) {
         if (isCaptured) {
-            btnCapture.setText("Add Section");
-            btnCancel.setText("Retake");
+            btnCapture.setText(getResources().getString(R.string.add_section));//"Add Section"
+            btnCancel.setText(getResources().getString(R.string.retake));
 
             btnCapture.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_add, 0, 0);
             btnCancel.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_retake, 0, 0);
         } else {
-            btnCapture.setText("Capture");
-            btnCancel.setText("Cancel");
+            btnCapture.setText(getResources().getString(R.string.capture));//"Capture"
+            btnCancel.setText(getResources().getString(R.string.cancel));//"Cancel"
 
             btnCapture.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_camera, 0, 0);
             btnCancel.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_cancel, 0, 0);
@@ -205,7 +211,6 @@ public class TakePhoto extends AppCompatActivity implements View.OnClickListener
     }
 
     public void writeBitmapToFile(Bitmap bitmap) {
-
         File file = null, f = null;
         if (android.os.Environment.getExternalStorageState()
                 .equals(android.os.Environment.MEDIA_MOUNTED)) {

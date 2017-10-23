@@ -44,6 +44,9 @@ public class Bill {
     @SerializedName("invoice_no")
     @Expose
     private String invoiceNo;
+    @SerializedName("location")
+    @Expose
+    private String location;
     @SerializedName("file_path")
     @Expose
     private List<String> filePath = new ArrayList<String>();
@@ -230,4 +233,11 @@ public class Bill {
         this.filePath = filePath;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

@@ -81,7 +81,7 @@
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:maxWidth="180dp"
-            android:text="@string/msg_long"
+            android:text="@string/msg_long_receipt"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:drawableTop="@drawable/ic_cancel"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:background="@null"
             android:textColor="#FFFFFF"
             android:textAllCaps="false" />
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:drawableTop="@drawable/ic_camera"
-            android:text="Capture"
+            android:text="@string/capture"
             android:background="@null"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"/>
@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="@string/btn_finish"
+            android:text="@string/finish"
             android:background="@null"
             android:drawableTop="@drawable/ic_done"
             android:textColor="#FFFFFF"
