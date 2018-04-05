@@ -580,6 +580,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
+                                            SearchBusiness_MyStash.this.finish();
                                         }
                                     }).show();
                         } else {
@@ -596,6 +597,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            SearchBusiness_MyStash.this.finish();
                                             dialog.cancel();
                                         }
                                     })
@@ -633,6 +635,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
+                                        SearchBusiness_MyStash.this.finish();
                                     }
                                 })
                                 .show();

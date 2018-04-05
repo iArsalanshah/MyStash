@@ -120,13 +120,6 @@
                     android:layout_height="185dp"
                     android:layout_above="@+id/textRatio">
 
-                    <ImageView
-                        android:id="@+id/img1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/placeholder_img_not_found" />
-
                     <FrameLayout
                         android:id="@+id/img2_layout"
                         android:layout_width="match_parent"
@@ -148,6 +141,13 @@
                             android:src="@android:color/transparent" />
                     </FrameLayout>
 
+
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/placeholder_img_not_found" />
                 </ViewFlipper>
 
                 <TextView

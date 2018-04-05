@@ -257,14 +257,14 @@ public class Program_Details extends AppCompatActivity {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.citemenu.mystash.animation.AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT); //http://genzeb.github.io/flip/
+                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT); //http://genzeb.github.io/flip/
             }
         });
 
         findViewById(R.id.img_gridview_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.citemenu.mystash.animation.AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
+                AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
             }
         });
 
@@ -277,12 +277,12 @@ public class Program_Details extends AppCompatActivity {
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//@"Check out this great company i found on MyStash.\n%@\n%@\n%@\n%@\n\nhttp://www.mystashapp.ca/"
                 String fullMsg = Constant.SHARE_PROGRAM_STAMP_TEXT_START
-                        + pOthersObj.getName()
-                        + ", "
-                        + stampObject.getProgramname()
-                        + "\n" + pOthersObj.getAddress()
-                        + "\n" + pOthersObj.getPostalcode();
+                        + pOthersObj.getName() + "\n"
+                        + stampObject.getProgramname() + "\n"
+                        + pOthersObj.getAddress() + "\n"
+                        + pOthersObj.getPostalcode() + "\n\n";
                 SelectShareIntent.selectIntent(Program_Details.this, fullMsg);
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);

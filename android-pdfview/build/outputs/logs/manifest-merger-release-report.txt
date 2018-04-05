@@ -1,0 +1,29 @@
+-- Merging decision tree log ---
+manifest
+ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:1-31:12
+	package
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:22:5-37
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+	android:versionName
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:24:5-32
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+	xmlns:android
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:21:11-69
+	android:versionCode
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:23:5-28
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+		INJECTED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml
+uses-sdk
+ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:27:5-29:41
+	android:targetSdkVersion
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:29:9-38
+	android:minSdkVersion
+		ADDED from Z:\Android\Hyenoon Projects\MyStashAppProject\android-pdfview\AndroidManifest.xml:28:9-34

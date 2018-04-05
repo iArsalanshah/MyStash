@@ -63,7 +63,8 @@ public class SelectShareIntent {
         // Create intent using ACTION_VIEW and a normal Twitter url:
         String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
                 urlEncode(msg),
-                urlEncode(Constant.SHARE_LINK));
+                urlEncode(Constant.WEB_URL)
+        );
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
 
         // Narrow down to official Twitter app, if available:
@@ -82,6 +83,8 @@ public class SelectShareIntent {
 
     //Share on Facebook
     private static void facebookShare(Activity activity, String msg) {
+        String msgWithLink = msg + Constant.WEB_URL;
+
         if (!FacebookSdk.isInitialized()) {
             FacebookSdk.sdkInitialize(activity);
         }
@@ -90,8 +93,8 @@ public class SelectShareIntent {
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle(Constant.SHARE_SUBJECT)
-                    .setContentDescription(msg)
-                    .setContentUrl(Uri.parse(Constant.SHARE_LINK))
+                    .setContentDescription(msgWithLink)
+                    .setContentUrl(Uri.parse(Constant.WEB_URL))
                     .build();
             shareDialog.show(linkContent);
         }
@@ -99,18 +102,18 @@ public class SelectShareIntent {
 
     //Email Share
     private static void emailShare(Context context, String msg) {
-//        String msgWithLink = msg + "\n\n" + Constant.SHARE_LINK;
+        String msgWithLink = msg + Constant.WEB_URL;
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", "", null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, Constant.SHARE_SUBJECT);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
-        context.startActivity(Intent.createChooser(emailIntent, Constant.SHARE_SUBJECT));
+        emailIntent.putExtra(Intent.EXTRA_TEXT, msgWithLink);
+        context.startActivity(Intent.createChooser(emailIntent, "Share"));
     }
 
     //SMS Share
     private static void messageShare(Context context, String msg) {
-        String msgWithLink = msg + "\n\n" + Constant.SHARE_LINK;
+        String msgWithLink = msg + Constant.WEB_URL;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) //At least KitKat
         {

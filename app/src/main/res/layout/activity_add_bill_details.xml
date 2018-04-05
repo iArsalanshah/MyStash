@@ -261,7 +261,7 @@
                         android:layout_height="80dp"
                         android:background="@drawable/drawable_stroke_black"
                         android:scaleType="centerInside"
-                        android:src="@drawable/plus_upload_bills" />
+                        android:src="@drawable/ic_addphoto" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_thumbnails"

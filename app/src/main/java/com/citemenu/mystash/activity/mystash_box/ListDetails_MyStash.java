@@ -106,7 +106,11 @@ public class ListDetails_MyStash extends AppCompatActivity {
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullMsg = Constant.SHARE_BUSINESS_START + searchnearby.getName();
+                String fullMsg = Constant.SHARE_PROGRAM_STAMP_TEXT_START
+                        + searchnearby.getName() + "\n"
+                        + searchnearby.getAddress() + "\n"
+                        + searchnearby.getPostalcode() + "\n\n";
+//                String fullMsg = Constant.SHARE_BUSINESS_START + searchnearby.getName();
                 SelectShareIntent.selectIntent(ListDetails_MyStash.this, fullMsg);
 //                Intent sendIntent = new Intent();
 //                sendIntent.setAction(Intent.ACTION_SEND);
