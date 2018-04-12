@@ -43,6 +43,10 @@ public class BillCameraPreview extends SurfaceView implements SurfaceHolder.Call
         try {
             camera.setPreviewDisplay(holder);
             camera.setDisplayOrientation(90);
+            //set camera to continually auto-focus
+            Camera.Parameters params = camera.getParameters();
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            camera.setParameters(params);
             camera.startPreview();
         } catch (Exception e) {
             Log.d("Error setting camera", e);

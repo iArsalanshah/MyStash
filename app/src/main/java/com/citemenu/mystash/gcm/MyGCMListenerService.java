@@ -21,6 +21,8 @@ import com.citemenu.mystash.activity.mystash_box.Program_Details;
 import com.citemenu.mystash.constant.Constant;
 import com.google.android.gms.gcm.GcmListenerService;
 
+import java.util.Random;
+
 public class MyGCMListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGCMListenerService";
@@ -118,7 +120,7 @@ public class MyGCMListenerService extends GcmListenerService {
             ex.printStackTrace();
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                0); //PendingIntent.FLAG_ONE_SHOT
+                PendingIntent.FLAG_ONE_SHOT); //PendingIntent.FLAG_ONE_SHOT
 //
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -128,20 +130,26 @@ public class MyGCMListenerService extends GcmListenerService {
 //                .setAutoCancel(true)
 //                .setSound(defaultSoundUri)
 //                .setContentIntent(pendingIntent);
-        Notification notification = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
                 .setTicker(getResources().getString(R.string.app_name))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                         R.mipmap.ic_launcher))
-                .setContentTitle("MyStash")
+                .setContentTitle("My Stash")
+                .setStyle(new NotificationCompat.BigTextStyle())
                 .setContentText(message)
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
-                .setAutoCancel(true)
-                .build();
+                .setDefaults(Notification.DEFAULT_ALL)  //to show alert notification
+                .setPriority(Notification.PRIORITY_MAX)  //on top of app
+                .setAutoCancel(true);
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notification);
+        Random rn = new Random();
+        int range = 10000 - 1 + 1;
+        int randomNum = rn.nextInt(range) + 1;
+        notificationManager.notify(randomNum /* ID of notification */, notification.build());
     }
 }
