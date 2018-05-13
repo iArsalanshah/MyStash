@@ -97,14 +97,14 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         filterDialog();
         if (IS_CHECK_IN) {
             TextView titleSearchBusiness = (TextView) findViewById(R.id.titleSearchBusiness);
-            titleSearchBusiness.setText("Check In");
+            titleSearchBusiness.setText(getString(R.string.checkin));
         }
     }
 
     private void filterDialog() {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-        alertDialog.setTitle("Range");
+        alertDialog.setTitle(getString(R.string.range));
         String[] filterItems = {"5km", "10km", "20km", "50km"};
         alertDialog.setItems(filterItems, new DialogInterface.OnClickListener() {
             @Override
@@ -164,7 +164,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         et.setTextColor(Color.BLACK);
         //Progress Dialog
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getString(R.string.please_wait));
 //        btnMapSB.setClickable(false);
 
         //SupportMapFragment
@@ -225,7 +225,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 progressDialog.dismiss();
                 SearchBusiness webResponse = response.body();
                 if (webResponse == null) {
-                    Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchBusiness_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     search.setClickable(false);
                 } else if (webResponse.getHeader().getSuccess().equals("1")) {
                     if (!search.isClickable()) {
@@ -252,11 +252,11 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
                     if (filtered_SB_List.size() == 0) {
                         if (isPlusClicked) {
-                            altText.setText("You already have added all available businesses");
+                            altText.setText(getString(R.string.you_have_submitted_business));
                             altText.setVisibility(View.VISIBLE);
                             search.setClickable(false);
                         } else {
-                            altText.setText("There are currently no business nearby. Send us an email from the contact us section with some suggestions of your favorite places and we will try to add them ASAP!");
+                            altText.setText(getString(R.string.no_business_nearby));
                             altText.setVisibility(View.VISIBLE);
                             search.setClickable(false);
                         }
@@ -273,7 +273,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 progressDialog.dismiss();
                 search.setClickable(false);
                 Log.d("ERROR ON FAILURE: " + t.toString());
-                Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchBusiness_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -385,8 +385,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         getErrorDialog(this, ERROR_DIALOG_REQUEST, isAvailable);
                 dialog.show();
             } else {
-                Toast.makeText(SearchBusiness_MyStash.this,
-                        "Can't connect to mapping service",
+                Toast.makeText(SearchBusiness_MyStash.this, getString(R.string.cant_connect_map),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -399,7 +398,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
         mGoogleMap = googleMap;
         userMarker = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
-                .snippet("Your location")
+                .snippet(getString(R.string.your_location))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.home_location)));//fromResource(R.drawable.home_location)
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 12);
         googleMap.moveCamera(update);
@@ -567,16 +566,14 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                     dialog.dismiss();
                     CustomerCheckIn checkIn = response.body();
                     if (checkIn == null) {
-                        Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     } else if (checkIn.getHeader().getSuccess().equals("1")) {
                         if (filtered_SB_List.get(position).getIsstash().equals("1")) {
                             new AlertDialog.Builder(SearchBusiness_MyStash.this)
                                     .setCancelable(false)
-                                    .setTitle("Thanks for visiting")
-                                    .setMessage("Present yourself at the cash counter " +
-                                            "and mention your name when making " +
-                                            "your purchase. See you again soon")
-                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    .setTitle(getString(R.string.thanks_for_visiting))
+                                    .setMessage(getString(R.string.checkin_success_message1))
+                                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
@@ -586,15 +583,15 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                         } else {
                             new AlertDialog.Builder(SearchBusiness_MyStash.this)
                                     .setCancelable(false)
-                                    .setTitle("Thanks for visiting")
-                                    .setMessage("To start earning rewards please add us to your stash")
-                                    .setPositiveButton("Add to stash", new DialogInterface.OnClickListener() {
+                                    .setTitle(getString(R.string.thanks_for_visiting))
+                                    .setMessage(getString(R.string.checkin_success_message2))
+                                    .setPositiveButton(getString(R.string.add_to_stash), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             addStash(filtered_SB_List.get(position), position);
                                         }
                                     })
-                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             SearchBusiness_MyStash.this.finish();
@@ -612,7 +609,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 @Override
                 public void onFailure(Call<CustomerCheckIn> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(mContext, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -624,14 +621,14 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
                 public void onResponse(Call<AddStash> call, Response<AddStash> response) {
                     AddStash stash = response.body();
                     if (stash == null) {
-                        Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchBusiness_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     } else if (stash.getHeader().getSuccess().equals("1")) {
                         filtered_SB_List.get(position).setIsstash("1");
                         mAdapter.notifyDataSetChanged();
                         new android.support.v7.app.AlertDialog.Builder(SearchBusiness_MyStash.this)
-                                .setMessage("Add my stash successful")
-                                .setTitle("Message")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                .setMessage(getString(R.string.add_to_stash_success))
+                                .setTitle(getString(R.string.message))
+                                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
@@ -646,7 +643,7 @@ public class SearchBusiness_MyStash extends AppCompatActivity implements OnMapRe
 
                 @Override
                 public void onFailure(Call<AddStash> call, Throwable t) {
-                    Toast.makeText(SearchBusiness_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchBusiness_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
         }

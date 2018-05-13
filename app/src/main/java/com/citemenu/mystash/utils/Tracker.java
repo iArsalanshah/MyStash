@@ -13,7 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import permissions.dispatcher.RuntimePermissions;
+import com.citemenu.mystash.R;
 
 /**
  * Created by Arsalan on 1/21/2016.
@@ -45,7 +45,7 @@ public class Tracker implements LocationListener {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isNetworkEnabled && !isGpsEnabled) {
-                Toast.makeText(mContext, "Please enable GPS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.enable_gps), Toast.LENGTH_SHORT).show();
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -106,16 +106,16 @@ public class Tracker implements LocationListener {
     public void settingGPS() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
-        builder.setTitle("Setting GPS");
-        builder.setMessage("GPS is not Enabled");
-        builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+        builder.setTitle(mContext.getString(R.string.gps_settings));
+        builder.setMessage(mContext.getString(R.string.enable_gps_message));
+        builder.setPositiveButton(mContext.getString(R.string.setting), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
@@ -127,16 +127,16 @@ public class Tracker implements LocationListener {
     private void settingGPS(final Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Setting GPS");
-        builder.setMessage("GPS is not Enabled");
-        builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+        builder.setTitle(mContext.getString(R.string.gps_settings));
+        builder.setMessage(mContext.getString(R.string.enable_gps_message));
+        builder.setPositiveButton(mContext.getString(R.string.setting), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 context.startActivity(intent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();

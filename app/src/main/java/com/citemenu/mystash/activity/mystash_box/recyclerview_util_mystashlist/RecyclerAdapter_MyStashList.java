@@ -89,7 +89,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ToastUtil.showShortMessage(context, "delete");
+                ToastUtil.showShortMessage(context, context.getString(R.string.delete));
                 return false;
             }
         });
@@ -111,17 +111,15 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
 
     private void removeDialog(final String id, final int adapterPosition) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setTitle("Confirmation");
-        dialog.setMessage("Are you sure you want to remove this business " +
-                "from your stash, doing so will prevent  you from  receiving " +
-                "specials and VIP offers from this merchant.");
-        dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setTitle(context.getString(R.string.confirmation));
+        dialog.setMessage(context.getString(R.string.remove_stash_message));
+        dialog.setPositiveButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        dialog.setNegativeButton("REMOVE", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(context.getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -134,7 +132,7 @@ public class RecyclerAdapter_MyStashList extends RecyclerView.Adapter<RecyclerAd
     private void onRemoveStashItem(String id, final int adapterPosition) {
         // webservice should be called here.
         final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage("Deleting...");
+        dialog.setMessage(context.getString(R.string.deleting));
         dialog.show();
         Call<RemoveStash> call = WebServicesFactory.getInstance()
                 .getRemoveStash(Constant.ACTION_REMOVE_STASH, id

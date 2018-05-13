@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
             android:background="@android:color/white"
-            android:hint="Enter your email address"
+            android:hint="@string/enter_your_email_address"
             android:inputType="textEmailAddress"
             android:padding="14dp"
             android:singleLine="true" />
@@ -45,7 +45,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/colorLoginBtn"
             android:onClick="BtnSendForgotPwd"
-            android:text="Send"
+            android:text="@string/send"
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
     </LinearLayout>

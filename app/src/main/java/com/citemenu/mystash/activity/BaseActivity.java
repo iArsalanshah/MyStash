@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import com.citemenu.mystash.R;
+
 public class BaseActivity extends AppCompatActivity{
     protected Context context;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -17,7 +19,7 @@ public class BaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         this.context = this;
         this.mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.setMessage(getString(R.string.please_wait));
         mProgressDialog.setCancelable(false);
     }
 

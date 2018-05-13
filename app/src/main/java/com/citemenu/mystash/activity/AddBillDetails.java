@@ -132,7 +132,7 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(getString(R.string.please_wait));
     }
 
     @Override
@@ -175,9 +175,9 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
                         dialog.dismiss();
                     UploadBills object = response.body();
                     if (object == null) {
-                        Toast.makeText(AddBillDetails.this, "Found Null", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(AddBillDetails.this, "Found Null", Toast.LENGTH_SHORT).show();
                     } else if (object.getHeader().getSuccess().equals("1")) {
-                        Toast.makeText(AddBillDetails.this, "Bill Uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddBillDetails.this, getString(R.string.bill_uploaded), Toast.LENGTH_SHORT).show();
                         if (!AddBillDetails.this.isFinishing()) {
                             finish();
                             startActivity(new Intent(AddBillDetails.this, UploadedBillsHistory.class));
@@ -192,11 +192,11 @@ public class AddBillDetails extends AppCompatActivity implements DatePickerDialo
                     if (dialog != null)
                         dialog.dismiss();
                     Log.d("TAG MULTIPLE IMAGES", " onFailure: " + t);
-                    Toast.makeText(AddBillDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBillDetails.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            Toast.makeText(AddBillDetails.this, "Please complete all required fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddBillDetails.this, getString(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
         }
     }
 

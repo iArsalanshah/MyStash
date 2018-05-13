@@ -155,7 +155,7 @@ public class Messages extends BaseActivity {
                 tvDesc.setText(listPosition.getMessage().trim());
             if (listPosition.getSentTime() != null)
                 if (DateUtils.isToday(listPosition.getSentTime()))
-                    tvTime.setText("Today");
+                    tvTime.setText(getString(R.string.today));
                 else {
                     tvTime.setText(setTime(listPosition.getSentTime()));
                 }
@@ -166,7 +166,7 @@ public class Messages extends BaseActivity {
                         new AlertDialog.Builder(context)
                                 .setTitle(R.string.message)
                                 .setMessage(listPosition.getMessage())
-                                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                .setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -200,15 +200,15 @@ public class Messages extends BaseActivity {
 
         private void deleteItem(final int positionId, final String messageid) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setTitle("Confirmation");
-            dialog.setMessage("Are you sure you want to remove this Message");
-            dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            dialog.setTitle(getString(R.string.confirmation));
+            dialog.setMessage(getString(R.string.message_remove));
+            dialog.setPositiveButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
-            dialog.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+            dialog.setNegativeButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -238,21 +238,21 @@ public class Messages extends BaseActivity {
             public void onResponse(Call<DeleteNotificationWS> call, Response<DeleteNotificationWS> response) {
                 if (response.body() == null || response.body().getHeader() == null
                         || response.body().getHeader().getSuccess() == null) {
-                    Toast.makeText(Messages.this, "Found null in web response", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Messages.this, "Found null in web response", Toast.LENGTH_SHORT).show();
                 } else if (response.body().getHeader().getSuccess().equals("1")) {
                     listData.remove(positionId);
                     adapter.notifyDataSetChanged();
                 } else if (response.body().getHeader().getMessage() != null) {
                     Toast.makeText(Messages.this, response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Messages.this, "Found null in API response", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Messages.this, "Found null in API response", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DeleteNotificationWS> call, Throwable t) {
                 Log.e(t.toString());
-                Toast.makeText(Messages.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Messages.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

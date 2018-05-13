@@ -25,6 +25,7 @@ import com.citemenu.mystash.activity.mystash_box.SearchBusiness_MyStash;
 import com.citemenu.mystash.constant.Constant;
 import com.citemenu.mystash.pojo.pojo_cite_points.CitePointsTransactions;
 import com.citemenu.mystash.pojo.pojo_login.Users;
+import com.citemenu.mystash.residemenu_util.CustomAdapterNavList;
 import com.citemenu.mystash.residemenu_util.ResideMenu;
 import com.citemenu.mystash.singleton.MyCitePoints;
 import com.citemenu.mystash.singleton.MyLocation;
@@ -63,15 +64,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.share_the_app_icon,
             R.drawable.logout_icon};
 
-    static String[] listName = {
-            "Home",
-            "Messages",
-            "Cite Points",
-            "My Account",
-            "Upload Bill",
-            "View Bill Status",
-            "Share the App",
-            "Logout"};
+    private String[] listName = {};
 
     ListView lv;
     private ResideMenu resideMenu;
@@ -132,15 +125,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpMenu() {
+        for (int i = 0; i < 6; i++){
+            switch (i){
+                case 0:
+                    listName[i] = getString(R.string.home);
+                    break;
+                case 1:
+                    listName[i] = getString(R.string.messages);
+                    break;
+                case 2:
+                    listName[i] = getString(R.string.cite_points);
+                    break;
+                case 3:
+                    listName[i] = getString(R.string.my_account);
+                    break;
+                case 4:
+                    listName[i] = getString(R.string.upload_bill);
+                    break;
+                case 5:
+                    listName[i] = getString(R.string.view_bill_status);
+                    break;
+                case 6:
+                    listName[i] = getString(R.string.share_app);
+                    break;
+                case 7:
+                    listName[i] = getString(R.string.logout);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         // attach to current activity;
         user = CustomSharedPref.getUserObject(MainActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences(Constant.PREFS_NAME, 0);
-        resideMenu = new com.citemenu.mystash.residemenu_util.ResideMenu(this, R.layout.residemenu_left_activity, R.layout.residemenu_left_activity);
+        resideMenu = new ResideMenu(this, R.layout.residemenu_left_activity, R.layout.residemenu_left_activity);
         resideMenu.setBackground(R.drawable.menu_background);
         resideMenu.attachToActivity(this);
         lv = (ListView) resideMenu.getLeftMenuView().findViewById(R.id.listview_nav_items);
-        lv.setAdapter(new com.citemenu.mystash.residemenu_util.CustomAdapterNavList(this, listName, listImages));
+        lv.setAdapter(new CustomAdapterNavList(this, listName, listImages));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -222,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.title_bar_left_menu).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    resideMenu.openMenu(com.citemenu.mystash.residemenu_util.ResideMenu.DIRECTION_LEFT);
+                    resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
                 }
             });
         } catch (NullPointerException e) {
@@ -292,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), "Press again to exit",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.exit_message),Toast.LENGTH_SHORT).show();
         }
         mBackPressed = System.currentTimeMillis();
     }
@@ -327,13 +350,13 @@ public class MainActivity extends AppCompatActivity {
     void showRationaleForCamera(final PermissionRequest request) {
         new AlertDialog.Builder(this)
                 .setMessage("Please grant Location access to MyStash")
-                .setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.allow), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.proceed();
                     }
                 })
-                .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.deny), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         request.cancel();
@@ -362,8 +385,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<CitePointsTransactions> call, Response<CitePointsTransactions> response) {
                 CitePointsTransactions transactions = response.body();
                 if (transactions == null) {
-                    Toast.makeText(MainActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
-                    return;
+                    Toast.makeText(MainActivity.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 } else if (transactions.getHeader().getSuccess().equals("1")) {
                     if (transactions.getBody().getTotalpoints() != null &&
                             !transactions.getBody().getTotalpoints().isEmpty()) {
@@ -380,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CitePointsTransactions> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

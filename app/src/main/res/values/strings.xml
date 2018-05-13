@@ -3,25 +3,10 @@
     <string name="facebook_app_id">619355934907424</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <!--<string name="hint_phone">Phone no.</string>-->
-    <!--<string name="hint_bday">Birthday</string>-->
-    <!--<string name="hint_sex">Sex</string>-->
-    <!--<string name="hint_categories">Categories</string>-->
-    <!--<string name="hint_areaOfInterest">Area of interest</string>-->
-    <!--<string name="hint_confirm_password">Confirm Password</string>-->
-    <!--<string name="btn_sign_up">Sign Up</string>-->
-    <!--<string name="err_msg_name">Enter your full name</string>-->
-    <!--<string name="err_msg_email">Enter valid email address</string>-->
-    <!--<string name="err_msg_password">Enter the password</string>-->
     <string name="login">Login</string>
-    <!--<string name="btn_fb_login">Connect with facebook</string>-->
-    <string name="reg_login">Register</string>
-    <!--<string name="lorem_ispum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>-->
     <string name="rate_review"><![CDATA[Rate & Review]]></string>
     <string name="list_alt">There are currently no programs active for this business yet, check back later for changes</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
-
-    <!--<string name="gcm_sender_ID">456789105121</string>-->
 
     <string-array name="genderRegisterArray">
         <item></item>
@@ -42,6 +27,59 @@
     <string name="msg_upload_success">Image(s) Uploaded successfully</string>
 
     <string name="savedCouponsAltText">You have not saved any coupons yet. Please save them to your wallet when you find one you like and it will appear here</string>
+
+    <!--Dialog Messages-->
+    <string name="please_wait">Please wait...</string>
+    <string name="loading">Loading...</string>
+    <string name="deleting">Deleting...</string>
+    <string name="exit_message">Press again to exit</string>
+    <string name="title_share_intent_dialog">Add Photo!</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="select_file">Select File</string>
+
+    <!--Permission Messages-->
+    <string name="camera">Camera</string>
+    <string name="read_storage">Read Storage</string>
+    <string name="write_storage">Write Storage</string>
+    <string name="grant_permission_denied">Some Permissions Denied</string>
+    <string name="grant_permission_access">You need to grant access to</string>
+
+    <!--Validation-->
+    <string name="invalid_email">Please enter valid email address</string>
+    <string name="empty_field_message">Please enter valid fields</string>
+    <string name="new_password_mismatched">new password not matched</string>
+
+    <!--Actions-->
+    <string name="ok">OK</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
+
+    <!--API Response Message-->
+    <string name="message_api_failure">Something went wrong. Please try again</string>
+
+    <!--Forgot Password Screen-->
+    <string name="enter_your_email_address">Enter your email address</string>
+    <string name="send">Send</string>
+
+    <!--Registration-->
+    <string name="old_password">old password</string>
+    <string name="new_password">new password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="change_password">Change Password</string>
+    <string name="update_account">Please update account to effect changes</string>
+    <string name="old_password_mismatched">old password not matched</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">OR</string>
+    <string name="name">Name</string>
+    <string name="phone_no">Phone no.</string>
+    <string name="birthday">Birthday</string>
+    <string name="registration">Register</string>
+    <string name="sex">Sex</string>
+    <string name="categories">Categories</string>
+    <string name="area_of_interest">Area of interest</string>
 
     <!--Add Bill Screen-->
     <string name="add_bill">Add Bill</string>
@@ -67,7 +105,6 @@
     <!--Add BILL-> Take Photo Screen-->
     <string name="msg_top">Store Name / Logo</string>
     <string name="msg_long_receipt">Long receipt? Add the rest on the next screen</string>
-    <string name="cancel">Cancel</string>
     <string name="retake">Retake</string>
     <string name="msg_retake">Can you read the text? if not, retake</string>
     <string name="finish">Finish</string>
@@ -83,10 +120,117 @@
     <string name="status">Status</string>
     <string name="invoice">Invoice</string>
     <string name="enter_business_name">Enter business name</string>
-    <string name="submit">Submit</string>
     <string name="take_atleast_1_pic">Please take atleast 1 picture</string>
-    <string name="please_wait">Please wait...</string>
     <string name="unable_to_get_location">Unable to get location please try again</string>
     <string name="bill">Bill</string>
+
+    <!--My Cards & MyStash-->
+    <string name="add_loyalty_card">Add Loyalty Card</string>
+    <string name="create_your_own_card">Create your own card</string>
+    <string name="add_front_card">Please add front card</string>
+    <string name="image_upload_failure">Image uploading failed, Please try again</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="remove_loyalty_card">Are you sure you want to remove this loyalty card</string>
+    <string name="grant_permission_access_for_qr_code">Please grant camera permission to use the QR Scanner</string>
+    <string name="enter_barcode">Please enter barcode</string>
+    <string name="barcode_format_error">Barcode format not supported</string>
+    <string name="your_name">Your Name</string>
+    <string name="card_name">Card Name</string>
+    <string name="card_notes">Card Notes</string>
+    <string name="save">Save</string>
+    <string name="tap_to_scan_barcode">Tap to scan barcode</string>
+    <string name="enter_your_code_manually">Enter your code manually</string>
+    <string name="generate_barcode">Generate barcode</string>
+    <string name="next">Next</string>
+    <string name="loyalty_cards">Loyalty Cards</string>
+    <string name="user_must_add_cards_to_their_app_by_clicking_icon">User must ADD cards to their app, by clicking + icon</string>
+    <string name="edit">Edit</string>
+    <string name="details">Details</string>
+    <string name="card_no">Card No.</string>
+    <string name="business">Business</string>
+    <string name="tap_to_capture_front_of_card_image">Tap to capture front of card image</string>
+    <string name="remove_stash_message">Are you sure you want to remove this business from your stash, doing so will prevent  you from  receiving specials and VIP offers from this merchant.</string>
+    <string name="add_stash_success">Add my stash successful</string>
+    <string name="location_error">Can\'t get location</string>
+    <string name="no_reviews">No Reviews</string>
+    <string name="reviews">Reviews</string>
+    <string name="required_info_missing">Required information not provided</string>
+    <string name="rating_submitted">Rating submitted</string>
+    <string name="review_submitted">Review submitted</string>
+    <string name="you_have_submitted_business">You already have added all available businesses</string>
+    <string name="no_business_nearby">There are currently no business nearby. Send us an email from the contact us section with some suggestions of your favorite places and we will try to add them ASAP!</string>
+    <string name="cant_connect_map">Can\'t connect to mapping service</string>
+    <string name="your_location">Your location</string>
+    <string name="range">Range</string>
+    <string name="checkin">Check In</string>
+    <string name="thanks_for_visiting">Thanks for visiting</string>
+    <string name="checkin_success_message1">Present yourself at the cash counter and mention your name when making your purchase. See you again soon</string>
+    <string name="add_to_stash">Add to stash</string>
+    <string name="checkin_success_message2">To start earning rewards please add us to your stash</string>
+    <string name="add_to_stash_success">Add my stash successful</string>
+    <string name="mystash">MyStash</string>
+    <string name="user_must_add_business_to_their_stash_by_clicking_icon">user must ADD business to their stash, by clicking + icon</string>
+    <string name="description">Description</string>
+    <string name="share">Share</string>
+    <string name="available_days">Available days:</string>
+    <string name="timing">Timing:</string>
+    <string name="programs">Programs</string>
+    <string name="your_rating">Your Rating</string>
+    <string name="write_your_comments_here">Write your comments here</string>
+    <string name="review">Review</string>
+    <string name="search_business">Search Business</string>
+    <string name="filter">Filter</string>
+    <string name="list">List</string>
+    <string name="map">Map</string>
+    <string name="done">Done</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="error_catching_click">Error catching click</string>
+    <string name="store_name_placeholder">Scan restaurant name here</string>
+    <string name="scan_item_list">Scan items list</string>
+    <string name="scan_bill_amount">Scan the total bill amount</string>
+    <string name="bill_uploaded">Bill Uploaded</string>
+    <string name="flyers">Flyers</string>
+    <string name="coupons">Coupons</string>
+    <string name="saved_coupons">Saved Coupons</string>
+    <string name="checkout_this_great_company">Check out this great company</string>
+    <string name="that_i_found">that i found on</string>
+    <string name="coupon_saved_success">Coupon saved successfully</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="notification_reminder_message">You will be notified, 03 days before this coupon expires</string>
+    <string name="reminder_set_for_coupon">Reminder has been set for coupon</string>
+    <string name="redeem_coupon_message">Are you sure you want to redeem this Coupon?</string>
+    <string name="coupon_expire_message">This coupon will be expire Soon</string>
+    <string name="no_expiry">No Expiry</string>
+    <string name="internet_required">Internet Connection required!</string>
+    <string name="no_pdf_file">No PDF file found</string>
+    <string name="no_title">No Title Found</string>
+    <string name="pdf_corrupted">PDF document is damaged or corrupt</string>
+    <string name="today">Today</string>
+    <string name="message_remove">Are you sure you want to remove this Message</string>
+    <string name="total_points">Total Points</string>
+    <string name="messages">Messages</string>
+    <string name="no_messages_found">No Messages Found</string>
+    <string name="available_flyers">Available Flyers</string>
+    <string name="remind_me">Remind me</string>
+    <string name="expires">EXPIRES:</string>
+    <string name="coupons_used">COUPONS USED:</string>
+    <string name="description_">Description:</string>
+    <string name="redeem_now">Redeem Now</string>
+    <string name="sorry_there_are_currently_no_coupons_in_this_section_yet_please_try_back_again_some_other_time">Sorry there are currently no coupons in this section yet. Please try back again some other time</string>
+    <string name="cite_points">Cite Points</string>
+    <string name="you_have">You have</string>
+    <string name="points">Points</string>
+    <string name="your_points_history">Your Points history</string>
+    <string name="use_your_points_here">Use your points here</string>
+    <string name="home">Home</string>
+    <string name="my_account">My Account</string>
+    <string name="view_bill_status">View Bill Status</string>
+    <string name="share_app">Share the App</string>
+    <string name="logout">Logout</string>
+    <string name="gps_settings">Setting GPS</string>
+    <string name="enable_gps_message">GPS is not Enabled</string>
+    <string name="setting">Setting</string>
+    <string name="enable_gps">Please enable GPS</string>
 
 </resources>

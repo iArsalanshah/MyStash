@@ -332,7 +332,7 @@ public class Program_Details extends AppCompatActivity {
             @Override
             public void onFailure(Call<com.citemenu.mystash.pojo.stampCount.StampCountWebService> call, Throwable t) {
                 dialogP.dismiss();
-                Toast.makeText(Program_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Program_Details.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

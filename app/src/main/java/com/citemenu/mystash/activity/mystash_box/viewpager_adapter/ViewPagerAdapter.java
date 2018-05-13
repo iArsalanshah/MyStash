@@ -10,14 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.citemenu.mystash.R;
+import com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby;
 import com.citemenu.mystash.utils.ImageUtil;
 
 public class ViewPagerAdapter extends PagerAdapter {
-    com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby snb;
+    Searchnearby snb;
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public ViewPagerAdapter(Context context, com.citemenu.mystash.pojo.pojo_searchbusiness.Searchnearby gsonBusiness) {
+    public ViewPagerAdapter(Context context, Searchnearby gsonBusiness) {
         this.context = context;
         snb = gsonBusiness;
     }

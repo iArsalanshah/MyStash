@@ -83,7 +83,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
         backArrow = (ImageView) findViewById(R.id.imageview_backToolbar);
         textview_front_of_card = (TextView) findViewById(R.id.textview_front_of_card);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait...");
+        progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCancelable(false);
     }
 
@@ -106,14 +106,14 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     if (isCaptured || !url.equals("")) {
                         uploadImageView();
                     } else
-                        Toast.makeText(CreateACard.this, "Please add front card", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateACard.this, getString(R.string.add_front_card), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.imageView_captureFrontCard:
                 getPermisions();
                 break;
             case R.id.imageview_backToolbar:
-                startActivity(new Intent(CreateACard.this, com.citemenu.mystash.activity.mycards_box.Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(CreateACard.this, Add_LoyaltyCard.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
             case R.id.textview_front_of_card:
                 break;
@@ -137,13 +137,13 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
             // MultipartBody.Part is used to send also the actual file name
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("uploaded_file", "loyalty_images", requestFile);
-            Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant.ACTION_UPLOAD_LOYALTY_IMAGE, body);
+            Call<UploadLoyaltyImage> call = WebServicesFactory.getInstance().uploadLoyaltyImage(Constant.ACTION_UPLOAD_LOYALTY_IMAGE, body);
 
-            call.enqueue(new Callback<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage>() {
+            call.enqueue(new Callback<UploadLoyaltyImage>() {
                 @Override
-                public void onResponse(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
+                public void onResponse(Call<UploadLoyaltyImage> call, Response<UploadLoyaltyImage> response) {
                     progressDialog.dismiss();
-                    com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage uploadLoyaltyImage = response.body();
+                    UploadLoyaltyImage uploadLoyaltyImage = response.body();
                     if (uploadLoyaltyImage.getHeader().getSuccess().equals("1")) {
                         updateSharedPref("http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath());
 //                        String frontImage = "http://www.mystash.ca/" + uploadLoyaltyImage.getBody().getFiles().getFilepath();
@@ -158,9 +158,9 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                 }
 
                 @Override
-                public void onFailure(Call<com.citemenu.mystash.pojo.upload_loyaltyimage_pojo.UploadLoyaltyImage> call, Throwable t) {
+                public void onFailure(Call<UploadLoyaltyImage> call, Throwable t) {
 //                    Log.d(Constant.LOG_TAG, "onFailure: " + t.getMessage());
-                    Toast.makeText(CreateACard.this, "Image uploading failed, Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateACard.this, getString(R.string.image_upload_failure), Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             });
@@ -175,24 +175,31 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     }
 
     private void selectImage() {
-        final String[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
+        final String title = getString(R.string.title_share_intent_dialog);
+        final String takePhoto = getString(R.string.take_photo);
+        final String Gallery = getString(R.string.choose_from_gallery);
+        final String cancel = getString(R.string.cancel);
+        final String selectFile = getString(R.string.select_file);
+        final CharSequence[] items = {takePhoto, Gallery, cancel};
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateACard.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle(title);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals(takePhoto)) {
 //                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                    Intent intent = new Intent(CreateACard.this, ImageCropActivity.class);
 //                    intent.putExtra("ACTION", Constant.ACTION_CAMERA);
 //                    startActivityForResult(intent, REQUEST_CAMERA);
                     onUseCameraClick();
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals(Gallery)) {
                     Intent intent = new Intent(CreateACard.this, ImageCropActivity.class);
                     intent.putExtra("ACTION", Constant.ACTION_GALLERY);
-                    startActivityForResult(intent, SELECT_FILE);
+                    startActivityForResult(
+                            Intent.createChooser(intent, selectFile),
+                            SELECT_FILE);
 //                    Intent intent = new Intent(
 //                            Intent.ACTION_PICK,
 //                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -201,7 +208,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
 //                            Intent.createChooser(intent, "Select File"),
 //                            SELECT_FILE);
 
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(cancel)) {
                     dialog.dismiss();
                 }
             }
@@ -294,20 +301,25 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
     }
 
     private void getPermisions() {
+        final String camera = getString(R.string.camera);
+        final String readStorage = getString(R.string.read_storage);
+        final String writeStorage = getString(R.string.write_storage);
+        final String grantAccessMessage = getString(R.string.grant_permission_access);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             List<String> permissionsNeeded = new ArrayList<>();
             final List<String> permissionsList = new ArrayList<>();
             if (!addPermission(permissionsList, Manifest.permission.CAMERA))
-                permissionsNeeded.add("Camera");
+                permissionsNeeded.add(camera);
             if (!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
-                permissionsNeeded.add("Read Storage");
+                permissionsNeeded.add(readStorage);
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                permissionsNeeded.add("Write Storage");
+                permissionsNeeded.add(writeStorage);
             if (permissionsList.size() > 0) {
 
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = "You need to grant access to " + permissionsNeeded.get(0);
+                    String message = grantAccessMessage + permissionsNeeded.get(0);
                     for (int i = 1; i < permissionsNeeded.size(); i++)
                         message = message + ", " + permissionsNeeded.get(i);
                     showMessageOKCancel(message,
@@ -380,7 +392,7 @@ public class CreateACard extends AppCompatActivity implements View.OnClickListen
                     selectImage();
                 } else {
                     // Permission Denied
-                    Toast.makeText(CreateACard.this, "Some Permission is Denied", Toast.LENGTH_SHORT)
+                    Toast.makeText(CreateACard.this, getString(R.string.grant_permission_denied), Toast.LENGTH_SHORT)
                             .show();
                 }
             }

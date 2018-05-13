@@ -41,7 +41,7 @@ public class RateAndReview extends AppCompatActivity {
         init();
         clickEvents();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage(getString(R.string.please_wait));
     }
 
     private void clickEvents() {
@@ -70,9 +70,9 @@ public class RateAndReview extends AppCompatActivity {
                     }
                 } else {
                     new AlertDialog.Builder(RateAndReview.this)
-                            .setMessage("Required information not provided")
-                            .setTitle("Message")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            .setMessage(getString(R.string.required_info_missing))
+                            .setTitle(getString(R.string.message))
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
@@ -91,7 +91,7 @@ public class RateAndReview extends AppCompatActivity {
                 progressDialog.dismiss();
                 com.citemenu.mystash.pojo.add_review_pojo.ADDReview rev = response.body();
                 if (rev.getHeader().getSuccess().equals("1")) {
-                    Toast.makeText(RateAndReview.this, "Review submitted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RateAndReview.this, getString(R.string.review_submitted), Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(RateAndReview.this, "" + rev.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
@@ -116,7 +116,7 @@ public class RateAndReview extends AppCompatActivity {
                 final com.citemenu.mystash.pojo.add_rating_pojo.ADDRating rat = response.body();
                 if (rat.getHeader().getSuccess().equals("1")) {
                     if (etComments.getText().toString().trim().equals("")) {
-                        Toast.makeText(RateAndReview.this, "Rating submitted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RateAndReview.this, getString(R.string.rating_submitted), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {

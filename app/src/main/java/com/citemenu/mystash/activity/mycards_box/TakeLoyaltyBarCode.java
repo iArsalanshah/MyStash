@@ -87,7 +87,7 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
             generatedBarcode = barcode;
             generateBarcode(barcode);
             if (bitmap == null) {
-                Toast.makeText(TakeLoyaltyBarCode.this, "Barcode format not supported", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyBarCode.this, getString(R.string.barcode_format_error), Toast.LENGTH_SHORT).show();
             } else {
                 imageView_captureBarcode.setImageBitmap(bitmap);
             }
@@ -148,7 +148,7 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 //                        uploadBarcodeImage();
 //                    }
                 } else
-                    Toast.makeText(TakeLoyaltyBarCode.this, "Please enter barcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyBarCode.this, getString(R.string.enter_barcode), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.imageView_captureBarcode:
                 launchActivity(SimpleScannerActivity.class);
@@ -160,7 +160,7 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
 
     private void uploadBarcodeImage() {
         final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(getString(R.string.please_wait));
         dialog.setCancelable(false);
         dialog.show();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -237,7 +237,7 @@ public class TakeLoyaltyBarCode extends AppCompatActivity implements View.OnClic
                         startActivity(intent);
                     }
                 } else {
-                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.grant_permission_access_for_qr_code), Toast.LENGTH_SHORT).show();
                 }
         }
     }

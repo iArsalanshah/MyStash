@@ -58,7 +58,7 @@
                 android:background="@android:color/white"
                 android:backgroundTint="@android:color/white"
                 android:gravity="center_vertical"
-                android:hint="Your Name"
+                android:hint="@string/your_name"
                 android:imeOptions="actionDone"
                 android:inputType="textPersonName"
                 android:paddingLeft="6dp"
@@ -72,7 +72,7 @@
                 android:background="@android:color/white"
                 android:backgroundTint="@android:color/white"
                 android:gravity="center_vertical"
-                android:hint="Card Name"
+                android:hint="@string/card_name"
                 android:inputType="textPersonName"
                 android:paddingLeft="6dp"
                 android:singleLine="true" />
@@ -84,7 +84,7 @@
                 android:background="@android:color/white"
                 android:backgroundTint="@android:color/white"
                 android:gravity="start"
-                android:hint="Card Notes"
+                android:hint="@string/card_notes"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:maxHeight="150dp"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:background="#ccedb532"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 

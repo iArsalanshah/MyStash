@@ -71,7 +71,7 @@ public class ProgramsList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progress = new ProgressDialog(this);
-        progress.setMessage("Loading ...");
+        progress.setMessage(getString(R.string.loading));
         progress.show();
         getStamps();
     }
@@ -106,7 +106,7 @@ public class ProgramsList extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProgramsStamps> call, Throwable t) {
                 progress.dismiss();
-                Toast.makeText(ProgramsList.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProgramsList.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

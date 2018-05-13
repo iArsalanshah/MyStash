@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.citemenu.mystash.home.mystash_box.SearchBusiness_MyStash">
+    tools:context=".activity.mystash_box.SearchBusiness_MyStash">
 
     <RelativeLayout
         android:id="@+id/toolbarMyStashSearchBusiness"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Search Business"
+            android:text="@string/search_business"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
             android:padding="6dp"
-            android:text="Filter"
+            android:text="@string/filter"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </RelativeLayout>
@@ -63,7 +63,7 @@
                 android:layout_height="30dp"
                 android:background="#ffff"
                 android:onClick="BtnListSearchBusiness"
-                android:text="List"
+                android:text="@string/list"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:textSize="13sp" />
@@ -74,7 +74,7 @@
                 android:layout_height="30dp"
                 android:background="@color/colorPrimary"
                 android:onClick="BtnMapSearchBusiness"
-                android:text="Map"
+                android:text="@string/map"
                 android:textAllCaps="false"
                 android:textColor="#ffff"
                 android:textSize="13sp" />

@@ -115,7 +115,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
                     } else
                         addLoyaltyCard();
                 } else
-                    Toast.makeText(TakeLoyaltyNameDetails.this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TakeLoyaltyNameDetails.this, getString(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -151,7 +151,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<EditLoyalty> call, Throwable t) {
-                Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyNameDetails.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -185,7 +185,7 @@ public class TakeLoyaltyNameDetails extends AppCompatActivity implements View.On
 
             @Override
             public void onFailure(Call<AddLoyalty> call, Throwable t) {
-                Toast.makeText(TakeLoyaltyNameDetails.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TakeLoyaltyNameDetails.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

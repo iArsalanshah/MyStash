@@ -133,7 +133,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
         listView = (ListView) findViewById(R.id.listView_MyCards);
 
         progress = new ProgressDialog(this);
-        progress.setMessage("Please wait...");
+        progress.setMessage(getString(R.string.please_wait));
         progress.setCancelable(false);
         progress.show();
 
@@ -180,7 +180,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
             public void onFailure(Call<GetMycards> call, Throwable t) {
                 progress.dismiss();
                 searchView_cards.setVisibility(View.GONE);
-                Toast.makeText(MyCards.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyCards.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -318,7 +318,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
             // webservice should be called here.
             final ProgressDialog dialog = new ProgressDialog(context);
-            dialog.setMessage("Deleting...");
+            dialog.setMessage(getString(R.string.deleting));
             dialog.show();
             Call<com.citemenu.mystash.pojo.delete_loyalty_card.DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
                     .deleteLoyaltyCard(Constant.ACTION_DELETE_LOYALTY_CARD,
@@ -350,7 +350,7 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
                 @Override
                 public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -358,15 +358,15 @@ MyCards extends AppCompatActivity implements SearchView.OnQueryTextListener {
         private void deleteItem(final String position) {
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setTitle("Confirmation");
-            dialog.setMessage("Are you sure you want to remove this loyalty card");
-            dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            dialog.setTitle(getString(R.string.confirmation));
+            dialog.setMessage(getString(R.string.remove_loyalty_card));
+            dialog.setPositiveButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
-            dialog.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+            dialog.setNegativeButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

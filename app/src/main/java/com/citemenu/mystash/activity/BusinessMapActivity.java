@@ -76,8 +76,7 @@ public class BusinessMapActivity extends AppCompatActivity implements OnMapReady
                         getErrorDialog(this, ERROR_DIALOG_REQUEST, isAvailable);
                 dialog.show();
             } else {
-                Toast.makeText(BusinessMapActivity.this,
-                        "Can't connect to mapping service",
+                Toast.makeText(BusinessMapActivity.this, getString(R.string.cant_connect_map),
                         Toast.LENGTH_SHORT).show();
             }
         }

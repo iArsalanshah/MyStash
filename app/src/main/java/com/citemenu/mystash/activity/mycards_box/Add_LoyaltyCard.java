@@ -79,7 +79,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
     @Override
     protected void onResume() {
         super.onResume();
-        progress.setMessage("Please wait...");
+        progress.setMessage(getString(R.string.please_wait));
         progress.setCancelable(false);
         progress.show();
         //Retrofit2.0 Call
@@ -108,7 +108,7 @@ public class Add_LoyaltyCard extends AppCompatActivity implements android.widget
             public void onFailure(Call<com.citemenu.mystash.pojo.getcardslist_pojo.GetCardsList> call, Throwable t) {
                 progress.dismiss();
                 searchView_Addcards.setVisibility(View.GONE);
-                Toast.makeText(Add_LoyaltyCard.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Add_LoyaltyCard.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
 //                if (t.getMessage() != null)
 //                    Log.d(com.citemenu.mystash.constant.Constant.LOG_TAG, "" + t.getMessage());
             }

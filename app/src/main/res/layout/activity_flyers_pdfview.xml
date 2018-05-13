@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
             android:padding="6dp"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/com_facebook_blue"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Test Flyer"
+            android:text="-"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>

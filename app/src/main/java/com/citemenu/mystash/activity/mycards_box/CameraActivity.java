@@ -61,7 +61,7 @@ public class CameraActivity extends Activity implements Camera.PictureCallback {
     private void initCameraPreview() {
         cameraPreview = (CameraPreview) findViewById(R.id.camera_preview);
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(getString(R.string.please_wait));
         dialog.setCancelable(false);
         cameraPreview.init(camera);
     }

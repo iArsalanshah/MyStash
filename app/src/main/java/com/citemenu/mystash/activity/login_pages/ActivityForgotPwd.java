@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.citemenu.mystash.R;
 import com.citemenu.mystash.constant.Constant;
+import com.citemenu.mystash.pojo.pojo_register.RegisterUser;
+import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,33 +37,33 @@ public class ActivityForgotPwd extends AppCompatActivity {
     }
 
     public void BtnSendForgotPwd(View view) {
-        dialog.setMessage("Loading ... ");
+        dialog.setMessage(getString(R.string.loading));
         email = etEmail.getText().toString();
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        if (!email.equals("") && email.matches(emailPattern)) {
+        if (!email.isEmpty() && email.matches(emailPattern)) {
             dialog.show();
-            Call<com.citemenu.mystash.pojo.pojo_register.RegisterUser> call = com.citemenu.mystash.webservicefactory.WebServicesFactory.getInstance().getForgotPwd(Constant.ACTION_FORGOT_PWD, email);
+            Call<RegisterUser> call = WebServicesFactory.getInstance().getForgotPwd(Constant.ACTION_FORGOT_PWD, email);
             call.enqueue(new Callback<com.citemenu.mystash.pojo.pojo_register.RegisterUser>() {
                 @Override
-                public void onResponse(Call<com.citemenu.mystash.pojo.pojo_register.RegisterUser> call, Response<com.citemenu.mystash.pojo.pojo_register.RegisterUser> response) {
+                public void onResponse(Call<RegisterUser> call, Response<RegisterUser> response) {
                     dialog.dismiss();
                     if (response.body().getHeader().getSuccess().equals("1")) {
-                        Toast.makeText(context, "" + response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(context, "" + response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, response.body().getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<com.citemenu.mystash.pojo.pojo_register.RegisterUser> call, Throwable t) {
+                public void onFailure(Call<RegisterUser> call, Throwable t) {
                     dialog.dismiss();
-                    Toast.makeText(context, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
 
         } else {
-            Toast.makeText(ActivityForgotPwd.this, "Please enter valid email address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityForgotPwd.this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
         }
     }
 }

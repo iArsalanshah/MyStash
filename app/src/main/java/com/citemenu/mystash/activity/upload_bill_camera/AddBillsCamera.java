@@ -28,10 +28,10 @@ public class AddBillsCamera extends Activity implements Camera.PictureCallback {
     private ProgressDialog dialog;
     private BillCameraPreview cameraPreview;
     private TextView tvSuggestionTop, tvDone, tvCancel;
-    private String storeName = "Scan restaurant name here";
-    private String scanItemList = "Scan items list";
-    private String longReceiptText = "long Receipt? Add the rest on the NEXT Screen";
-    private String scanBillAmount = "Scan the total bill amount";
+    private String storeName = getString(R.string.store_name_placeholder);
+    private String scanItemList = getString(R.string.scan_item_list);
+    private String longReceiptText = getString(R.string.msg_long_receipt);
+    private String scanBillAmount = getString(R.string.scan_bill_amount);
     private String billType;
     private boolean isCaptureAPic = false;
     private int counter = 0;
@@ -50,7 +50,7 @@ public class AddBillsCamera extends Activity implements Camera.PictureCallback {
             finish();
         }
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(getString(R.string.please_wait));
         dialog.setCancelable(false);
         tvSuggestionTop = (TextView) findViewById(R.id.tv_addBillsCamera_top);
         tvDone = (TextView) findViewById(R.id.tv_addBillsCamera_done);
@@ -63,7 +63,7 @@ public class AddBillsCamera extends Activity implements Camera.PictureCallback {
         } else if (billType.equals("bottom")) {
             tvSuggestionTop.setText(scanBillAmount);
         } else {
-            Toast.makeText(this, "Error catching click", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_catching_click), Toast.LENGTH_SHORT).show();
         }
 
         tvDone.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class AddBillsCamera extends Activity implements Camera.PictureCallback {
                     setResultStatus(RESULT_OK, null);
                     finish();
                 } else {
-                    Toast.makeText(AddBillsCamera.this, "Take Picture", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBillsCamera.this, getString(R.string.take_picture), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -122,7 +122,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         //RootLayout
         rootLayout = (RelativeLayout) findViewById(R.id.rootContainerRegister);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage(getString(R.string.loading));
         //Button
         btnRegisterID = (Button) findViewById(R.id.btnId_Register);
         btnId_updateRegister = (Button) findViewById(R.id.btnId_updateRegister);
@@ -164,17 +164,17 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText oldPwd = new EditText(this);
-        oldPwd.setHint(" old password");
+        oldPwd.setHint(getString(R.string.old_password));
         oldPwd.setSingleLine(true);
         layout.addView(oldPwd);
 
         final EditText newPwd = new EditText(this);
-        newPwd.setHint(" new password");
+        newPwd.setHint(getString(R.string.new_password));
         newPwd.setSingleLine(true);
         layout.addView(newPwd);
 
         final EditText newcPwd = new EditText(this);
-        newcPwd.setHint(" confirm password");
+        newcPwd.setHint(getString(R.string.confirm_password));
         newcPwd.setSingleLine(true);
         layout.addView(newcPwd);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -182,9 +182,9 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 LinearLayout.LayoutParams.MATCH_PARENT);
         layout.setLayoutParams(lp);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Change Password");
+        builder.setTitle(getString(R.string.change_password));
         builder.setView(layout);
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.submit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -196,14 +196,14 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                         if (newp.equals(newc)) {
                             hidesoftkeyboard(v);
                             newPassword = newp;
-                            Toast.makeText(Register.this, "Please update account to effect changes", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, getString(R.string.update_account), Toast.LENGTH_SHORT).show();
                         } else {
                             hidesoftkeyboard(v);
-                            Toast.makeText(Register.this, "new password not matched", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, getString(R.string.new_password_mismatched), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         hidesoftkeyboard(v);
-                        Toast.makeText(Register.this, "old password not matched", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, getString(R.string.old_password_mismatched), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     hidesoftkeyboard(getCurrentFocus());
@@ -267,7 +267,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     @Override
                     public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
@@ -307,12 +307,12 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     @Override
                     public void onFailure(Call<UpdateRegisteration> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         } else {
-            Toast.makeText(Register.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, getString(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -342,7 +342,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
         listInterest.add("South Shore/Rive Sud");
         listInterest.add("Other/Autre");
 
-        multiSpinnerCat.setItems(listCat, getString(R.string.reg_login), this);
+        multiSpinnerCat.setItems(listCat, getString(R.string.registration), this);
 
         com.citemenu.mystash.activity.login_pages.MultiSpinner.MultiSpinnerListener listener = new com.citemenu.mystash.activity.login_pages.MultiSpinner.MultiSpinnerListener() {
             @Override
@@ -357,7 +357,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                 etInterest.setText(interest);
             }
         };
-        multiSpinnerInterest.setItems(listInterest, getString(R.string.reg_login), listener);
+        multiSpinnerInterest.setItems(listInterest, getString(R.string.registration), listener);
     }
 
     public void backRegisterImageBtn(View view) {
@@ -571,7 +571,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     @Override
                     public void onFailure(Call<RegisterUser> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(Register.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -581,31 +581,35 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
             }
 
         } else {
-            Toast.makeText(Register.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, getString(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
+        final String title = getString(R.string.title_share_intent_dialog);
+        final String takePhoto = getString(R.string.take_photo);
+        final String Gallery = getString(R.string.choose_from_gallery);
+        final String cancel = getString(R.string.cancel);
+        final String selectFile = getString(R.string.select_file);
+        final CharSequence[] items = {takePhoto, Gallery, cancel};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Register.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle(title);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals(takePhoto)) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals(Gallery)) {
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
                     startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
+                            Intent.createChooser(intent, selectFile),
                             SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(cancel)) {
                     dialog.dismiss();
                 }
             }
@@ -719,20 +723,25 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
     private void getPermisions() {
+        final String camera = getString(R.string.camera);
+        final String readStorage = getString(R.string.read_storage);
+        final String writeStorage = getString(R.string.write_storage);
+        final String grantAccessMessage = getString(R.string.grant_permission_access);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             List<String> permissionsNeeded = new ArrayList<>();
             final List<String> permissionsList = new ArrayList<>();
             if (!addPermission(permissionsList, Manifest.permission.CAMERA))
-                permissionsNeeded.add("Camera");
+                permissionsNeeded.add(camera);
             if (!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
-                permissionsNeeded.add("Read Storage");
+                permissionsNeeded.add(readStorage);
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                permissionsNeeded.add("Write Storage");
+                permissionsNeeded.add(writeStorage);
             if (permissionsList.size() > 0) {
 
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = "You need to grant access to " + permissionsNeeded.get(0);
+                    String message = grantAccessMessage + permissionsNeeded.get(0);
                     for (int i = 1; i < permissionsNeeded.size(); i++)
                         message = message + ", " + permissionsNeeded.get(i);
                     showMessageOKCancel(message,
@@ -764,9 +773,11 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        final String cancel = getString(R.string.cancel);
+
         new AlertDialog.Builder(Register.this)
                 .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         final Intent i = new Intent();
@@ -779,7 +790,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                         Register.this.startActivity(i);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(cancel, null)
                 .create()
                 .show();
     }
@@ -805,7 +816,7 @@ public class Register extends AppCompatActivity implements AdapterView.OnItemSel
                     selectImage();
                 } else {
                     // Permission Denied
-                    Toast.makeText(Register.this, "Some Permission is Denied", Toast.LENGTH_SHORT)
+                    Toast.makeText(Register.this, getString(R.string.grant_permission_denied), Toast.LENGTH_SHORT)
                             .show();
                 }
             }

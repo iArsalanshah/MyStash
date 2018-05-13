@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Loyalty Cards"
+            android:text="@string/loyalty_cards"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -47,7 +47,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="22dp"
-        android:text="User must ADD cards to their app, by clicking + icon"
+        android:text="@string/user_must_add_cards_to_their_app_by_clicking_icon"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:visibility="gone" />

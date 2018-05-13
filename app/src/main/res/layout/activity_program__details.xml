@@ -27,7 +27,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:maxLength="26"
-            android:text="Program Testing"
+            android:text="Title"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -39,7 +39,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
             android:padding="6dp"
-            android:text="Share"
+            android:text="@string/share"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </RelativeLayout>
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/textTiming"
                     android:layout_marginLeft="6dp"
-                    android:text="Available days: "
+                    android:text="@string/available_days"
                     android:textColor="@android:color/white" />
 
                 <TextView
@@ -178,7 +178,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="2dp"
                     android:layout_marginLeft="6dp"
-                    android:text="Timing: "
+                    android:text="@string/timing"
                     android:textColor="@android:color/white" />
 
             </RelativeLayout>
@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="6dp"
                     android:paddingTop="10dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 

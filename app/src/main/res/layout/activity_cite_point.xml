@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Cite Points"
+            android:text="@string/cite_points"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="You have"
+            android:text="@string/you_have"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
             android:layout_below="@id/textView_CitePointsNumber"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
-            android:text="Points"
+            android:text="@string/points"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -94,7 +94,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp"
-            android:text="Use your points here"
+            android:text="@string/use_your_points_here"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
-            android:text="Your Points history"
+            android:text="@string/your_points_history"
             android:textSize="16sp" />
     </RelativeLayout>
 

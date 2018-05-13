@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Cite_Points extends AppCompatActivity {
+public class    Cite_Points extends AppCompatActivity {
     ListView listView;
     TextView tvCPNumber;
     private ImageView img_AddIcon;
@@ -68,7 +69,7 @@ public class Cite_Points extends AppCompatActivity {
 
     private void getCitePoints() {
         final ProgressDialog dlg = new ProgressDialog(this);
-        dlg.setMessage("Loading...");
+        dlg.setMessage(getString(R.string.loading));
         dlg.show();
         String cid = CustomSharedPref.getUserObject(this).getId();
         Call<CitePointsTransactions> call = WebServicesFactory.getInstance().getCitePoints(Constant.ACTION_GET_CITE_POINTS, cid);
@@ -94,7 +95,7 @@ public class Cite_Points extends AppCompatActivity {
             @Override
             public void onFailure(Call<CitePointsTransactions> call, Throwable t) {
                 dlg.dismiss();
-                Toast.makeText(Cite_Points.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Cite_Points.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -149,9 +150,9 @@ public class Cite_Points extends AppCompatActivity {
             tvBusinessName.setText(history.get(position).getBusinessName());
             tvTime.setText(history.get(position).getDate());
             if (history.get(position).getType().equals("Redeemed")) {
-                tvPoints.setTextColor(getColor(R.color.colorPrimaryDark));
+                tvPoints.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
             } else {
-                tvPoints.setTextColor(getColor(R.color.colorCitePointsTypeGreen));
+                tvPoints.setTextColor(ContextCompat.getColor(context,R.color.colorCitePointsTypeGreen));
             }
             return convertView;
         }

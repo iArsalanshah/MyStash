@@ -57,7 +57,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (isTextSavedClick) {
-            titleSavedCoupon.setText("Saved Coupons");
+            titleSavedCoupon.setText(getString(R.string.saved_coupons));
             imgSavedCoupons.setVisibility(View.GONE);
             getSavedCoupons();
         } else if (isCouponByAdmin) {
@@ -87,7 +87,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -112,7 +112,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -139,7 +139,7 @@ public class Coupons_Categories_Click extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Get_All_Coupons> call, Throwable t) {
-                Toast.makeText(Coupons_Categories_Click.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons_Categories_Click.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

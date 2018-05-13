@@ -105,7 +105,7 @@ public class Login_activity extends AppCompatActivity {
                                         public void onFailure(Call<LoginUser> call, Throwable t) {
                                             if (prog != null)
                                                 prog.dismiss();
-                                            Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Login_activity.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -178,7 +178,7 @@ public class Login_activity extends AppCompatActivity {
         etPwd = (EditText) findViewById(R.id.input_pwd_login);
         loginButton = (LoginButton) findViewById(R.id.login_fb_btn);
         prog = new ProgressDialog(this);
-        prog.setMessage("Please wait...");
+        prog.setMessage(getString(R.string.please_wait));
         prog.setCancelable(false);
     }
 
@@ -240,7 +240,7 @@ public class Login_activity extends AppCompatActivity {
 
 //                    users.getBody().getUsers();
                     if (users == null) {
-                        Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login_activity.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     } else if (users.getHeader().getSuccess().equals("1")) {
 //                        Toast.makeText(Login_activity.this, "" + users.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                         getSharedPreferences(Constant.PREFS_NAME, 0).edit().putString(Constant.IS_LOGIN, Constant.IS_LOGIN).apply();
@@ -255,11 +255,11 @@ public class Login_activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<LoginUser> call, Throwable t) {
                     prog.dismiss();
-                    Toast.makeText(Login_activity.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_activity.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            Toast.makeText(Login_activity.this, "Please enter valid fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Login_activity.this, getString(R.string.empty_field_message), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -280,7 +280,7 @@ public class Login_activity extends AppCompatActivity {
             moveTaskToBack(true);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), "Press again to exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.exit_message), Toast.LENGTH_SHORT).show();
         }
         mBackPressed = System.currentTimeMillis();
     }

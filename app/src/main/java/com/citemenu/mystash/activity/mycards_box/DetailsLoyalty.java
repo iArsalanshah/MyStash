@@ -119,15 +119,15 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(DetailsLoyalty.this);
-                    dialog.setTitle("Confirmation");
-                    dialog.setMessage("Are you sure you want to remove this loyalty card");
-                    dialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    dialog.setTitle(getString(R.string.confirmation));
+                    dialog.setMessage(getString(R.string.remove_loyalty_card));
+                    dialog.setPositiveButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
-                    dialog.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    dialog.setNegativeButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -146,7 +146,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
 
         // webservice should be called here.
         final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Deleting...");
+        dialog.setMessage(getString(R.string.deleting));
         dialog.show();
         Call<DeleteLoyaltyCard> call = WebServicesFactory.getInstance()
                 .deleteLoyaltyCard(Constant.ACTION_DELETE_LOYALTY_CARD,
@@ -168,7 +168,7 @@ public class DetailsLoyalty extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onFailure(Call<DeleteLoyaltyCard> call, Throwable t) {
                 dialog.dismiss();
-                Toast.makeText(DetailsLoyalty.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsLoyalty.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
 

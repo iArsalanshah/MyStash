@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="MyStash"
+            android:text="@string/mystash"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -63,7 +63,7 @@
         android:layout_below="@+id/toolbarMyStashList"
         android:layout_marginTop="10dp"
         android:padding="20dp"
-        android:text="user must ADD business to their stash, by clicking + icon"
+        android:text="@string/user_must_add_business_to_their_stash_by_clicking_icon"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:visibility="gone" />

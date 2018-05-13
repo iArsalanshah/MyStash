@@ -57,7 +57,7 @@ public class Coupons extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progDialog = new ProgressDialog(this);
-        progDialog.setMessage("Loading...");
+        progDialog.setMessage(getString(R.string.loading));
         progDialog.show();
         //Retrofit2.0 call
         if (isFlyer) {
@@ -83,7 +83,7 @@ public class Coupons extends AppCompatActivity {
             @Override
             public void onFailure(Call<CategoriesCoupons> call, Throwable t) {
                 progDialog.dismiss();
-                Toast.makeText(Coupons.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Coupons.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -96,7 +96,7 @@ public class Coupons extends AppCompatActivity {
 
         //Setting of Toolbar Title;
         if (isFlyer) {
-            textTitleToolbar.setText("Flyers");
+            textTitleToolbar.setText(getString(R.string.flyers));
             img_Saved_Coupons.setVisibility(View.GONE);
         }
     }

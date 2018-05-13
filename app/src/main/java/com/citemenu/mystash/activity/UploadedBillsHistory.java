@@ -46,7 +46,7 @@ public class UploadedBillsHistory extends AppCompatActivity {
         tvAlternateText = (TextView) findViewById(R.id.tv_billsHistory_altText);
         recyclerView = (RecyclerView) findViewById(R.id.bill_history_recycler_view);
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(getString(R.string.please_wait));
         dialog.setCancelable(false);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -70,7 +70,7 @@ public class UploadedBillsHistory extends AppCompatActivity {
                 dialog.dismiss();
                 GetBillsWS billsWS = response.body();
                 if (billsWS == null) {
-                    Toast.makeText(UploadedBillsHistory.this, "Found Null in getBills service", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(UploadedBillsHistory.this, "Found Null in getBills service", Toast.LENGTH_SHORT).show();
                 } else if (billsWS.getHeader().getSuccess().equals("1")) {
                     billList = billsWS.getBody().getBills();
                     mAdapter.notifyDataSetChanged();
@@ -92,7 +92,7 @@ public class UploadedBillsHistory extends AppCompatActivity {
                 dialog.dismiss();
                 Log.d("RETROFIT ON FAILURE: " + t);
                 Toast.makeText(UploadedBillsHistory.this,
-                        "Something went wrong. Please try again",
+                        getString(R.string.message_api_failure),
                         Toast.LENGTH_SHORT).show();
             }
         });

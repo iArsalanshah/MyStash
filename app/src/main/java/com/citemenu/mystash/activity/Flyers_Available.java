@@ -67,7 +67,7 @@ public class Flyers_Available extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.gridView);
         imgBack = (ImageView) findViewById(R.id.imageViewToolbarBack);
         progDialog = new ProgressDialog(this);
-        progDialog.setMessage("Loading...");
+        progDialog.setMessage(getString(R.string.loading));
         progDialog.setCancelable(false);
     }
 
@@ -98,7 +98,7 @@ public class Flyers_Available extends AppCompatActivity {
             @Override
             public void onFailure(Call<GetAllFlyersWebService> call, Throwable t) {
                 progDialog.dismiss();
-                Toast toast = Toast.makeText(Flyers_Available.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_Available.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
@@ -144,12 +144,13 @@ public class Flyers_Available extends AppCompatActivity {
                 if (!data.get(position).getExpirydate().startsWith("00")) {
                     Label1.setText(data.get(position).getExpirydate());
                 } else {
-                    Label1.setText("No Expiry");
+                    Label1.setText(getString(R.string.no_expiry));
                 }
             }
             if (data.get(position).getTitle() != null &&
                     !data.get(position).getTitle().isEmpty())
                 Label2.setText(data.get(position).getTitle());
+            listImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageUtil.setImageWithResource(context,listImage,data.get(position).getImgpath());
 //            if (data.get(position).getImg_path() != null &&
 //                    !data.get(position).getImg_path().isEmpty())

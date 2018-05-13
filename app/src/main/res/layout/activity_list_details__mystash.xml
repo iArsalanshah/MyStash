@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Details"
+            android:text="@string/details"
             android:textColor="#ffff"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -179,7 +179,7 @@
                 android:layout_margin="4dp"
                 android:layout_toRightOf="@+id/imageView_ic_phoneImageView_mystashDetails"
                 android:onClick="callContactNumber"
-                android:text="+1 204-778-5630"
+                android:text="-"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -212,7 +212,7 @@
                 android:layout_below="@+id/textView_phoneNumber_myStashDetails"
                 android:layout_marginRight="16dp"
                 android:onClick="textViewReviews"
-                android:text="Reviews"
+                android:text="@string/reviews"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -231,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/border_line_mystashDetails"
                 android:layout_marginTop="10dp"
-                android:text="Description"
+                android:text="@string/description"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 

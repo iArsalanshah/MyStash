@@ -78,7 +78,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="33dp"
             android:onClick="TvForgotPwd"
-            android:text="Forgot Password?"
+            android:text="@string/forgot_password"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
@@ -98,7 +98,7 @@
             android:layout_marginTop="11dp"
             android:background="@color/colorRegisterBtn"
             android:onClick="btnRegLogin"
-            android:text="@string/reg_login"
+            android:text="@string/registration"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
-            android:text="OR"
+            android:text="@string/or"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 

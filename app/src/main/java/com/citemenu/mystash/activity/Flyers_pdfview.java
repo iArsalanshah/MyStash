@@ -63,7 +63,8 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
                 if (InternetConnectionHelper.isNetworkAvailable(this)) { //checking is network available
                     getPdfFile();
                 } else {
-                    Toast toast = Toast.makeText(Flyers_pdfview.this, "Internet Connection required!", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(Flyers_pdfview.this,
+                            getString(R.string.internet_required), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
@@ -79,7 +80,8 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
                         .load();
             }
         else {
-            Toast toast = Toast.makeText(Flyers_pdfview.this, "No PDF file found", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(Flyers_pdfview.this,
+                    getString(R.string.no_pdf_file), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
@@ -92,10 +94,10 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
 
     private void init() {
         txtTitle = (TextView) findViewById(R.id.tv_flyerName);
-        txtTitle.setText(flyerTile != null ? flyerTile : "No Title Found");
+        txtTitle.setText(flyerTile != null ? flyerTile : getString(R.string.no_title));
         pdfUrl = getIntent().getStringExtra("pdfFile");
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
+        pDialog.setMessage(getString(R.string.please_wait));
         pDialog.setCancelable(false);
         pdfView = (PDFView) findViewById(R.id.pdfView);
         TextView textDone = (TextView) findViewById(R.id.textviewToolbarDone);
@@ -134,7 +136,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
-                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_pdfview.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
@@ -205,8 +207,8 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
     @Override
     public void loadComplete(int nbPages) {
         if (PDFView.curruptFile) {
-            new AlertDialog.Builder(this).setMessage("PDF document is damaged or corrupt")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(this).setMessage(getString(R.string.pdf_corrupted))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             onBackPressed();
@@ -247,7 +249,7 @@ public class Flyers_pdfview extends AppCompatActivity implements OnPageChangeLis
                         .load();
             } else {
                 Log.d(TAG, "onPostExecute: write to disk error");
-                Toast toast = Toast.makeText(Flyers_pdfview.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(Flyers_pdfview.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }

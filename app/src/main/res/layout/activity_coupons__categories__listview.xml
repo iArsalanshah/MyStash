@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Coupons"
+            android:text="@string/coupons"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -60,7 +60,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="18dp"
-        android:text="Sorry there are currently no coupons in this section yet. Please try back again some other time"
+        android:text="@string/sorry_there_are_currently_no_coupons_in_this_section_yet_please_try_back_again_some_other_time"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:visibility="gone" />

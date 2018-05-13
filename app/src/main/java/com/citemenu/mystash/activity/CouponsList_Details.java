@@ -74,7 +74,7 @@ public class CouponsList_Details extends AppCompatActivity {
         if (cObj.getTotalCount() != null && cObj.getRedeemedCount() != null)
             textViewCouponsUSED.append(cObj.getRedeemedCount() + "/" + cObj.getTotalCount());
         ImageUtil.setImageWithResource(this, imgView, cObj.getImgurl());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCancelable(false);
     }
 
@@ -105,7 +105,7 @@ public class CouponsList_Details extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullMsg = "Check out this great company " + cObj.getName() + " that i found on ";
+                String fullMsg = getString(R.string.checkout_this_great_company) + cObj.getName() + getString(R.string.that_i_found);
                 SelectShareIntent.selectIntent(CouponsList_Details.this, fullMsg);
             }
         });
@@ -123,10 +123,10 @@ public class CouponsList_Details extends AppCompatActivity {
                         ToSaveCoupon saveCoupon = response.body();
                         if (saveCoupon.getHeader().getSuccess().equals("1")) {
                             new AlertDialog.Builder(CouponsList_Details.this)
-                                    .setTitle("Message")
-                                    .setMessage("Coupon saved successfully")
+                                    .setTitle(getString(R.string.message))
+                                    .setMessage(getString(R.string.coupon_saved_success))
                                     .setCancelable(false)
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
@@ -141,7 +141,7 @@ public class CouponsList_Details extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ToSaveCoupon> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(CouponsList_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CouponsList_Details.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -153,15 +153,15 @@ public class CouponsList_Details extends AppCompatActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(CouponsList_Details.this)
                         .setCancelable(true)
-                        .setTitle("Confirmation")
-                        .setMessage("Are you sure you want to redeem this Coupon?")
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.confirmation))
+                        .setMessage(getString(R.string.redeem_coupon_message))
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 progressDialog.show();
@@ -173,10 +173,10 @@ public class CouponsList_Details extends AppCompatActivity {
                                         RedeemCoupon redeemCoupon = response.body();
                                         if (redeemCoupon.getHeader().getSuccess().equals("1")) {
                                             new AlertDialog.Builder(CouponsList_Details.this)
-                                                    .setTitle("Message")
+                                                    .setTitle(getString(R.string.message))
                                                     .setMessage("Redemption request has been sent to admin.")
                                                     .setCancelable(false)
-                                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             dialog.dismiss();
@@ -192,7 +192,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                     @Override
                                     public void onFailure(Call<RedeemCoupon> call, Throwable t) {
                                         progressDialog.dismiss();
-                                        Toast.makeText(CouponsList_Details.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CouponsList_Details.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -254,9 +254,9 @@ public class CouponsList_Details extends AppCompatActivity {
                 if (cDate != null && cDate.after(date)) {
 //                    Log.d(Constant.LOG_TAG, "onClick: SUCCESS");
                     new AlertDialog.Builder(CouponsList_Details.this)
-                            .setTitle("Message")
-                            .setMessage("This coupon will be expire Soon")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            .setTitle(getString(R.string.message))
+                            .setMessage(getString(R.string.coupon_expire_message))
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -264,9 +264,9 @@ public class CouponsList_Details extends AppCompatActivity {
                             }).show();
                 } else {
                     new AlertDialog.Builder(CouponsList_Details.this)
-                            .setTitle("Message")
-                            .setMessage("You will be notified, 03 days before this coupon expires")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            .setTitle(getString(R.string.message))
+                            .setMessage(getString(R.string.notification_reminder_message))
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     progressDialog.show();
@@ -277,7 +277,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                             progressDialog.dismiss();
                                             RemindMe remindMe = response.body();
                                             if (remindMe.getHeader().getSuccess().equals("1")) {
-                                                remindMeDialog("Message", "Reminder has been set for coupon");
+                                                remindMeDialog(getString(R.string.message), getString(R.string.reminder_set_for_coupon));
                                             } else {
                                                 Toast.makeText(CouponsList_Details.this, remindMe.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -287,7 +287,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                         public void onFailure(Call<RemindMe> call, Throwable t) {
                                             progressDialog.dismiss();
                                             Toast.makeText(CouponsList_Details.this,
-                                                    "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                                                    getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -301,7 +301,7 @@ public class CouponsList_Details extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

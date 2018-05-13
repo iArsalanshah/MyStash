@@ -135,7 +135,7 @@ public class MyGCMListenerService extends GcmListenerService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                         R.mipmap.ic_launcher))
-                .setContentTitle("My Stash")
+                .setContentTitle(getString(R.string.app_name))
                 .setStyle(new NotificationCompat.BigTextStyle())
                 .setContentText(message)
                 .setContentIntent(pendingIntent)

@@ -143,19 +143,16 @@ public class ListDetails_MyStash extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(ListDetails_MyStash.this)
-                        .setMessage("Are you sure you want to remove this\n" +
-                                "business from your stash, doing so will\n" +
-                                "prevent you from receiving specials\n" +
-                                "and VIP offers from this merchant.")
-                        .setTitle("Confirmation")
-                        .setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
+                        .setMessage(getString(R.string.remove_stash_message))
+                        .setTitle(getString(R.string.confirmation))
+                        .setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 removeStash(searchnearby);
                                 dialog.cancel();
                             }
                         })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
@@ -173,7 +170,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
             public void onResponse(Call<RemoveStash> call, Response<RemoveStash> response) {
                 RemoveStash stash = response.body();
                 if (stash == null) {
-                    Toast.makeText(ListDetails_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListDetails_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 } else if (stash.getHeader().getSuccess().equals("1")) {
                     imgRemove.setVisibility(View.GONE);
                     imgAdd.setVisibility(View.VISIBLE);
@@ -184,7 +181,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RemoveStash> call, Throwable t) {
-                Toast.makeText(ListDetails_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListDetails_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -199,9 +196,9 @@ public class ListDetails_MyStash extends AppCompatActivity {
                     Toast.makeText(ListDetails_MyStash.this, stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 } else if (stash.getHeader().getSuccess().equals("1")) {
                     new AlertDialog.Builder(ListDetails_MyStash.this)
-                            .setMessage("Add my stash successful")
-                            .setTitle("Message")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            .setMessage(getString(R.string.add_stash_success))
+                            .setTitle(getString(R.string.message))
+                            .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
@@ -217,7 +214,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AddStash> call, Throwable t) {
-                Toast.makeText(ListDetails_MyStash.this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListDetails_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -261,11 +258,12 @@ public class ListDetails_MyStash extends AppCompatActivity {
             rating.setRating(starRating);
         }
         if (gsonBusiness.getReviews() != null) {
+            final String reviews = getString(R.string.reviews);
             int size = gsonBusiness.getReviews().size();
             if (obj.has("reviews") && size != 0) {
-                tvReviews.setText(size + " Reviews");
+                tvReviews.setText(size + " "+reviews);
             } else {
-                tvReviews.setText("No Reviews");
+                tvReviews.setText(getString(R.string.no_reviews));
             }
         }
     }
@@ -309,7 +307,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
             intent.putExtra("businessName", gsonBusiness.getName());
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Can't get location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.location_error), Toast.LENGTH_SHORT).show();
         }
     }
 

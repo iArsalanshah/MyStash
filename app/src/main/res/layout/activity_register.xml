@@ -52,7 +52,8 @@
                         android:cursorVisible="false"
                         android:drawableLeft="@drawable/ic_username"
                         android:drawableStart="@drawable/ic_username"
-                        android:hint=" Name"
+                        android:hint="@string/name"
+                        android:drawablePadding="8dp"
                         android:inputType="textPersonName|textAutoComplete"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -68,7 +69,8 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_username"
                         android:drawableStart="@drawable/ic_username"
-                        android:hint=" Email"
+                        android:hint="@string/email"
+                        android:drawablePadding="8dp"
                         android:inputType="textEmailAddress"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -85,7 +87,8 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_username"
                         android:drawableStart="@drawable/ic_username"
-                        android:hint=" Password"
+                        android:hint="@string/password"
+                        android:drawablePadding="8dp"
                         android:inputType="textPassword"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -102,7 +105,8 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_username"
                         android:drawableStart="@drawable/ic_username"
-                        android:hint=" Confirm Password"
+                        android:hint="@string/confirm_password"
+                        android:drawablePadding="8dp"
                         android:inputType="textPassword"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -118,7 +122,8 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_username"
                         android:drawableStart="@drawable/ic_username"
-                        android:hint=" Phone no."
+                        android:drawablePadding="8dp"
+                        android:hint="@string/phone_no"
                         android:inputType="phone" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -127,10 +132,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:drawablePadding="8dp"
                     android:drawableLeft="@drawable/ic_username"
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
-                    android:hint=" Birthday"
+                    android:hint="@string/birthday"
                     android:onClick="BirthdayRegister" />
 
                 <Spinner
@@ -144,10 +150,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:drawablePadding="8dp"
                     android:drawableLeft="@drawable/ic_username"
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
-                    android:hint=" Sex"
+                    android:hint="@string/sex"
                     android:onClick="GenderRegister" />
 
                 <Spinner
@@ -169,7 +176,8 @@
                     android:drawableLeft="@drawable/ic_username"
                     android:drawableStart="@drawable/ic_username"
                     android:focusable="false"
-                    android:hint=" Categories"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/categories"
                     android:onClick="CategoriesRegister"
                     android:singleLine="true" />
 
@@ -191,8 +199,9 @@
                     android:layout_marginTop="10dp"
                     android:drawableLeft="@drawable/ic_username"
                     android:drawableStart="@drawable/ic_username"
+                    android:drawablePadding="8dp"
                     android:focusable="false"
-                    android:hint=" Area of interest"
+                    android:hint="@string/area_of_interest"
                     android:onClick="AreaOfInterestRegister"
                     android:singleLine="true" />
 
@@ -204,7 +213,7 @@
                     android:layout_marginTop="11dp"
                     android:background="@color/colorLoginBtn"
                     android:onClick="btnRegister"
-                    android:text="@string/reg_login"
+                    android:text="@string/registration"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
