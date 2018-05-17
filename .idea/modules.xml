@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyStashAppProject.iml" filepath="$PROJECT_DIR$/MyStashAppProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Mystash.iml" filepath="$PROJECT_DIR$/Mystash.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-image-zoom-crop/android-image-zoom-crop.iml" filepath="$PROJECT_DIR$/android-image-zoom-crop/android-image-zoom-crop.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-pdfview/android-pdfview.iml" filepath="$PROJECT_DIR$/android-pdfview/android-pdfview.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

@@ -1,0 +1,238 @@
+<resources>
+    <string name="app_name">My Stash</string>
+    <string name="facebook_app_id">619355934907424</string>
+    <string name="email">Courriel</string>
+    <string name="password">Mot de Passe</string>
+    <string name="login">Connéxion</string>
+    <string name="rate_review"><![CDATA[Revues et Critiques]]></string>
+    <string name="list_alt">Il n\'y a actuellement aucun programme actif pour cette entreprise, revenez plus tard pour les changements</string>
+    <string name="terms_conditions"><![CDATA[Termes et Conditions]]></string>
+
+    <string-array name="genderRegisterArray">
+        <item></item>
+        <item> Mâle </item>
+        <item> Femelle </item>
+    </string-array>
+
+    <string-array name="bill_types">
+        <item> Déjeuner </item>
+        <item> Dîner </item>
+        <item> Souper </item>
+        <item> Autre </item>
+    </string-array>
+
+    <string name="message">Message</string>
+    <string name="msg_select_image">Veuillez capturer ;\'image(s) à télécharger</string>
+    <string name="msg_no_internet">Aucun internet disponible. Réessayez plus tard</string>
+    <string name="msg_upload_success">Image(s) Envoyé avec succès</string>
+
+    <string name="savedCouponsAltText">Vous n\'avez pas encore enregistré des coupons. Veuillez les enregistrer dans votre porte-feuille digitale quand vous entrouvre un que vous aimez, et il apparaîtra ici.</string>
+
+    <!--Dialog Messages-->
+    <string name="please_wait">SVP attendez…</string>
+    <string name="loading"> Chargement…</string>
+    <string name="deleting"> Suppression…</string>
+    <string name="exit_message">Appuyez à nouveau pour quitter</string>
+    <string name="title_share_intent_dialog">Ajouter une Photo!</string>
+    <string name="take_photo">Prendre une Photo</string>
+    <string name="choose_from_gallery">Chosir pram la Galerie</string>
+    <string name="select_file">Choisir le dossier</string>
+
+    <!--Permission Messages-->
+    <string name="camera"> Caméra </string>
+    <string name="read_storage">Read Storage</string>
+    <string name="write_storage">Write Storage</string>
+    <string name="grant_permission_denied">Certaines autorisations refusées</string>
+    <string name="grant_permission_access">Vous devez accorder l\'accès à</string>
+
+    <!--Validation-->
+    <string name="invalid_email">Veuillez entrer une adresse courriel valide</string>
+    <string name="empty_field_message">Veuillez entrer des champs valides</string>
+    <string name="new_password_mismatched">le nouveau mot de passe ne correspond pas</string>
+
+    <!--Actions-->
+    <string name="ok">OK</string>
+    <string name="submit"> Soumettre </string>
+    <string name="cancel"> Annuler </string>
+    <string name="delete"> Effacer </string>
+    <string name="remove"> Retirer </string>
+
+    <!--API Response Message-->
+    <string name="message_api_failure">Quelque chose s\'est mal passé. Veuillez réessayer</string>
+
+    <!--Forgot Password Screen-->
+    <string name="enter_your_email_address">Entrez vote address courriel</string>
+    <string name="send"> Envoyer </string>
+
+    <!--Registration-->
+    <string name="old_password">ancien mot de passe</string>
+    <string name="new_password">nouvelle mot de passe</string>
+    <string name="confirm_password">Confirmer mot de passe</string>
+    <string name="change_password">Modifier mot de passe</string>
+    <string name="update_account">Veuillez mettre à jour le compte pour effectuer les changements</string>
+    <string name="old_password_mismatched">ancien mot de passe non associé</string>
+    <string name="forgot_password">Mot de passe oublié?</string>
+    <string name="or">OU</string>
+    <string name="name"> Nom </string>
+    <string name="phone_no">Numéro de téléphone</string>
+    <string name="birthday"> Anniversaire </string>
+    <string name="registration">Inscrivez-vous</string>
+    <string name="sex"> Sexe </string>
+    <string name="categories"> Catégories </string>
+    <string name="area_of_interest">Lieu d\'intérêt</string>
+
+    <!--Add Bill Screen-->
+    <string name="add_bill">Ajouter une facture</string>
+    <string name="upload_your_recent_bills_to_receive_citypoints">Téléchargez vos factures récentes pour recevoir vos CityPoints</string>
+    <string name="name_of_restaurant">Nom du restaurant</string>
+    <string name="enter_restaurant_name">Entrez le nom du restaurant</string>
+    <string name="total_amount">Montant total</string>
+    <string name="amount"> Montant </string>
+    <string name="invoice_no"># de facture</string>
+    <string name="bill_no"># de facture</string>
+    <string name="date">Date</string>
+    <string name="select_a_date">Choisissez une date</string>
+    <string name="select_bill_type">Sélectionnez le type de facture</string>
+    <string name="upload_bill_pictures">Télécharger photos des factures</string>
+    <string name="at_least_3_picture_of_the_bill_will_upload_header_body_footer">Au moins 3 images de la facture seront téléchargées (en-tête, corps, pied de page)</string>
+    <string name="take_bill_pictures">Prendre une photo</string>
+    <string name="upload_bill_permission_error">La fonctionnalité de téléchargement de la facture ne peut pas être terminée sans la caméra, l\'emplacement et l'accès au stockage</string>
+    <string name="allow"> Permettre </string>
+    <string name="upload_bill_permission_rationale">Télécharger la fonctionnalité de facture requise Caméra, emplacement et autorisation de stockage</string>
+    <string name="deny"> Refuser </string>
+    <string name="selected_date_invalid">La date sélectionnée n\'est pas valide</string>
+
+    <!--Add BILL-> Take Photo Screen-->
+    <string name="msg_top">Nom du magasin / Logo</string>
+    <string name="msg_long_receipt">Long reçu? Ajouter le reste sur l\'écran suivant</string>
+    <string name="retake"> Reprendre </string>
+    <string name="msg_retake">Pouvez-vous lire le texte? sinon, reprends</string>
+    <string name="finish"> Terminer </string>
+    <string name="capture"> Capturer </string>
+    <string name="add_section">Ajouter une section</string>
+    <string name="upload_bill">Importer une facture</string>
+
+    <!--Bill History Screen-->
+    <string name="restaurant_name">Nom du restaurant:</string>
+    <string name="restaurant_location">Restaurant du Emplacement:</string>
+    <string name="no_bills_found">Aucune facture trouvée</string>
+    <string name="bills_history">Historique des factures</string>
+    <string name="status"> Statut </string>
+    <string name="invoice"> Facture </string>
+    <string name="enter_business_name">Entrez le nom de l\'entreprise</string>
+    <string name="take_atleast_1_pic">S\'il vous plaît prendre au moins 1 photo</string>
+    <string name="unable_to_get_location">Impossible d\'obtenir l\'emplacement s\'il vous plaît essayez à nouveau</string>
+    <string name="bill"> Facture </string>
+
+    <!--My Cards & MyStash-->
+    <string name="add_loyalty_card">Ajouter une carte de fidélité</string>
+    <string name="create_your_own_card">Créez votre propre carte</string>
+    <string name="add_front_card">Veuillez ajouter l\'avant de la carte</string>
+    <string name="image_upload_failure">Le téléchargement de l\'image a échoué. Veuillez réessayer.</string>
+    <string name="confirmation"> Confirmation </string>
+    <string name="remove_loyalty_card">Voulez-vous vraiment supprimer cette carte de fidélité?</string>
+    <string name="grant_permission_access_for_qr_code">Veuillez accorder l\'autorisation de l\'appareil photo pour utiliser le scanner QR.</string>
+    <string name="enter_barcode">Veuillez entrer le code à barres</string>
+    <string name="barcode_format_error">Format de code à barres invalide</string>
+    <string name="your_name">Votre nom</string>
+    <string name="card_name">Nom de Carte</string>
+    <string name="card_notes">Notes de carte</string>
+    <string name="save"> Sauvegarder </string>
+    <string name="tap_to_scan_barcode">Appuyez pour scanner le code à barres</string>
+    <string name="enter_your_code_manually">Entrez votre code manuellement</string>
+    <string name="generate_barcode">Générer un code à barres</string>
+    <string name="next"> Suivant </string>
+    <string name="loyalty_cards">Cartes de fidélité</string>
+    <string name="user_must_add_cards_to_their_app_by_clicking_icon">L\'utilisateur doit ajouter des cartes, en cliquant sur l\'icône +</string>
+    <string name="edit"> Modifier </string>
+    <string name="details"> Détails </string>
+    <string name="card_no">Numéro de carte</string>
+    <string name="business"> Entreprise </string>
+    <string name="tap_to_capture_front_of_card_image">Appuyez pour capturer le devant de l\'image de la carte</string>
+    <string name="remove_stash_message">Êtes-vous sûr de vouloir supprimer cette entreprise de votre stock, ce qui vous empêchera de recevoir des offres spéciales et VIP de la part de ce marchand.</string>
+    <string name="add_stash_success">Ajout à MyStash réussie</string>
+    <string name="location_error">Impossible d\'obtenir l'emplacement</string>
+    <string name="no_reviews">Aucun Critiques</string>
+    <string name="reviews"> Critiques </string>
+    <string name="required_info_missing">Informations obligatoires non fournies</string>
+    <string name="rating_submitted">Critique soumise</string>
+    <string name="review_submitted">Critique soumise</string>
+    <string name="you_have_submitted_business">Vous avez déjà ajouté toutes les entreprises disponibles</string>
+    <string name="no_business_nearby">Il n\'y a actuellement aucune entreprise à proximité. Envoyez-nous un courriel de la section contactez-nous avec quelques suggestions de vos endroits préférés et nous essaierons de les ajouter dès que possible!</string>
+    <string name="cant_connect_map">Impossible de se connecter au service de cartographie</string>
+    <string name="your_location">Votre emplacement</string>
+    <string name="range">Gamme</string>
+    <string name="checkin">Check In</string>
+    <string name="thanks_for_visiting">Merci pour votre visite</string>
+    <string name="checkin_success_message1">Présentez-vous au guichet et mentionnez votre nom lors de votre achat. Au plaisir de vous revoir bientôt</string>
+    <string name="add_to_stash">Ajouter à MyStash</string>
+    <string name="checkin_success_message2">Pour commencer à gagner des récompenses s\'il vous plaît nous ajouter à votre MyStash</string>
+    <string name="add_to_stash_success">Ajout à MyStash réussi</string>
+    <string name="mystash">MyStash</string>
+    <string name="user_must_add_business_to_their_stash_by_clicking_icon">l\'Utilisateur doit AJOUTER une entreprise à MyStash, en cliquant sur l\'icône +</string>
+    <string name="description"> Description </string>
+    <string name="share"> Partager </string>
+    <string name="available_days">Jours disponibles:</string>
+    <string name="timing">Timing:</string>
+    <string name="programs"> Programmes </string>
+    <string name="your_rating">Votre critique</string>
+    <string name="write_your_comments_here">Écrivez vos critiques ici</string>
+    <string name="review"> Critique </string>
+    <string name="search_business">Rechercher des entreprises</string>
+    <string name="filter"> Filtre </string>
+    <string name="list"> Liste </string>
+    <string name="map">Map</string>
+    <string name="done"> Terminé </string>
+    <string name="take_picture">Prendre une photo</string>
+    <string name="error_catching_click">Erreur lors de la capture de la photo</string>
+    <string name="store_name_placeholder">Nom du restaurant ici</string>
+    <string name="scan_item_list">Liste des éléments à analyser</string>
+    <string name="scan_bill_amount">Scannez le montant total de la facture</string>
+    <string name="bill_uploaded">Facture téléchargé</string>
+    <string name="flyers"> Pamphlets </string>
+    <string name="coupons">Coupons</string>
+    <string name="saved_coupons">Coupons enregistrés</string>
+    <string name="checkout_this_great_company">Découvrez cette belle entreprise</string>
+    <string name="that_i_found">que j\'ai trouvé sur</string>
+    <string name="coupon_saved_success">Coupon enregistré avec succès</string>
+    <string name="no">Non</string>
+    <string name="yes"> Oui </string>
+    <string name="notification_reminder_message">Vous serez averti, 03 jours avant l\'expiration de ce coupon</string>
+    <string name="reminder_set_for_coupon">Le rappel a été enregistré pour le coupon</string>
+    <string name="redeem_coupon_message">Êtes-vous sûr de vouloir utiliser ce coupon?</string>
+    <string name="coupon_expire_message">Ce coupon expirera bientôt</string>
+    <string name="no_expiry">Pas d\'expiration</string>
+    <string name="internet_required">Connexion Internet requise!</string>
+    <string name="no_pdf_file">Aucun fichier PDF trouvé</string>
+    <string name="no_title">Aucun titre trouvé</string>
+    <string name="pdf_corrupted">Le document PDF est endommagé ou corrompu</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="message_remove">Êtes-vous sûr de vouloir supprimer ce message?</string>
+    <string name="total_points">Points totaux</string>
+    <string name="messages">Messages</string>
+    <string name="no_messages_found">Aucune Messages trouvées</string>
+    <string name="available_flyers">Pamhpelts disponibles</string>
+    <string name="remind_me">Rappelle moi</string>
+    <string name="expires"> EXPIRATION:</string>
+    <string name="coupons_used">COUPONS UTULISÉES:</string>
+    <string name="description_">Description:</string>
+    <string name="redeem_now">Échangez maintenant</string>
+    <string name="sorry_there_are_currently_no_coupons_in_this_section_yet_please_try_back_again_some_other_time">Désolé, il n\'y a pas encore de coupons dans cette section. S\'il vous plaît essayez de nouveau une autre fois</string>
+    <string name="cite_points">City Points</string>
+    <string name="you_have">Vous avez</string>
+    <string name="points"> Points </string>
+    <string name="your_points_history">Votre historique de points</string>
+    <string name="use_your_points_here">Utilisez vos points ici</string>
+    <string name="home"> Acceuil </string>
+    <string name="my_account">Mon compte</string>
+    <string name="view_bill_status">Afficher le statut de la facture</string>
+    <string name="share_app">Partager l\'App</string>
+    <string name="logout"> Déconnexion </string>
+    <string name="gps_settings">Paramètres GPS</string>
+    <string name="enable_gps_message">Le GPS n\'est pas activé</string>
+    <string name="setting"> Parameters </string>
+    <string name="enable_gps">Veuillez activer le GPS</string>
+    <string name="update">Mettre à jour</string>
+    <string name="coupon_redemption_request_sent">La demande de rachat a été envoyée à admin.</string>
+
+</resources>

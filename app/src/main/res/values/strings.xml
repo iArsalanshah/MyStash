@@ -232,5 +232,7 @@
     <string name="enable_gps_message">GPS is not Enabled</string>
     <string name="setting">Setting</string>
     <string name="enable_gps">Please enable GPS</string>
+    <string name="update">Update</string>
+    <string name="coupon_redemption_request_sent">Redemption request has been sent to admin.</string>
 
 </resources>

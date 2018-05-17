@@ -37,6 +37,8 @@ import com.citemenu.mystash.webservicefactory.WebServicesFactory;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 
+import java.util.ArrayList;
+
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
@@ -63,10 +65,9 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.view_bill_icon,
             R.drawable.share_the_app_icon,
             R.drawable.logout_icon};
-
-    private String[] listName = {};
-
     ListView lv;
+    //    private String[] listName = {};
+    private ArrayList<String> sideMenuItemsList = new ArrayList<>();
     private ResideMenu resideMenu;
     private Tracker tracker;
     private Users user;
@@ -125,31 +126,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpMenu() {
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 8; i++) {
             switch (i){
                 case 0:
-                    listName[i] = getString(R.string.home);
+//                    listName[i] = getString(R.string.home);
+                    sideMenuItemsList.add(getString(R.string.home));
                     break;
                 case 1:
-                    listName[i] = getString(R.string.messages);
+//                    listName[i] = getString(R.string.messages);
+                    sideMenuItemsList.add(getString(R.string.messages));
                     break;
                 case 2:
-                    listName[i] = getString(R.string.cite_points);
+//                    listName[i] = getString(R.string.cite_points);
+                    sideMenuItemsList.add(getString(R.string.cite_points));
                     break;
                 case 3:
-                    listName[i] = getString(R.string.my_account);
+//                    listName[i] = getString(R.string.my_account);
+                    sideMenuItemsList.add(getString(R.string.my_account));
                     break;
                 case 4:
-                    listName[i] = getString(R.string.upload_bill);
+//                    listName[i] = getString(R.string.upload_bill);
+                    sideMenuItemsList.add(getString(R.string.upload_bill));
                     break;
                 case 5:
-                    listName[i] = getString(R.string.view_bill_status);
+//                    listName[i] = getString(R.string.view_bill_status);
+                    sideMenuItemsList.add(getString(R.string.view_bill_status));
                     break;
                 case 6:
-                    listName[i] = getString(R.string.share_app);
+//                    listName[i] = getString(R.string.share_app);
+                    sideMenuItemsList.add(getString(R.string.share_app));
                     break;
                 case 7:
-                    listName[i] = getString(R.string.logout);
+//                    listName[i] = getString(R.string.logout);
+                    sideMenuItemsList.add(getString(R.string.logout));
                     break;
                 default:
                     break;
@@ -163,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         resideMenu.setBackground(R.drawable.menu_background);
         resideMenu.attachToActivity(this);
         lv = (ListView) resideMenu.getLeftMenuView().findViewById(R.id.listview_nav_items);
-        lv.setAdapter(new CustomAdapterNavList(this, listName, listImages));
+        lv.setAdapter(new CustomAdapterNavList(this, sideMenuItemsList, listImages));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

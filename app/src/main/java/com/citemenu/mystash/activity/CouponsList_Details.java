@@ -174,7 +174,7 @@ public class CouponsList_Details extends AppCompatActivity {
                                         if (redeemCoupon.getHeader().getSuccess().equals("1")) {
                                             new AlertDialog.Builder(CouponsList_Details.this)
                                                     .setTitle(getString(R.string.message))
-                                                    .setMessage("Redemption request has been sent to admin.")
+                                                    .setMessage(getString(R.string.coupon_redemption_request_sent))
                                                     .setCancelable(false)
                                                     .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                                                         @Override
