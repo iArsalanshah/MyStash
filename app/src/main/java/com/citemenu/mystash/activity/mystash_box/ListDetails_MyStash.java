@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,13 +40,16 @@ public class ListDetails_MyStash extends AppCompatActivity {
     ViewPager viewPager;
     ViewPagerAdapter adapter;
     private RelativeLayout rootLayout;
+    private LinearLayout containerShare, containerWriteReview, containerStash;
     private ImageView imgPrograms, imgCoupons, imgShare, imgWrite, imgRemove, imgAdd, topbarImageBack;
-    private TextView tvName, tvAddress, tvCity, tvMobile, tvDesc, tvReviews;
+    private TextView tvName, tvAddress, tvCity, tvMobile, tvDesc, tvReviews, stashTextView;
     private RatingBar rating;
     private String s;
     private Searchnearby gsonBusiness;
     private JSONObject obj;
     private Users users_obj;
+
+    private boolean isStashed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +107,10 @@ public class ListDetails_MyStash extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        imgShare.setOnClickListener(new View.OnClickListener() {
+        containerShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullMsg = Constant.SHARE_PROGRAM_STAMP_TEXT_START
+                String fullMsg = getString(R.string.share_message_program) + "\n"//Constant.SHARE_PROGRAM_STAMP_TEXT_START
                         + searchnearby.getName() + "\n"
                         + searchnearby.getAddress() + "\n"
                         + searchnearby.getPostalcode() + "\n\n";
@@ -121,7 +125,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
             }
         });
 
-        imgWrite.setOnClickListener(new View.OnClickListener() {
+        containerWriteReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent writeIntent = new Intent(ListDetails_MyStash.this, RateAndReview.class);
@@ -132,35 +136,66 @@ public class ListDetails_MyStash extends AppCompatActivity {
             }
         });
 
-        imgAdd.setOnClickListener(new View.OnClickListener() {
+        containerStash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addStash(searchnearby);
+                if (isStashed) {//if already stashed
+                    removeStashPopup(searchnearby);
+                } else {
+                    addStash(searchnearby);
+                }
             }
         });
 
-        imgRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(ListDetails_MyStash.this)
-                        .setMessage(getString(R.string.remove_stash_message))
-                        .setTitle(getString(R.string.confirmation))
-                        .setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                removeStash(searchnearby);
-                                dialog.cancel();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .show();
-            }
-        });
+//        imgAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addStash(searchnearby);
+//            }
+//        });
+//
+//        imgRemove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new AlertDialog.Builder(ListDetails_MyStash.this)
+//                        .setMessage(getString(R.string.remove_stash_message))
+//                        .setTitle(getString(R.string.confirmation))
+//                        .setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                removeStash(searchnearby);
+//                                dialog.cancel();
+//                            }
+//                        })
+//                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        })
+//                        .show();
+//            }
+//        });
+    }
+
+    private void removeStashPopup(final Searchnearby searchnearby) {
+        new AlertDialog.Builder(ListDetails_MyStash.this)
+                .setMessage(getString(R.string.remove_stash_message))
+                .setTitle(getString(R.string.confirmation))
+                .setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeStash(searchnearby);
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     public void removeStash(Searchnearby searchnearby) {
@@ -172,8 +207,10 @@ public class ListDetails_MyStash extends AppCompatActivity {
                 if (stash == null) {
                     Toast.makeText(ListDetails_MyStash.this, getString(R.string.message_api_failure), Toast.LENGTH_SHORT).show();
                 } else if (stash.getHeader().getSuccess().equals("1")) {
-                    imgRemove.setVisibility(View.GONE);
-                    imgAdd.setVisibility(View.VISIBLE);
+                    isStashed = true;
+                    stashTextView.setText(getString(R.string.add_to_stash));
+//                    imgRemove.setVisibility(View.GONE);
+//                    imgAdd.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(ListDetails_MyStash.this, stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -205,8 +242,10 @@ public class ListDetails_MyStash extends AppCompatActivity {
                                 }
                             })
                             .show();
-                    imgAdd.setVisibility(View.GONE);
-                    imgRemove.setVisibility(View.VISIBLE);
+                    isStashed = false;
+                    stashTextView.setText(getString(R.string.remove_stash));
+//                    imgAdd.setVisibility(View.GONE);
+//                    imgRemove.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(ListDetails_MyStash.this, stash.getHeader().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -222,14 +261,20 @@ public class ListDetails_MyStash extends AppCompatActivity {
     private void init() {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         rootLayout = (RelativeLayout) findViewById(R.id.rootContainerStashDetails);
+
+        containerShare = (LinearLayout) findViewById(R.id.containerShare);
+        containerWriteReview = (LinearLayout) findViewById(R.id.containerWriteReview);
+        containerStash = (LinearLayout) findViewById(R.id.containerStash);
+
         topbarImageBack = (ImageView) findViewById(R.id.topbarImageBack);
         imgPrograms = (ImageView) findViewById(R.id.imageView_programs_mystashDetails);
         imgCoupons = (ImageView) findViewById(R.id.imageView_Coupons_mystashDetails);
-        imgShare = (ImageView) findViewById(R.id.imageView_Share_mystashDetails);
-        imgWrite = (ImageView) findViewById(R.id.imageView_WriteReview_mystashDetails);
+//        imgShare = (ImageView) findViewById(R.id.imageView_Share_mystashDetails);
+//        imgWrite = (ImageView) findViewById(R.id.imageView_WriteReview_mystashDetails);
         imgRemove = (ImageView) findViewById(R.id.imageView_RemoveStash_mystashDetails);
         imgAdd = (ImageView) findViewById(R.id.imageView_AddStash_mystashDetails);
         tvName = (TextView) findViewById(R.id.textView_AreaName_myStashDetails);
+        stashTextView = (TextView) findViewById(R.id.stashTextView);//add to stash text
         tvAddress = (TextView) findViewById(R.id.textView_AreaAddress_myStashDetails);
         tvCity = (TextView) findViewById(R.id.textView_AreaPostalCity_myStashDetails);
         tvMobile = (TextView) findViewById(R.id.textView_phoneNumber_myStashDetails);
@@ -261,7 +306,7 @@ public class ListDetails_MyStash extends AppCompatActivity {
             final String reviews = getString(R.string.reviews);
             int size = gsonBusiness.getReviews().size();
             if (obj.has("reviews") && size != 0) {
-                tvReviews.setText(size + " "+reviews);
+                tvReviews.setText(size + " " + reviews);
             } else {
                 tvReviews.setText(getString(R.string.no_reviews));
             }
@@ -270,11 +315,13 @@ public class ListDetails_MyStash extends AppCompatActivity {
 
     private void swappingStashImg(Searchnearby searchnearby) {
         if (searchnearby.getIsstash().equals("0")) {
-            imgAdd.setVisibility(View.VISIBLE);
-            imgRemove.setVisibility(View.GONE);
+            isStashed = false;
+//            imgAdd.setVisibility(View.VISIBLE);
+//            imgRemove.setVisibility(View.GONE);
         } else if (searchnearby.getIsstash().equals("1")) {
-            imgAdd.setVisibility(View.GONE);
-            imgRemove.setVisibility(View.VISIBLE);
+            isStashed = true;
+//            imgAdd.setVisibility(View.GONE);
+//            imgRemove.setVisibility(View.VISIBLE);
         }
     }
 
@@ -293,7 +340,14 @@ public class ListDetails_MyStash extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        swappingStashImg(gsonBusiness);
+        if (gsonBusiness != null && gsonBusiness.isStashed()) {
+            isStashed = true;
+            stashTextView.setText(getString(R.string.remove_stash));
+        } else {
+            isStashed = false;
+            stashTextView.setText(getString(R.string.add_to_stash));
+        }
+//        swappingStashImg(gsonBusiness);
     }
 
     public void onClickMapIcon(View view) {

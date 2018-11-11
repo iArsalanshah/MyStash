@@ -125,6 +125,7 @@
     <string name="bill">Bill</string>
 
     <!--My Cards & MyStash-->
+    <string name="my_cards">My Cards</string>
     <string name="add_loyalty_card">Add Loyalty Card</string>
     <string name="create_your_own_card">Create your own card</string>
     <string name="add_front_card">Please add front card</string>
@@ -169,6 +170,7 @@
     <string name="checkin_success_message2">To start earning rewards please add us to your stash</string>
     <string name="add_to_stash_success">Add my stash successful</string>
     <string name="mystash">MyStash</string>
+    <string name="my_stash">My Stash</string>
     <string name="user_must_add_business_to_their_stash_by_clicking_icon">user must ADD business to their stash, by clicking + icon</string>
     <string name="description">Description</string>
     <string name="share">Share</string>
@@ -234,5 +236,30 @@
     <string name="enable_gps">Please enable GPS</string>
     <string name="update">Update</string>
     <string name="coupon_redemption_request_sent">Redemption request has been sent to admin.</string>
+
+    <string name="day_Mon">Mon</string>
+    <string name="day_Tue">Tue</string>
+    <string name="day_Wed">Wed</string>
+    <string name="day_Thu">Thu</string>
+    <string name="day_Fri">Fri</string>
+    <string name="day_Sat">Sat</string>
+    <string name="day_Sun">Sun</string>
+    <string name="all_week">All Week</string>
+    <string name="all_day">All Day</string>
+
+
+    <string name="near_by">Near By</string>
+
+    <string name="location_access_message">Please grant Location access to MyStash</string>
+    <string name="permission_access_denied_message">Some features may not work without permissions</string>
+    <string name="sms">SMS</string>
+    <string name="no_twitter_message">No Application Found to share on twitter</string>
+    <string name="share_title">Share App</string>
+    <string name="mystash_app">MyStash App</string>
+    <string name="share_message_program">Check out this great company i found on MyStash.</string>
+    <string name="share_message_app">Check out MyStash App. The best loyalty app on the market.
+        \nStore all your loyalty cards, find many more loyalty programs to all your favorite businesses, savings, special VIP offers, and MUCH MUCH more. Download it today.\n\n</string>
+    <string name="write_review">Write Review</string>
+    <string name="remove_stash">Remove Stash</string>
 
 </resources>

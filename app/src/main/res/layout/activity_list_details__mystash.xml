@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainerStashDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,8 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/view_pager"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="16dp"
                 app:currentPageIndicatorColor="#ffff"
                 app:dotDiameter="8dp"
                 app:dotGap="8dp"
@@ -64,8 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ink_indicator"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="16dp">
 
                 <ImageView
                     android:id="@+id/imageView_programs_mystashDetails"
@@ -89,8 +88,86 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container_imageviewsDetails1"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp">
+
+                <LinearLayout
+                    android:id="@+id/containerShare"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_bg_action_business"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_share" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/share"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerWriteReview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_bg_action_business"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_write_review" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/write_review"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerStash"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_bg_action_business"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_thumb" />
+
+                    <TextView
+                        android:id="@+id/stashTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/add_to_stash"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imageView_Share_mystashDetails"
@@ -99,7 +176,8 @@
                     android:layout_gravity="left"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1"
-                    android:src="@drawable/share_stash" />
+                    android:src="@drawable/share_stash"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/imageView_WriteReview_mystashDetails"
@@ -108,7 +186,8 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1"
-                    android:src="@drawable/review_write_stash" />
+                    android:src="@drawable/review_write_stash"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/imageView_RemoveStash_mystashDetails"
@@ -116,7 +195,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_weight="1"
-                    android:src="@drawable/remove_stash" />
+                    android:src="@drawable/remove_stash"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/imageView_AddStash_mystashDetails"
@@ -142,8 +222,8 @@
                 android:id="@+id/textView_AreaAddress_myStashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@id/textView_AreaName_myStashDetails"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="16dp"
                 android:layout_toLeftOf="@+id/imageView_mycitePoints_mystashDetails"
                 android:text=""
@@ -154,8 +234,8 @@
                 android:id="@+id/textView_AreaPostalCity_myStashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@id/textView_AreaAddress_myStashDetails"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="6dp"
                 android:text=""
                 android:textColor="@android:color/white"
@@ -165,8 +245,8 @@
                 android:id="@+id/imageView_ic_phoneImageView_mystashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textView_AreaPostalCity_myStashDetails"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="16dp"
                 android:onClick="callContactNumber"
                 android:src="@drawable/phone_icon" />
@@ -189,8 +269,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/textView_AreaName_myStashDetails"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="25dp"
+                android:layout_marginRight="16dp"
                 android:onClick="onClickMapIcon"
                 android:src="@drawable/my_cite_points_map" />
 
@@ -199,8 +279,8 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView_reviews_myStashDetails"
                 android:layout_alignStart="@+id/textView_reviews_myStashDetails"
+                android:layout_alignLeft="@+id/textView_reviews_myStashDetails"
                 android:layout_alignTop="@+id/imageView_ic_phoneImageView_mystashDetails"
                 android:progressDrawable="@drawable/ratingbar_color_white" />
 
@@ -208,8 +288,8 @@
                 android:id="@+id/textView_reviews_myStashDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_below="@+id/textView_phoneNumber_myStashDetails"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:onClick="textViewReviews"
                 android:text="@string/reviews"
@@ -240,8 +320,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/desc_mystashDetails"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="16dp"
                 android:textColor="@android:color/white" />
         </RelativeLayout>
     </ScrollView>

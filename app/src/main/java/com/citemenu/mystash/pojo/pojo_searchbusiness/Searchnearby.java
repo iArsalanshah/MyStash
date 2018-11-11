@@ -501,4 +501,7 @@ public class Searchnearby {
         this.reviews = reviews;
     }
 
+    public boolean isStashed(){
+        return isstash != null && isstash.equals("1");
+    }
 }

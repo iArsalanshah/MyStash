@@ -249,7 +249,8 @@ public class CouponsList_Details extends AppCompatActivity {
                 cal2.setTime(date);
 //                Log.d(Constant.LOG_TAG, "Reminder Data10: " + cal2);
 
-                final String formatedDate = cal2.get(Calendar.YEAR) + "-" + (cal2.get(Calendar.MONTH) + 1) + "-" + cal2.get(Calendar.DATE);
+                final String formatedDate = cal2.get(Calendar.YEAR) + "-"
+                        + (cal2.get(Calendar.MONTH) + 1) + "-" + cal2.get(Calendar.DATE);
 //                Log.d(Constant.LOG_TAG, "Reminder Data11: " + formatedDate);
                 if (cDate != null && cDate.after(date)) {
 //                    Log.d(Constant.LOG_TAG, "onClick: SUCCESS");

@@ -14,4 +14,6 @@
     <color name="backgroung_action">#99000000</color>
     <color name="black">#000000</color>
     <color name="white">#8cffffff</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="bgColorActionButtons">#3a3a3a</color>
 </resources>

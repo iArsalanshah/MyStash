@@ -110,7 +110,7 @@
     <string name="finish"> Terminer </string>
     <string name="capture"> Capturer </string>
     <string name="add_section">Ajouter une section</string>
-    <string name="upload_bill">Importer une facture</string>
+    <string name="upload_bill">Sousmettre facture</string>
 
     <!--Bill History Screen-->
     <string name="restaurant_name">Nom du restaurant:</string>
@@ -125,6 +125,7 @@
     <string name="bill"> Facture </string>
 
     <!--My Cards & MyStash-->
+    <string name="my_cards">My Cards</string>
     <string name="add_loyalty_card">Ajouter une carte de fidélité</string>
     <string name="create_your_own_card">Créez votre propre carte</string>
     <string name="add_front_card">Veuillez ajouter l\'avant de la carte</string>
@@ -165,12 +166,13 @@
     <string name="checkin">Check In</string>
     <string name="thanks_for_visiting">Merci pour votre visite</string>
     <string name="checkin_success_message1">Présentez-vous au guichet et mentionnez votre nom lors de votre achat. Au plaisir de vous revoir bientôt</string>
-    <string name="add_to_stash">Ajouter à MyStash</string>
+    <string name="add_to_stash">Ajouter au Stash</string>
     <string name="checkin_success_message2">Pour commencer à gagner des récompenses s\'il vous plaît nous ajouter à votre MyStash</string>
     <string name="add_to_stash_success">Ajout à MyStash réussi</string>
     <string name="mystash">MyStash</string>
+    <string name="my_stash">Mon Stash</string>
     <string name="user_must_add_business_to_their_stash_by_clicking_icon">l\'Utilisateur doit AJOUTER une entreprise à MyStash, en cliquant sur l\'icône +</string>
-    <string name="description"> Description </string>
+    <string name="description">Description</string>
     <string name="share"> Partager </string>
     <string name="available_days">Jours disponibles:</string>
     <string name="timing">Timing:</string>
@@ -218,14 +220,14 @@
     <string name="description_">Description:</string>
     <string name="redeem_now">Échangez maintenant</string>
     <string name="sorry_there_are_currently_no_coupons_in_this_section_yet_please_try_back_again_some_other_time">Désolé, il n\'y a pas encore de coupons dans cette section. S\'il vous plaît essayez de nouveau une autre fois</string>
-    <string name="cite_points">City Points</string>
+    <string name="cite_points">Points Cité</string>
     <string name="you_have">Vous avez</string>
-    <string name="points"> Points </string>
-    <string name="your_points_history">Votre historique de points</string>
+    <string name="points">Points</string>
+    <string name="your_points_history">Historique de points</string>
     <string name="use_your_points_here">Utilisez vos points ici</string>
-    <string name="home"> Acceuil </string>
+    <string name="home">Acceuil</string>
     <string name="my_account">Mon compte</string>
-    <string name="view_bill_status">Afficher le statut de la facture</string>
+    <string name="view_bill_status">Verifier statut de facture</string>
     <string name="share_app">Partager l\'App</string>
     <string name="logout"> Déconnexion </string>
     <string name="gps_settings">Paramètres GPS</string>
@@ -234,5 +236,33 @@
     <string name="enable_gps">Veuillez activer le GPS</string>
     <string name="update">Mettre à jour</string>
     <string name="coupon_redemption_request_sent">La demande de rachat a été envoyée à admin.</string>
+
+    <string name="day_Mon">Lun</string>
+    <string name="day_Tue">Mar</string>
+    <string name="day_Wed">Merc</string>
+    <string name="day_Thu">Jeu</string>
+    <string name="day_Fri">Ven</string>
+    <string name="day_Sat">Sam</string>
+    <string name="day_Sun">Dim</string>
+    <string name="all_week">Toute la semaine</string>
+    <string name="all_day">Toute la journée</string>
+
+
+    <string name="near_by">Near By</string>
+
+    <string name="location_access_message">Merci d\'accorder l\'accès à MyStash</string>
+
+    <string name="permission_access_denied_message">Certaines fonctionnalités peuvent ne pas fonctionner sans autorisations</string>
+
+    <string name="sms">SMS</string>
+
+    <string name="no_twitter_message">Aucune application à partager sur Twitter</string>
+    <string name="share_title">Partager l\'application</string>
+    <string name="mystash_app">MyStash App</string>
+    <string name="share_message_program">Découvrez cette excellente entreprise que j\'ai trouvée sur MyStash.</string>
+    <string name="share_message_app">Découvrez l\'application MyStash. La meilleure application de fidélisation sur le marché.
+        \nStockez toutes vos cartes de fidélité, trouvez beaucoup plus de programmes de fidélité dans toutes vos entreprises préférées, épargne, offres spéciales VIP et BEAUCOUP plus. Téléchargez-le aujourd'hui.\n\n</string>
+    <string name="write_review">Ecrire une critique</string>
+    <string name="remove_stash">Enlever de Stash</string>
 
 </resources>

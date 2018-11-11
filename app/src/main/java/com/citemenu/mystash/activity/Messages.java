@@ -74,7 +74,7 @@ public class Messages extends BaseActivity {
                 MessagesWebService messagesWebService = response.body();
                 if (messagesWebService == null || messagesWebService.getHeader() == null
                         || messagesWebService.getHeader().getSuccess() == null) {
-                    ToastUtil.showShortMessage(context, Constant.RESPONSE_NULL);
+                    ToastUtil.showShortMessage(context, getString(R.string.message_api_failure));
                 } else if (messagesWebService.getHeader().getSuccess().equals("1")) {
                     listData = messagesWebService.getBody().getData();
                     if (listData.size() > 0) {
@@ -96,7 +96,7 @@ public class Messages extends BaseActivity {
             public void onFailure(Call<MessagesWebService> call, Throwable t) {
                 dismissProgressDialog();
                 LogUtil.e(Constant.LOG_TAG, t.toString());
-                ToastUtil.showShortMessage(context, Constant.RESPONSE_ON_FAILURE);
+                ToastUtil.showShortMessage(context, getString(R.string.message_api_failure));
             }
         });
     }

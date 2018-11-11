@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.citemenu.mystash.R;
 import com.citemenu.mystash.constant.Constant;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
@@ -23,12 +24,17 @@ import java.net.URLEncoder;
 import java.util.List;
 
 public class SelectShareIntent {
-    private static final CharSequence[] items = {"Facebook", "Twitter", "Email", "SMS",
-            "Cancel"};
+    private static String[] items;
 
     public static void selectIntent(final Activity activity, final String msg) {
+
+        items = new String[]{"Facebook", "Twitter",
+                activity.getString(R.string.email),
+                activity.getString(R.string.sms),
+                activity.getString(R.string.cancel)};
+
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Share App");
+        builder.setTitle(activity.getString(R.string.share_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
@@ -36,11 +42,11 @@ public class SelectShareIntent {
                     facebookShare(activity, msg);
                 } else if (items[item].equals("Twitter")) {
                     twitterShare(activity, msg);
-                } else if (items[item].equals("Email")) {
+                } else if (items[item].equals(activity.getString(R.string.email))) {
                     emailShare(activity, msg);
-                } else if (items[item].equals("SMS")) {
+                } else if (items[item].equals(activity.getString(R.string.sms))) {
                     messageShare(activity, msg);
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(activity.getString(R.string.cancel))) {
                     dialog.dismiss();
                 }
             }
@@ -77,7 +83,7 @@ public class SelectShareIntent {
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            Toast.makeText(context, "No Application Found to share on twitter", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.no_twitter_message), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -92,7 +98,7 @@ public class SelectShareIntent {
 
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle(Constant.SHARE_SUBJECT)
+                    .setContentTitle(activity.getString(R.string.mystash_app))
                     .setContentDescription(msgWithLink)
                     .setContentUrl(Uri.parse(Constant.WEB_URL))
                     .build();
@@ -106,9 +112,9 @@ public class SelectShareIntent {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", "", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, Constant.SHARE_SUBJECT);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.mystash_app));
         emailIntent.putExtra(Intent.EXTRA_TEXT, msgWithLink);
-        context.startActivity(Intent.createChooser(emailIntent, "Share"));
+        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.share)));
     }
 
     //SMS Share

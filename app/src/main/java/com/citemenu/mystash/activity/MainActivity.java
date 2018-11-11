@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     Name.append(" " + user.getClastname());
                 }
             }
-            ImageUtil.setImageWithResource(this,imgProfile,user.getImgurl());
+            ImageUtil.setImageWithResource(this, imgProfile, user.getImgurl());
 //            if (user.getImgurl() != null && !user.getImgurl().isEmpty()) {
 //                Picasso.with(this)
 //                        .load(user.getImgurl())
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpMenu() {
         for (int i = 0; i < 8; i++) {
-            switch (i){
+            switch (i) {
                 case 0:
 //                    listName[i] = getString(R.string.home);
                     sideMenuItemsList.add(getString(R.string.home));
@@ -203,7 +203,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 6:
                         resideMenu.closeMenu();
-                        SelectShareIntent.selectIntent(MainActivity.this, Constant.SHARE_APP_TEXT);
+                        SelectShareIntent.selectIntent(MainActivity.this,
+                                getString(R.string.share_message_app) //Constant.SHARE_APP_TEXT
+                        );
                         break;
                     case 7:
                         resideMenu.closeMenu();
@@ -324,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.exit_message),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.exit_message), Toast.LENGTH_SHORT).show();
         }
         mBackPressed = System.currentTimeMillis();
     }
@@ -358,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
     @OnShowRationale({ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, CAMERA})
     void showRationaleForCamera(final PermissionRequest request) {
         new AlertDialog.Builder(this)
-                .setMessage("Please grant Location access to MyStash")
+                .setMessage(getString(R.string.location_access_message))
                 .setPositiveButton(getString(R.string.allow), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -376,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnPermissionDenied({ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, CAMERA})
     void showDeniedForCamera() {
-        Toast.makeText(this, "Some features may not work without permissions", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.permission_access_denied_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override

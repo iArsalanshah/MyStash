@@ -106,6 +106,15 @@ public class Program_Details extends AppCompatActivity {
     }
 
     private void settingData() {
+        String mon = getString(R.string.day_Mon);
+        String tue = getString(R.string.day_Thu);
+        String wed = getString(R.string.day_Wed);
+        String thu = getString(R.string.day_Thu);
+        String fri = getString(R.string.day_Fri);
+        String sat = getString(R.string.day_Sat);
+        String sun = getString(R.string.day_Sun);
+        String allWeek = getString(R.string.all_week);
+        String allDay = getString(R.string.all_day);
 
         //item objects
         ImageUtil.setImageWithResource(this, img_item, pOthersObj.getLogourl());
@@ -145,7 +154,7 @@ public class Program_Details extends AppCompatActivity {
                 switch (i) {
                     case 0:
                         if (daysStrings[i].equals("1")) {
-                            allDaysEvaluated = "All Week";
+                            allDaysEvaluated = allWeek;
                             allday = true;
                         }
                         break;
@@ -154,42 +163,42 @@ public class Program_Details extends AppCompatActivity {
 //                        if (daysStrings[i - 1].equals("1"))
 //                            stringBuilder.append(",Tue");
 //                        else
-                            stringBuilder.append("Mon");
+                            stringBuilder.append(mon);
                         }
                         break;
 
                     case 2:
                         if (daysStrings[i].equals("1")) {
                             if (daysStrings[i - 1].equals("1"))
-                                stringBuilder.append(",Tue");
+                                stringBuilder.append("," + tue);
                             else
-                                stringBuilder.append("Tue");
+                                stringBuilder.append(tue);
                         }
                         break;
                     case 3:
                         if (daysStrings[i].equals("1")) {
                             if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1"))
-                                stringBuilder.append(",Wed");
+                                stringBuilder.append("," + wed);
                             else
-                                stringBuilder.append("Wed");
+                                stringBuilder.append(wed);
                         }
                         break;
                     case 4:
                         if (daysStrings[i].equals("1")) {
                             if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                     || daysStrings[i - 3].equals("1"))
-                                stringBuilder.append(",Thu");
+                                stringBuilder.append("," + thu);
                             else
-                                stringBuilder.append("Thu");
+                                stringBuilder.append(thu);
                         }
                         break;
                     case 5:
                         if (daysStrings[i].equals("1")) {
                             if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                     || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1"))
-                                stringBuilder.append(",Fri");
+                                stringBuilder.append("," + fri);
                             else
-                                stringBuilder.append("Fri");
+                                stringBuilder.append(fri);
                         }
                         break;
                     case 6:
@@ -197,9 +206,9 @@ public class Program_Details extends AppCompatActivity {
                             if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                     || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
                                     || daysStrings[i - 5].equals("1"))
-                                stringBuilder.append(",Sat");
+                                stringBuilder.append("," + sat);
                             else
-                                stringBuilder.append("Sat");
+                                stringBuilder.append(sat);
                         }
                         break;
                     case 7:
@@ -207,9 +216,9 @@ public class Program_Details extends AppCompatActivity {
                             if (daysStrings[i - 1].equals("1") || daysStrings[i - 2].equals("1")
                                     || daysStrings[i - 3].equals("1") || daysStrings[i - 4].equals("1")
                                     || daysStrings[i - 5].equals("1") || daysStrings[i - 6].equals("1"))
-                                stringBuilder.append(",Sun");
+                                stringBuilder.append("," + sun);
                             else
-                                stringBuilder.append("Sun");
+                                stringBuilder.append(sun);
                         }
                         break;
                     default:
@@ -217,13 +226,13 @@ public class Program_Details extends AppCompatActivity {
                 }
             }
         }
-        if (!allDaysEvaluated.equals("All Week")) {
+        if (!allDaysEvaluated.equals(allWeek)) {
             allDaysEvaluated = stringBuilder.toString();
         }
         tvAvailableDays.append(allDaysEvaluated);
         if (stampObject.getAllDay() != null)
             if (stampObject.getAllDay().equals("1")) {
-                tvTiming.append("All Day");
+                tvTiming.append(allDay);
             } else {
                 //time formation
                 SimpleDateFormat start = new SimpleDateFormat("HH:mm:ss", Locale.US);
@@ -278,7 +287,7 @@ public class Program_Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //@"Check out this great company i found on MyStash.\n%@\n%@\n%@\n%@\n\nhttp://www.mystashapp.ca/"
-                String fullMsg = Constant.SHARE_PROGRAM_STAMP_TEXT_START
+                String fullMsg = getString(R.string.share_message_program) + "\n"//Constant.SHARE_PROGRAM_STAMP_TEXT_START
                         + pOthersObj.getName() + "\n"
                         + stampObject.getProgramname() + "\n"
                         + pOthersObj.getAddress() + "\n"

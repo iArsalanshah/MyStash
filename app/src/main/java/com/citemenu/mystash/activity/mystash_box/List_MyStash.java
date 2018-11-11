@@ -87,7 +87,7 @@ public class List_MyStash extends BaseActivity {
                 dismissProgressDialog();
                 if (response.body() == null || response.body().getHeader() == null
                         || response.body().getHeader().getSuccess() == null) {
-                    ToastUtil.showShortMessage(context, Constant.RESPONSE_NULL);
+                    ToastUtil.showShortMessage(context, getString(R.string.message_api_failure));
                 } else if (response.body().getHeader().getSuccess().equals("1")) {
                     if (response.body().getBody().getStashlist().size() > 0) {
                         if (altText.getVisibility() == View.VISIBLE)
@@ -134,7 +134,7 @@ public class List_MyStash extends BaseActivity {
             public void onFailure(Call<GetMyStash> call, Throwable t) {
                 dismissProgressDialog();
                 LogUtil.e(Constant.LOG_TAG, t.toString());
-                ToastUtil.showShortMessage(context, Constant.RESPONSE_ON_FAILURE);
+                ToastUtil.showShortMessage(context, getString(R.string.message_api_failure));
             }
         });
     }

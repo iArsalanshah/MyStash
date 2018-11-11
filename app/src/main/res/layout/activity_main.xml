@@ -78,27 +78,80 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@drawable/my_stash"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="myStash_container_home"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_my_stash" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_stash"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="3dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/my_stash"-->
+            <!--android:onClick="myStash_container_home"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="gone" />-->
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@drawable/check_in"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="checkIn_container_home"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_check_in" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/checkin"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/near_by"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="nearBy_container_home"
                 android:orientation="vertical">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_near_by" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/near_by"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -115,26 +168,71 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@drawable/my_cards"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="myCards_container_home"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_my_cards" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_cards"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@drawable/coupons"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="coupons_container_home"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_coupons" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coupons"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/flyers"
+                android:background="@drawable/ic_box"
+                android:gravity="center"
                 android:onClick="flyers_container_home"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_flyers" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/flyers"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="17sp" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
